@@ -111,6 +111,7 @@ input,select,textarea{font:inherit}
 /* bottom sheet */
 .sheet{position:absolute;left:0;right:0;bottom:0;z-index:1300;background:#F4F7FB;color:#0D1B30;border-radius:22px 22px 0 0;padding:8px 16px calc(88px + env(safe-area-inset-bottom));box-shadow:0 -14px 40px rgba(0,0,0,.45);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
 .sheet.mini{transform:translateY(calc(100% - 118px))}
+.sheet.mini .hotcard,.sheet.mini .tilerow,.sheet.mini .catchcard,.sheet.mini .sechead,.sheet.mini .foot{visibility:hidden}
 .grab{width:44px;height:5px;border-radius:3px;background:#C6D2E4;margin:4px auto 10px}
 .sheet h3{margin:0;font-size:1.02rem;font-weight:800;color:#0D1B30}
 .sheet .viewall{color:var(--blue);font-weight:700;font-size:.8rem}
@@ -898,7 +899,7 @@ function openSpot(slug){
  loadSpotConditions(z);
 }
 async function loadSpotConditions(z){
- try{const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude='+z.lat+'&longitude='+z.lon+'&current=swell_wave_height,swell_wave_direction,sea_surface_temperature&length_unit=imperial&cell_selection=sea');const j=await r.json(),c=j.current||{};
+ try{const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude='+z.lat+'&longitude='+z.lon+'&current=swell_wave_height,swell_wave_direction,sea_surface_temperature&length_unit=imperial&temperature_unit=fahrenheit&cell_selection=sea');const j=await r.json(),c=j.current||{};
   if(Number.isFinite(+c.swell_wave_height)){$('sc-swell').textContent=(+c.swell_wave_height).toFixed(1)+' ft';$('sc-swell-s').textContent=compass(+c.swell_wave_direction)}
   if(Number.isFinite(+c.sea_surface_temperature))$('sc-water').textContent=Math.round(+c.sea_surface_temperature)+'°';
   $('spot-cond-src').textContent='Open-Meteo model · live';
@@ -1004,7 +1005,7 @@ async function loadHomeTiles(){
   $('wx-hourly').innerHTML=cells;$('wxw-hourly').innerHTML=wcells;
   $('sheet-src').textContent='Conditions: Open-Meteo model · live · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
  }catch(e){$('sheet-src').textContent='Conditions: sample (feed blocked)'}
- try{const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=32.55&longitude=-117.35&current=wave_height,swell_wave_height,swell_wave_direction,swell_wave_period,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&length_unit=imperial&wind_speed_unit=kn&cell_selection=sea');const j=await r.json(),c=j.current||{};
+ try{const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=32.55&longitude=-117.35&current=wave_height,swell_wave_height,swell_wave_direction,swell_wave_period,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&length_unit=imperial&temperature_unit=fahrenheit&wind_speed_unit=kn&cell_selection=sea');const j=await r.json(),c=j.current||{};
   if(Number.isFinite(+c.sea_surface_temperature)){$('t-water').textContent=Math.round(+c.sea_surface_temperature)+'°';$('t-water-s').textContent='SST · model · live';$('wx-water').textContent=Math.round(+c.sea_surface_temperature)+'°';$('wxt-big').textContent=Math.round(+c.sea_surface_temperature)+'°'}
   if(Number.isFinite(+c.swell_wave_height)){$('wx-swell').textContent=(+c.swell_wave_height).toFixed(1);$('wx-swell-s').textContent='ft '+compass(+c.swell_wave_direction);$('wxs-big').textContent=(+c.swell_wave_height).toFixed(1);$('wxs-dir').textContent=compass(+c.swell_wave_direction)}
   if(Number.isFinite(+c.swell_wave_period))$('wxs-per').textContent=Math.round(+c.swell_wave_period)+' s';
@@ -1057,7 +1058,7 @@ function openWaypoint(i){
 }
 async function loadWpConditions(w){
  ['wpd-swell','wpd-water','wpd-cur','wpd-wind'].forEach(id=>$(id).textContent='—');
- try{const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude='+w.lat+'&longitude='+w.lon+'&current=swell_wave_height,swell_wave_direction,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&length_unit=imperial&wind_speed_unit=kn&cell_selection=sea');const j=await r.json(),c=j.current||{};
+ try{const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude='+w.lat+'&longitude='+w.lon+'&current=swell_wave_height,swell_wave_direction,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&length_unit=imperial&temperature_unit=fahrenheit&wind_speed_unit=kn&cell_selection=sea');const j=await r.json(),c=j.current||{};
   if(Number.isFinite(+c.swell_wave_height)){$('wpd-swell').textContent=(+c.swell_wave_height).toFixed(1);$('wpd-swell-s').textContent='ft '+compass(+c.swell_wave_direction)}
   if(Number.isFinite(+c.sea_surface_temperature))$('wpd-water').textContent=Math.round(+c.sea_surface_temperature)+'°';
   if(Number.isFinite(+c.ocean_current_velocity)){$('wpd-cur').textContent=(+c.ocean_current_velocity).toFixed(1);$('wpd-cur-s').textContent='kts '+compass(+c.ocean_current_direction)}
