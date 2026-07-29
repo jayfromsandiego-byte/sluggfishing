@@ -804,7 +804,7 @@ function show(name){document.querySelectorAll('.scr').forEach(s=>s.classList.rem
  $('tabbar').style.display=(name==='post')?'none':'grid';
  $('notifpanel').classList.remove('open');
  if(name==='map'&&window._map)setTimeout(()=>_map.invalidateSize(),60);
- if(name==='ais')setTimeout(initAis,60);
+ if(name==='ais'){setTimeout(initAis,60);setTimeout(()=>{if(aisMap)aisMap.invalidateSize()},450);setTimeout(()=>{if(aisMap)aisMap.invalidateSize()},1200)};
  if(name==='reports')renderReports();
  if(name==='favs')renderFavs();
  if(name==='waypoints')renderWaypoints();
@@ -862,7 +862,7 @@ document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
  if(k==='ais'){c.classList.toggle('on');toggleAisMain(c.classList.contains('on'));return}
  if(k==='species'){speciesFilterOn=!speciesFilterOn;c.classList.toggle('on',speciesFilterOn);_wpMarkers.forEach(m=>m.setOpacity(speciesFilterOn?(parseFloat(m._w.rating)>=7.5?1:.25):1));toast('Species Filter',speciesFilterOn?'Showing tuna + yellowtail marks (preview filter).':'Filter cleared.')}
 }));
-function vslIcon(deg){return L.divIcon({className:'',html:'<svg class="vsl" width="22" height="22" viewBox="0 0 24 24" style="transform:rotate('+deg+'deg)"><path d="M12 2.5 18 20l-6-4-6 4z" fill="currentColor"/></svg>',iconSize:[22,22],iconAnchor:[11,11]})}
+function vslIcon(deg){return L.divIcon({className:'',html:'<svg class="vsl" width="26" height="26" viewBox="0 0 24 24" style="transform:rotate('+deg+'deg)"><path d="M12 2.5 18 20l-6-4-6 4z" fill="currentColor"/></svg>',iconSize:[26,26],iconAnchor:[13,13]})}
 const SAMPLE_VESSELS=[[32.60,-117.42,215],[32.52,-117.30,180],[32.70,-117.50,95],[32.44,-117.60,240],[32.80,-117.42,300],[32.36,-117.36,200]];
 function toggleAisMain(on){if(on){aisLayerMain=L.layerGroup(SAMPLE_VESSELS.map(v=>L.marker([v[0],v[1]],{icon:vslIcon(v[2])}))).addTo(_map);toast('AIS Boats','Sample vessel layer — live AIS ships in V1.1 after terms confirmation.')}else if(aisLayerMain){_map.removeLayer(aisLayerMain);aisLayerMain=null}}
 /* AIS screen map */
@@ -976,7 +976,7 @@ $('pc-submit').addEventListener('click',async()=>{
 });
 
 /* ---- profile / my catches ---- */
-$('row-mycatches').addEventListener('click',()=>{const p=$('mycatches-panel');p.style.display=p.style.display==='none'?'block':'none';renderMyCatches()});
+$('row-mycatches').addEventListener('click',()=>{const p=$('mycatches-panel');p.style.display='block';renderMyCatches();setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),120)});
 $('row-maps').addEventListener('click',()=>toast('Offline pack','San Diego pack (chart context, five lakes, spot pages, rules) — offline access never lapses mid-trip.'));
 $('row-settings').addEventListener('click',()=>toast('Backend','Mode: '+Backend.mode()+'. The UI speaks the Supabase foundation contract (submit_report, set_report_privacy, moderate_report). Point BACKEND_CONFIG at the cloud project when provisioned.'));
 $('row-plan').addEventListener('click',()=>toast('Pro plan','$9.99/mo or $99/yr — first monthly payment counts toward annual within 30 days. Free tier never shrinks.'));
