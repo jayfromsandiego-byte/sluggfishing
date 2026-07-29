@@ -242,6 +242,38 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
 .privacyseg button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .pending-chip{display:inline-block;padding:4px 9px;border-radius:999px;background:rgba(245,166,35,.16);color:var(--orange);font-size:.64rem;font-weight:700}
 .ok-chip{display:inline-block;padding:4px 9px;border-radius:999px;background:rgba(47,163,98,.16);color:#57CE8C;font-size:.64rem;font-weight:700}
+/* phase 2 */
+.pane{display:none}.pane.on{display:block}
+.wpnum{width:56px;height:56px;border-radius:18px;background:var(--violet);display:grid;place-items:center;font-weight:800;font-size:1.05rem;color:#fff;flex:0 0 auto}
+.coordrow{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:.82rem;font-variant-numeric:tabular-nums;margin-top:4px}
+.copybtn{padding:4px 9px;border-radius:8px;border:1px solid var(--line-2);color:var(--sub);font-size:.64rem;font-weight:700}
+.tidecard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:12px;margin-top:12px}
+.tidecard .tv2{font-size:1.15rem;font-weight:800;font-variant-numeric:tabular-nums}
+.searchwrap{position:absolute;inset:0;z-index:2000;display:none;background:rgba(4,8,17,.86);backdrop-filter:blur(6px);padding:56px 16px 0}
+.searchwrap.open{display:block}
+.searchbar{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line-2);border-radius:14px;padding:12px 14px}
+.searchbar input{flex:1;background:transparent;border:0;outline:none;color:var(--text);font-size:.94rem}
+.searchbar svg{width:19px;height:19px;stroke:var(--faint);fill:none;stroke-width:2;stroke-linecap:round}
+.searchres{margin-top:12px;max-height:70%;overflow-y:auto}
+.notifpanel{position:absolute;top:96px;right:12px;left:12px;z-index:1950;display:none;background:var(--surface);border:1px solid var(--line-2);border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.55)}
+.notifpanel.open{display:block}
+.layerrow{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 4px;scrollbar-width:none}
+.layerrow::-webkit-scrollbar{display:none}
+.laychip{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;width:64px;padding:9px 4px;border-radius:13px;background:var(--card);border:1px solid var(--line);color:var(--sub);font-size:.56rem;font-weight:600}
+.laychip svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.laychip.on{border-color:var(--blue);color:var(--blue-2);background:rgba(21,45,90,.55)}
+.regtable{width:100%;border-collapse:collapse;font-size:.72rem}
+.regtable th{text-align:left;color:var(--faint);font-size:.62rem;font-weight:700;padding:8px 8px;border-bottom:1px solid var(--line-2)}
+.regtable td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.regtable td b{font-size:.74rem}
+.regtable td small{color:var(--sub);display:block;margin-top:2px;font-size:.64rem;line-height:1.4}
+.sstveil{position:absolute;inset:0;z-index:640;pointer-events:none;display:none;opacity:.3;mix-blend-mode:screen;background:radial-gradient(circle at 26% 66%,rgba(230,120,60,.85),transparent 32%),radial-gradient(circle at 60% 40%,rgba(240,190,80,.6),transparent 30%),radial-gradient(circle at 80% 75%,rgba(60,140,220,.7),transparent 34%)}
+.sstveil.chl{background:radial-gradient(circle at 30% 60%,rgba(70,200,120,.85),transparent 30%),radial-gradient(circle at 66% 42%,rgba(40,150,90,.6),transparent 34%)}
+.sstveil.show{display:block}
+.veiltag{position:absolute;left:12px;bottom:305px;z-index:1150;display:none;background:rgba(9,17,33,.88);border:1px solid var(--line-2);border-radius:999px;padding:6px 12px;font-size:.62rem;font-weight:600;color:var(--sub)}
+.veiltag.show{display:block}
+.editsheet{position:absolute;inset:0;z-index:2050;display:none;background:rgba(3,7,15,.6)}
+.editsheet.open{display:block}
 </style>
 </head>
 <body>
@@ -303,7 +335,8 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
 
   <!-- ============ MAP HOME ============ -->
   <section class="scr on" id="scr-map">
-    <div class="mapwrap"><div id="map"></div></div>
+    <div class="mapwrap"><div id="map"></div><div class="sstveil" id="mapveil"></div></div>
+    <div class="veiltag" id="veiltag"></div>
     <div class="map-top">
       <button class="iconbtn" id="btn-menu"><svg><use href="#i-menu"/></svg></button>
       <div class="logo">Slugg<span style="font-weight:700">Fishing</span> <span class="hook">&#9096;</span></div>
@@ -346,30 +379,44 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
       <div class="scr-head"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><span class="ttl"></span><button class="iconbtn" id="spot-heart"><svg><use href="#i-heart"/></svg></button></div>
       <div class="spot-title"><div style="flex:1"><h2 id="spot-name">Coronado Islands</h2><div class="meta" id="spot-meta">Saltwater · Offshore · Advanced</div></div><div style="text-align:center"><div class="score" id="spot-score">8.5</div><div style="font-size:.6rem;color:#B9C7DE;margin-top:4px" id="spot-scorelbl">Very Good</div></div></div>
     </div>
-    <div class="dtabs" id="spot-tabs"><button class="dtab on">Overview</button><button class="dtab">Conditions</button><button class="dtab">Species</button><button class="dtab">Reports</button><button class="dtab">Gallery</button></div>
+    <div class="dtabs" id="spot-tabs"><button class="dtab on" data-sp="overview">Overview</button><button class="dtab" data-sp="conditions">Conditions</button><button class="dtab" data-sp="species">Species</button><button class="dtab" data-sp="reports">Reports</button><button class="dtab" data-sp="gallery">Gallery</button></div>
     <div class="scroll" style="padding-top:12px">
-      <div style="font-size:.74rem;color:var(--sub)"><span class="stars" id="spot-stars"></span> <span id="spot-count">(124)</span> <span style="color:var(--faint)">· preview score from reports + counts</span></div>
-      <p id="spot-desc" style="font-size:.82rem;line-height:1.6;color:var(--sub);margin:10px 0 4px"></p>
-      <div id="spot-facts"></div>
-      <div class="row" style="gap:9px;margin:14px 0 4px"><button class="btn ghost" id="spot-directions"><svg><use href="#i-dir"/></svg>Directions</button><button class="btn blue" id="spot-fav"><svg><use href="#i-star"/></svg>Add to Favorites</button></div>
-      <div class="small-note" id="spot-dirnote"></div>
-      <div class="sechead"><h3 style="font-size:.94rem;color:var(--text)">Conditions right now</h3><span class="small-note" id="spot-cond-src">Open-Meteo model</span></div>
-      <div class="ctile-row">
-        <div class="ctile"><div class="cl">Wind</div><div class="cv" id="sc-wind">—</div><div class="cs" id="sc-wind-s">mph</div></div>
-        <div class="ctile"><div class="cl">Water</div><div class="cv" id="sc-water">—</div><div class="cs">°F · SST</div></div>
-        <div class="ctile"><div class="cl">Swell</div><div class="cv" id="sc-swell">—</div><div class="cs" id="sc-swell-s">ft</div></div>
-        <div class="ctile"><div class="cl">Tide</div><div class="cv">3.2 ft</div><div class="cs">Rising · sample</div></div>
+      <div class="pane on" id="sppane-overview">
+        <div style="font-size:.74rem;color:var(--sub)"><span class="stars" id="spot-stars"></span> <span id="spot-count">(124)</span> <span style="color:var(--faint)">· preview score from reports + counts</span></div>
+        <p id="spot-desc" style="font-size:.82rem;line-height:1.6;color:var(--sub);margin:10px 0 4px"></p>
+        <div id="spot-facts"></div>
+        <div class="row" style="gap:9px;margin:14px 0 4px"><button class="btn ghost" id="spot-directions"><svg><use href="#i-dir"/></svg>Directions</button><button class="btn blue" id="spot-fav"><svg><use href="#i-star"/></svg>Add to Favorites</button></div>
+        <div class="small-note" id="spot-dirnote"></div>
       </div>
-      <div class="sechead"><h3 style="font-size:.94rem;color:var(--text)">Top Species Right Now</h3></div>
-      <div class="spec-strip">
-        <div class="spec"><svg><use href="#fx-tuna"/></svg><div>Bluefin Tuna</div></div>
-        <div class="spec"><svg><use href="#fx-yt"/></svg><div>Yellowtail</div></div>
-        <div class="spec"><svg><use href="#fx-dorado"/></svg><div>Dorado</div></div>
-        <div class="spec"><svg><use href="#fx-calico"/></svg><div>Calico Bass</div></div>
+      <div class="pane" id="sppane-conditions">
+        <div class="sechead" style="margin-top:2px"><h3 style="font-size:.94rem;color:var(--text)">Conditions right now</h3><span class="small-note" id="spot-cond-src">Open-Meteo model</span></div>
+        <div class="ctile-row" style="grid-template-columns:repeat(2,1fr)">
+          <div class="ctile"><div class="cl">Wind</div><div class="cv" id="sc-wind">—</div><div class="cs" id="sc-wind-s">mph</div></div>
+          <div class="ctile"><div class="cl">Water</div><div class="cv" id="sc-water">—</div><div class="cs">°F · SST</div></div>
+          <div class="ctile"><div class="cl">Swell</div><div class="cv" id="sc-swell">—</div><div class="cs" id="sc-swell-s">ft</div></div>
+          <div class="ctile"><div class="cl">Tide</div><div class="cv">3.2 ft</div><div class="cs">Rising · sample</div></div>
+        </div>
+        <button class="btn ghost" style="margin-top:12px" data-nav="weather">Full Conditions</button>
       </div>
-      <div class="sechead"><h3 style="font-size:.94rem;color:var(--text)">Latest Reports</h3><button class="viewall" data-nav="reports">View All</button></div>
-      <div id="spot-reports"></div>
-      <div class="row" style="gap:9px;margin:6px 0 12px"><button class="btn ghost" id="spot-dir2"><svg><use href="#i-dir"/></svg>Directions</button><button class="btn green" data-nav="post"><svg><use href="#i-plus"/></svg>Report a Catch</button></div>
+      <div class="pane" id="sppane-species">
+        <div class="sechead" style="margin-top:2px"><h3 style="font-size:.94rem;color:var(--text)">Top Species Right Now</h3></div>
+        <div class="spec-strip">
+          <div class="spec"><svg><use href="#fx-tuna"/></svg><div>Bluefin Tuna</div></div>
+          <div class="spec"><svg><use href="#fx-yt"/></svg><div>Yellowtail</div></div>
+          <div class="spec"><svg><use href="#fx-dorado"/></svg><div>Dorado</div></div>
+          <div class="spec"><svg><use href="#fx-calico"/></svg><div>Calico Bass</div></div>
+        </div>
+        <button class="btn ghost" style="margin-top:12px" id="spot-fishid">Learn Fish ID</button>
+      </div>
+      <div class="pane" id="sppane-reports">
+        <div class="sechead" style="margin-top:2px"><h3 style="font-size:.94rem;color:var(--text)">Latest Reports</h3><button class="viewall" data-nav="reports">View All</button></div>
+        <div id="spot-reports"></div>
+      </div>
+      <div class="pane" id="sppane-gallery">
+        <div class="photorow" style="grid-template-columns:1fr 1fr;margin-top:4px" id="spot-gallery"></div>
+        <div class="small-note">Satellite imagery — Esri World Imagery. Community photos land here after report approval (EXIF stripped).</div>
+      </div>
+      <div class="row" style="gap:9px;margin:14px 0 12px"><button class="btn ghost" id="spot-dir2"><svg><use href="#i-dir"/></svg>Directions</button><button class="btn green" data-nav="post"><svg><use href="#i-plus"/></svg>Report a Catch</button></div>
     </div>
   </section>
 
@@ -391,7 +438,7 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
       </div>
       <div class="field"><label>Species</label><select id="pc-species"></select></div>
       <div class="field"><label>Location</label><select id="pc-location"></select></div>
-      <div class="field"><label>Date &amp; Time</label><span class="fv" id="pc-date">Jul 29, 2026 · 1:45 PM</span></div>
+      <div class="field"><label>Date &amp; Time</label><input type="datetime-local" id="pc-date" style="max-width:190px;color-scheme:dark"></div>
       <div class="field"><label>Length</label><input type="number" id="pc-len" value="32" style="width:64px"><div class="unitseg" data-seg="len"><button class="on">in</button><button>cm</button></div></div>
       <div class="field"><label>Weight <span style="color:var(--faint);font-weight:500">(Optional)</span></label><input type="number" id="pc-wt" value="65" style="width:64px"><div class="unitseg" data-seg="wt"><button class="on">lb</button><button>kg</button></div></div>
       <textarea class="notes" id="pc-notes" placeholder="Enter notes about your catch...">Great bite on the corners. Flat fall jigs.</textarea>
@@ -407,7 +454,7 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
   <!-- ============ WAYPOINT LIST ============ -->
   <section class="scr" id="scr-waypoints">
     <div class="scr-head"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><span class="ttl">Waypoints</span><button class="iconbtn"><svg><use href="#i-filter"/></svg></button></div>
-    <div class="segrow"><button class="pill lt on">All Waypoints</button><button class="pill lt">Favorites</button><button class="pill lt">Hot Spots</button></div>
+    <div class="segrow" id="wpl-tabs"><button class="pill lt on" data-wf="all">All Waypoints</button><button class="pill lt" data-wf="favs">Favorites</button><button class="pill lt" data-wf="hot">Hot Spots</button></div>
     <div class="scroll"><div class="listcard" id="wp-list"></div><div class="small-note" style="margin-top:10px">Public-reference numbers pending captain verification — not for navigation.</div></div>
   </section>
 
@@ -415,26 +462,50 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
   <section class="scr" id="scr-ais">
     <div class="mapwrap"><div id="aismap"></div></div>
     <div class="map-top"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><span class="ttl" style="flex:1;text-align:center;font-weight:700">AIS Boats</span><button class="iconbtn"><svg><use href="#i-filter"/></svg></button></div>
-    <div class="segrow" style="position:absolute;top:100px;left:0;right:0;z-index:1200"><button class="pill on">All</button><button class="pill">Fishing</button><button class="pill">Cargo</button><button class="pill">Pleasure</button><button class="pill">Other</button></div>
-    <div class="aisbanner">Showing 356 vessels · sample until AIS goes live (V1.1)</div>
-    <div class="vesselcard"><div class="vflag"><svg style="width:24px;height:24px;stroke:#68F09A;fill:none;stroke-width:1.8"><use href="#i-boat"/></svg></div><div style="flex:1"><b style="font-size:.92rem">PACIFIC DAWN</b><div style="color:var(--sub);font-size:.72rem;margin-top:2px">Fishing Vessel · sample track</div><div style="color:var(--faint);font-size:.7rem;margin-top:2px;font-variant-numeric:tabular-nums">12.4 kn · Course 215° · 1.2 nm away</div></div><button class="starbtn"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></button></div>
+    <div class="segrow" id="ais-tabs" style="position:absolute;top:100px;left:0;right:0;z-index:1200"><button class="pill on" data-ak="all">All</button><button class="pill" data-ak="fishing">Fishing</button><button class="pill" data-ak="cargo">Cargo</button><button class="pill" data-ak="pleasure">Pleasure</button><button class="pill" data-ak="other">Other</button></div>
+    <div class="aisbanner" id="ais-banner">Showing 356 vessels · sample until AIS goes live (V1.1)</div>
+    <div class="vesselcard"><div class="vflag"><svg style="width:24px;height:24px;stroke:#68F09A;fill:none;stroke-width:1.8"><use href="#i-boat"/></svg></div><div style="flex:1"><b style="font-size:.92rem" id="vc-name">PACIFIC DAWN</b><div style="color:var(--sub);font-size:.72rem;margin-top:2px" id="vc-kind">Fishing Vessel · sample track</div><div style="color:var(--faint);font-size:.7rem;margin-top:2px;font-variant-numeric:tabular-nums" id="vc-stats">12.4 kn · Course 215° · 1.2 nm away</div></div><button class="starbtn" id="vc-star"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></button></div>
   </section>
 
   <!-- ============ WEATHER ============ -->
   <section class="scr" id="scr-weather">
     <div class="scr-head"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><div style="flex:1;text-align:center"><div style="font-weight:700;font-size:1.02rem">Conditions</div><div style="color:var(--sub);font-size:.7rem;margin-top:2px" id="wx-loc">Point Loma · Jul 29, 2026</div></div><button class="iconbtn" id="wx-star"><svg><use href="#i-star"/></svg></button></div>
-    <div class="segrow"><button class="pill on">Weather</button><button class="pill">Wind</button><button class="pill">Tides</button><button class="pill">Swell</button><button class="pill">Water</button></div>
+    <div class="segrow" id="wx-tabs"><button class="pill on" data-wx="weather">Weather</button><button class="pill" data-wx="wind">Wind</button><button class="pill" data-wx="tides">Tides</button><button class="pill" data-wx="swell">Swell</button><button class="pill" data-wx="water">Water</button></div>
     <div class="scroll">
-      <div class="bigwx"><svg class="sun"><use href="#wx-sun"/></svg><div><div class="deg" id="wx-air">72°F</div><div class="cond" id="wx-cond">Sunny</div></div><div class="side"><span>Humidity <b id="wx-hum">58%</b></span><span>UV Index <b id="wx-uv">6 High</b></span><span>Pressure <b id="wx-press">1015 mb</b></span></div></div>
-      <div class="wxgrid">
-        <div class="wxtile"><div class="wl">Wind</div><div class="wv" id="wx-wind">—</div><div class="ws" id="wx-wind-s">mph</div></div>
-        <div class="wxtile"><div class="wl">Swell</div><div class="wv" id="wx-swell">—</div><div class="ws" id="wx-swell-s">ft</div></div>
-        <div class="wxtile"><div class="wl">Wave Height</div><div class="wv" id="wx-wave">—</div><div class="ws">ft</div></div>
-        <div class="wxtile"><div class="wl">Water Temp</div><div class="wv" id="wx-water">—</div><div class="ws">°F · SST</div></div>
-        <div class="wxtile"><div class="wl">Current</div><div class="wv" id="wx-cur">—</div><div class="ws" id="wx-cur-s">kts</div></div>
-        <div class="wxtile"><div class="wl">Visibility</div><div class="wv" id="wx-vis">—</div><div class="ws">mi</div></div>
+      <div class="pane on" id="wxpane-weather">
+        <div class="bigwx"><svg class="sun"><use href="#wx-sun"/></svg><div><div class="deg" id="wx-air">72°F</div><div class="cond" id="wx-cond">Sunny</div></div><div class="side"><span>Humidity <b id="wx-hum">58%</b></span><span>UV Index <b id="wx-uv">6 High</b></span><span>Pressure <b id="wx-press">1015 mb</b></span></div></div>
+        <div class="wxgrid">
+          <div class="wxtile"><div class="wl">Wind</div><div class="wv" id="wx-wind">—</div><div class="ws" id="wx-wind-s">mph</div></div>
+          <div class="wxtile"><div class="wl">Swell</div><div class="wv" id="wx-swell">—</div><div class="ws" id="wx-swell-s">ft</div></div>
+          <div class="wxtile"><div class="wl">Wave Height</div><div class="wv" id="wx-wave">—</div><div class="ws">ft</div></div>
+          <div class="wxtile"><div class="wl">Water Temp</div><div class="wv" id="wx-water">—</div><div class="ws">°F · SST</div></div>
+          <div class="wxtile"><div class="wl">Current</div><div class="wv" id="wx-cur">—</div><div class="ws" id="wx-cur-s">kts</div></div>
+          <div class="wxtile"><div class="wl">Visibility</div><div class="wv" id="wx-vis">—</div><div class="ws">mi</div></div>
+        </div>
+        <div class="hourly" id="wx-hourly"></div>
       </div>
-      <div class="hourly" id="wx-hourly"></div>
+      <div class="pane" id="wxpane-wind">
+        <div class="bigwx"><div><div class="deg" id="wxw-big">—</div><div class="cond" id="wxw-dir">mph</div></div><div class="side"><span>Gusts <b id="wxw-gust">—</b></span><span>Direction <b id="wxw-deg">—</b></span><span>Source <b>Model</b></span></div></div>
+        <div class="hourly" id="wxw-hourly"></div>
+        <div class="small-note" style="margin-top:8px">Hourly wind — Open-Meteo model. NWS marine forecast is the production source.</div>
+      </div>
+      <div class="pane" id="wxpane-tides">
+        <div class="listcard">
+          <div class="lrow"><span style="flex:1"><b>High</b><small>2:42 PM</small></span><span class="rt">3.1 ft</span></div>
+          <div class="lrow"><span style="flex:1"><b>Low</b><small>8:58 PM</small></span><span class="rt">0.9 ft</span></div>
+          <div class="lrow"><span style="flex:1"><b>High</b><small>3:12 AM</small></span><span class="rt">4.6 ft</span></div>
+          <div class="lrow"><span style="flex:1"><b>Low</b><small>9:24 AM</small></span><span class="rt">1.4 ft</span></div>
+        </div>
+        <div class="small-note" style="margin-top:8px">Sample tide table — NOAA CO-OPS station 9410170 (San Diego) is the production source.</div>
+      </div>
+      <div class="pane" id="wxpane-swell">
+        <div class="bigwx"><div><div class="deg" id="wxs-big">—</div><div class="cond">ft swell</div></div><div class="side"><span>Period <b id="wxs-per">—</b></span><span>From <b id="wxs-dir">—</b></span><span>Wave ht <b id="wxs-wave">—</b></span></div></div>
+        <div class="small-note" style="margin-top:8px">Open-Meteo marine model. NDBC buoys are the production observation source.</div>
+      </div>
+      <div class="pane" id="wxpane-water">
+        <div class="bigwx"><div><div class="deg" id="wxt-big">—</div><div class="cond">°F sea surface</div></div><div class="side"><span>Current <b id="wxt-cur">—</b></span><span>Heading <b id="wxt-dir">—</b></span><span>Kind <b>Model SST</b></span></div></div>
+        <div class="small-note" style="margin-top:8px">SST history and chlorophyll layers are a Pro feature — NOAA CoastWatch in production.</div>
+      </div>
       <div class="small-note" style="margin-top:10px" id="wx-src">Open-Meteo model guidance — not measured observations, not for navigation. NOAA CO-OPS / NDBC / NWS are the production sources.</div>
     </div>
   </section>
@@ -442,14 +513,32 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
   <!-- ============ REGULATIONS ============ -->
   <section class="scr" id="scr-regs">
     <div class="scr-head"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><span class="ttl">Regulations</span><button class="iconbtn"><svg><use href="#i-search"/></svg></button></div>
-    <div class="segrow"><button class="pill on">California</button><button class="pill">Mexico</button><button class="pill">Federal</button></div>
+    <div class="segrow" id="regs-tabs"><button class="pill on" data-rg="ca">California</button><button class="pill" data-rg="mx">Mexico</button><button class="pill" data-rg="fed">Federal</button></div>
     <div class="scroll">
+      <div class="pane on" id="rgpane-ca">
       <div style="font-size:.72rem;font-weight:700;color:var(--sub);margin:2px 0 8px">Popular</div>
       <div class="listcard">
-        <button class="lrow"><span class="li"><svg><use href="#i-book"/></svg></span><span style="flex:1"><b>Bag &amp; Size Limits</b><small>View limits for all species</small></span><svg class="chev"><use href="#i-chev"/></svg></button>
-        <button class="lrow"><span class="li"><svg><use href="#i-id"/></svg></span><span style="flex:1"><b>Learn Fish ID</b><small>Identify legal species</small></span><svg class="chev"><use href="#i-chev"/></svg></button>
-        <button class="lrow"><span class="li"><svg><use href="#i-cal"/></svg></span><span style="flex:1"><b>Seasons</b><small>Season dates and closures</small></span><svg class="chev"><use href="#i-chev"/></svg></button>
-        <button class="lrow"><span class="li"><svg><use href="#i-mpa"/></svg></span><span style="flex:1"><b>Marine Protected Areas</b><small>MPAs and no-take zones</small></span><svg class="chev"><use href="#i-chev"/></svg></button>
+        <button class="lrow" data-regsub="bagsize"><span class="li"><svg><use href="#i-book"/></svg></span><span style="flex:1"><b>Bag &amp; Size Limits</b><small>View limits for all species</small></span><svg class="chev"><use href="#i-chev"/></svg></button>
+        <button class="lrow" data-regsub="fishid"><span class="li"><svg><use href="#i-id"/></svg></span><span style="flex:1"><b>Learn Fish ID</b><small>Identify legal species</small></span><svg class="chev"><use href="#i-chev"/></svg></button>
+        <button class="lrow" data-regsub="seasons"><span class="li"><svg><use href="#i-cal"/></svg></span><span style="flex:1"><b>Seasons</b><small>Season dates and closures</small></span><svg class="chev"><use href="#i-chev"/></svg></button>
+        <button class="lrow" data-regsub="mpas"><span class="li"><svg><use href="#i-mpa"/></svg></span><span style="flex:1"><b>Marine Protected Areas</b><small>MPAs and no-take zones</small></span><svg class="chev"><use href="#i-chev"/></svg></button>
+      </div>
+      </div>
+      <div class="pane" id="rgpane-mx">
+        <div class="card" style="padding:14px"><b style="font-size:.9rem">Mexican waters — verify before you cross</b>
+        <p style="font-size:.76rem;color:var(--sub);line-height:1.6;margin:8px 0 0">Fishing the Coronado Islands or below the border requires current Mexican authorization: sport fishing permit (CONAPESCA), FMM entry, passport, and vessel requirements that depend on your route. Rules follow jurisdiction, not this app — the map's 12 NM line is a territorial-sea reference, not an "international water" switch.</p></div>
+        <div class="listcard" style="margin-top:10px">
+          <a class="lrow" style="text-decoration:none;color:inherit" href="https://www.gob.mx/conapesca/documentos/conapesca-01-016-pesca-deportivo-recreativa" target="_blank" rel="noopener noreferrer"><span class="li"><svg><use href="#i-shield"/></svg></span><span style="flex:1"><b>CONAPESCA sport fishing</b><small>Official permit information</small></span><svg class="chev"><use href="#i-chev"/></svg></a>
+          <a class="lrow" style="text-decoration:none;color:inherit" href="https://travel.state.gov/en/international-travel/travel-advisories/mexico.html" target="_blank" rel="noopener noreferrer"><span class="li"><svg><use href="#i-book"/></svg></span><span style="flex:1"><b>Mexico entry guidance</b><small>U.S. State Department</small></span><svg class="chev"><use href="#i-chev"/></svg></a>
+        </div>
+        <div class="small-note" style="margin-top:10px">Verify CONAPESCA, INM, consular, captain, and landing requirements — the app does not determine legal status.</div>
+      </div>
+      <div class="pane" id="rgpane-fed">
+        <div class="listcard">
+          <a class="lrow" style="text-decoration:none;color:inherit" href="https://www.fisheries.noaa.gov/west-coast/recreational-fishing/recreational-fishing-west-coast" target="_blank" rel="noopener noreferrer"><span class="li"><svg><use href="#i-book"/></svg></span><span style="flex:1"><b>NOAA Fisheries — West Coast</b><small>Federal recreational rules</small></span><svg class="chev"><use href="#i-chev"/></svg></a>
+          <a class="lrow" style="text-decoration:none;color:inherit" href="https://www.fisheries.noaa.gov/species/pacific-bluefin-tuna" target="_blank" rel="noopener noreferrer"><span class="li"><svg><use href="#i-fish"/></svg></span><span style="flex:1"><b>Highly migratory species</b><small>Tuna rules — federal waters</small></span><svg class="chev"><use href="#i-chev"/></svg></a>
+        </div>
+        <div class="small-note" style="margin-top:10px">Federal groundfish and HMS rules can differ from state rules; both can apply on one trip.</div>
       </div>
       <div style="font-size:.72rem;font-weight:700;color:var(--sub);margin:14px 0 8px">Quick Links</div>
       <div class="listcard">
@@ -485,8 +574,12 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
   <!-- ============ FAVORITES ============ -->
   <section class="scr" id="scr-favs">
     <div class="scr-head"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><span class="ttl">Favorites</span><span style="width:38px"></span></div>
-    <div class="segrow"><button class="pill on">Spots</button><button class="pill">Reports</button><button class="pill">Boats</button></div>
-    <div class="scroll"><div class="listcard" id="fav-list"></div></div>
+    <div class="segrow" id="fav-tabs"><button class="pill on" data-fv="spots">Spots</button><button class="pill" data-fv="reports">Reports</button><button class="pill" data-fv="boats">Boats</button></div>
+    <div class="scroll">
+      <div class="pane on" id="fvpane-spots"><div class="listcard" id="fav-list"></div></div>
+      <div class="pane" id="fvpane-reports"><div id="fav-reports"></div></div>
+      <div class="pane" id="fvpane-boats"><div class="listcard" id="fav-boats"></div></div>
+    </div>
   </section>
 
   <!-- ============ PROFILE ============ -->
@@ -511,6 +604,53 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
     </div>
   </section>
 
+  <!-- ============ WAYPOINT DETAIL ============ -->
+  <section class="scr" id="scr-wpdetail">
+    <div class="scr-head"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><span class="ttl">Waypoint Details</span><button class="iconbtn" id="wpd-star"><svg><use href="#i-star"/></svg></button></div>
+    <div style="padding:4px 16px 0;display:flex;gap:14px;align-items:center">
+      <div class="wpnum" id="wpd-num">302</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:1.3rem" id="wpd-name">Waypoint 302</div><div style="color:var(--sub);font-size:.76rem;margin-top:2px" id="wpd-near">3.2 nm from Point Loma</div>
+      <div class="coordrow"><span id="wpd-coords">32.62000, -117.68000</span><button class="copybtn" id="wpd-copy">Copy</button></div></div>
+    </div>
+    <div class="row" style="gap:9px;margin:12px 16px 0"><button class="btn ghost" id="wpd-dir"><svg><use href="#i-dir"/></svg>Directions</button><button class="btn blue" id="wpd-fav"><svg><use href="#i-star"/></svg>Add to Favorites</button></div>
+    <div class="dtabs" id="wpd-tabs" style="margin-top:6px"><button class="dtab on" data-wpd="overview">Overview</button><button class="dtab" data-wpd="conditions">Conditions</button><button class="dtab" data-wpd="fish">Fish</button><button class="dtab" data-wpd="reports">Reports</button></div>
+    <div class="scroll" style="padding-top:12px">
+      <div class="pane on" id="wpdpane-overview">
+        <div id="wpd-facts"></div>
+        <div style="font-size:.78rem;font-weight:700;margin:12px 0 4px">Notes</div>
+        <div style="font-size:.78rem;color:var(--sub);line-height:1.55" id="wpd-notes"></div>
+        <div class="tidecard"><span class="li" style="width:36px;height:36px;border-radius:10px;background:var(--card-2);display:grid;place-items:center"><svg style="width:18px;height:18px;stroke:var(--blue-2);fill:none;stroke-width:1.9"><use href="#i-mpa"/></svg></span><div style="flex:1"><div style="color:var(--sub);font-size:.7rem;font-weight:600">Tide (San Diego)</div><div class="tv2">Rising · 3.1 ft</div><div style="color:var(--faint);font-size:.62rem">High 2:42 PM · sample — NOAA CO-OPS in production</div></div></div>
+        <button class="btn blue" style="margin-top:14px" id="wpd-viewmap"><svg><use href="#i-map"/></svg>View on Map</button>
+        <div class="small-note" style="margin-top:9px">Public-reference number pending captain verification — not for navigation.</div>
+      </div>
+      <div class="pane" id="wpdpane-conditions">
+        <div class="ctile-row" style="grid-template-columns:repeat(2,1fr)">
+          <div class="ctile"><div class="cl">Swell</div><div class="cv" id="wpd-swell">—</div><div class="cs" id="wpd-swell-s">ft</div></div>
+          <div class="ctile"><div class="cl">Water Temp</div><div class="cv" id="wpd-water">—</div><div class="cs">°F · SST</div></div>
+          <div class="ctile"><div class="cl">Current</div><div class="cv" id="wpd-cur">—</div><div class="cs" id="wpd-cur-s">kts</div></div>
+          <div class="ctile"><div class="cl">Wind</div><div class="cv" id="wpd-wind">—</div><div class="cs" id="wpd-wind-s">mph</div></div>
+        </div>
+        <div class="small-note" style="margin-top:10px" id="wpd-cond-src">Open-Meteo model at this mark — guidance, not measured truth.</div>
+      </div>
+      <div class="pane" id="wpdpane-fish">
+        <div style="font-size:.78rem;font-weight:700;margin:2px 0 8px">Best For</div>
+        <div class="spec-strip" id="wpd-fish-strip"></div>
+        <div style="font-size:.78rem;font-weight:700;margin:14px 0 4px">Season</div>
+        <div style="font-size:.78rem;color:var(--sub)" id="wpd-season">Year Round</div>
+      </div>
+      <div class="pane" id="wpdpane-reports">
+        <div id="wpd-reports"></div>
+        <button class="btn green" style="margin-top:8px" data-nav="post"><svg><use href="#i-plus"/></svg>Report a Catch Here</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REGULATION SUB-PAGE ============ -->
+  <section class="scr" id="scr-regsub">
+    <div class="scr-head"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><span class="ttl" id="regsub-title">Bag &amp; Size Limits</span><span style="width:38px"></span></div>
+    <div class="scroll" id="regsub-body" style="padding-top:4px"></div>
+  </section>
+
   <!-- tab bar -->
   <nav class="tabbar" id="tabbar">
     <button class="tab on" data-tab="map"><svg><use href="#i-map"/></svg>MAP</button>
@@ -521,9 +661,43 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
   </nav>
   <div class="homedash"></div>
 
+  <!-- search overlay -->
+  <div class="searchwrap" id="searchwrap">
+    <div class="searchbar"><svg><use href="#i-search"/></svg><input id="searchinput" placeholder="Search spots, waypoints, species..." autocomplete="off"><button class="copybtn" id="searchclose">Close</button></div>
+    <div class="searchres" id="searchres"></div>
+  </div>
+
+  <!-- notifications -->
+  <div class="notifpanel" id="notifpanel">
+    <div class="lrow"><span class="li" style="background:rgba(229,72,77,.15)"><svg style="stroke:var(--red)"><use href="#i-flame"/></svg></span><span style="flex:1"><b>Hot bite: Bluefin Tuna</b><small>Offshore Coronado Islands · 2 hrs ago · sample alert</small></span></div>
+    <div class="lrow"><span class="li" style="background:rgba(47,163,98,.15)"><svg style="stroke:#57CE8C"><use href="#i-check"/></svg></span><span style="flex:1"><b>Report approved</b><small>Your Calico Bass report is live at zone-only privacy · sample</small></span></div>
+    <div class="lrow"><span class="li"><svg><use href="#i-fish"/></svg></span><span style="flex:1"><b>Trout stocking: Lake Poway</b><small>CDFW stocking feed · this week · sample</small></span></div>
+  </div>
+
+  <!-- edit profile -->
+  <div class="editsheet" id="editsheet"><div class="menu-inner" style="position:absolute;left:0;right:0;bottom:0">
+    <div class="grab" style="background:#31415F"></div>
+    <div style="font-weight:800;font-size:1rem;margin:2px 0 10px">Edit Profile</div>
+    <div class="field"><label>Display name</label><input type="text" id="ep-name" value="Tommy Tran" maxlength="30" style="text-align:right"></div>
+    <div class="field"><label>Home port</label><input type="text" id="ep-port" value="San Diego, CA" maxlength="30" style="text-align:right"></div>
+    <button class="btn blue" id="ep-save">Save</button>
+  </div></div>
+
   <!-- menu sheet -->
   <div class="menu-sheet" id="menusheet"><div class="menu-inner">
     <div class="grab" style="background:#31415F"></div>
+    <div style="font-size:.7rem;font-weight:700;color:var(--sub);margin:0 0 2px">Map Layers <span style="color:var(--faint);font-weight:500">· toggle on/off</span></div>
+    <div class="layerrow">
+      <button class="laychip on" data-layer="spots"><svg><use href="#i-fish"/></svg>Fishing Spots</button>
+      <button class="laychip on" data-layer="piers"><svg><use href="#i-pier"/></svg>Piers</button>
+      <button class="laychip on" data-layer="lakes"><svg><use href="#i-reef"/></svg>Lakes</button>
+      <button class="laychip on" data-layer="harbors"><svg><use href="#i-anchor"/></svg>Bays</button>
+      <button class="laychip on" data-layer="wp"><svg><use href="#i-locate"/></svg>Offshore</button>
+      <button class="laychip" data-layer="ais"><svg><use href="#i-boat"/></svg>AIS Boats</button>
+      <button class="laychip" data-layer="sst"><svg><use href="#i-wx"/></svg>SST</button>
+      <button class="laychip" data-layer="chl"><svg><use href="#i-mpa"/></svg>Chlorophyll</button>
+    </div>
+    <div class="hr" style="margin:10px 0"></div>
     <div class="listcard">
       <button class="lrow" data-nav="waypoints"><span class="li"><svg><use href="#i-locate"/></svg></span><span style="flex:1"><b>Waypoint List</b></span><svg class="chev"><use href="#i-chev"/></svg></button>
       <button class="lrow" data-nav="weather"><span class="li"><svg><use href="#i-wx"/></svg></span><span style="flex:1"><b>Weather &amp; Conditions</b></span><svg class="chev"><use href="#i-chev"/></svg></button>
@@ -560,7 +734,18 @@ const ZONES=[{slug:'coronado-islands',name:'Coronado Islands',kind:'offshore',la
 {slug:'mission-bay',name:'Mission Bay',kind:'bay',lat:32.78,lon:-117.23,meta:'Bay · Flats',score:'6.5',scoreLbl:'Fair',stars:3.5,count:42,desc:'Protected bay water for spotted bay bass, halibut, and shortfin corvina.',facts:[['i-wx','Best Time','Moving tide'],['i-boat','Access','Shore / Kayak'],['i-mpa','Depth Range','2 - 20 ft'],['i-reef','Bottom','Sand / Eelgrass']]},
 {slug:'lake-poway',name:'Lake Poway',kind:'lake',lat:33.011,lon:-117.010,meta:'Freshwater Lake',score:'7.0',scoreLbl:'Good',stars:4,count:37,desc:'Stocked trout lake with seasonal CDFW plants; largemouth bass year-round.',facts:[['i-wx','Best Time','After stocking'],['i-boat','Access','Shore / Rental'],['i-mpa','Depth Range','5 - 60 ft'],['i-reef','Bottom','Structure / Points']]},
 {slug:'oceanside-harbor',name:'Oceanside Harbor',kind:'harbor',lat:33.205,lon:-117.395,meta:'Harbor / Marina',score:'6.5',scoreLbl:'Fair',stars:3.5,count:29,desc:'North county harbor access with bay species inside and coastal runs outside.',facts:[['i-wx','Best Time','Morning'],['i-boat','Access','Harbor'],['i-mpa','Depth Range','6 - 40 ft'],['i-reef','Bottom','Sand / Riprap']]}];
-const WAYPOINTS=[{num:'43',name:'Fathom Spot',lat:32.585,lon:-117.35,rating:'8.0',fav:true},{num:'115',name:'115 Spot',lat:32.55,lon:-117.55,rating:'7.0'},{num:'163',name:'163 Spot',lat:32.50,lon:-117.65,rating:'7.5'},{num:'172',name:'172 Spot',lat:32.72,lon:-117.45,rating:'6.5'},{num:'181',name:'181 Spot',lat:32.44,lon:-117.51,rating:'8.5'},{num:'182',name:'182 Spot',lat:32.40,lon:-117.42,rating:'7.0'},{num:'209',name:'209 Spot',lat:32.35,lon:-117.60,rating:'7.5'},{num:'265',name:'265 Spot',lat:32.30,lon:-117.38,rating:'7.0'},{num:'277',name:'277 Spot',lat:32.26,lon:-117.72,rating:'6.5'},{num:'289',name:'289 Spot',lat:32.48,lon:-117.78,rating:'7.0'},{num:'302',name:'302 Spot',lat:32.62,lon:-117.68,rating:'8.5',fav:true}];
+const WAYPOINTS=[
+{num:'43',name:'Fathom Spot',lat:32.585,lon:-117.35,rating:'8.0',fav:true,depth:'240 ft',bottom:'Hard / Mud edge',structure:'Bank',bestFor:['yellowtail','rockfish'],season:'Year Round',notes:'Rockfish marks on the hard edge; meter before you drop.',near:'Point Loma',wzone:'point-loma-kelp'},
+{num:'115',name:'115 Spot',lat:32.55,lon:-117.55,rating:'7.0',depth:'115 fm',bottom:'Mud / Rock patches',structure:'High spot',bestFor:['rockfish','yellowtail'],season:'Year Round',notes:'Deep-water high spot; watch drift speed.',near:'Point Loma',wzone:'point-loma-kelp'},
+{num:'163',name:'163 Spot',lat:32.50,lon:-117.65,rating:'7.5',depth:'163 fm',bottom:'Hard bottom',structure:'Ridge',bestFor:['bluefin-tuna','yellowtail'],season:'May - Oct',notes:'Tuna marks over the ridge in summer; birds tell the story.',near:'Point Loma',wzone:'coronado-islands'},
+{num:'172',name:'172 Spot',lat:32.72,lon:-117.45,rating:'6.5',depth:'172 fm',bottom:'Mud',structure:'Drop-off',bestFor:['rockfish'],season:'Year Round',notes:'Steady rockfish drift; check current before anchoring.',near:'Mission Bay',wzone:'mission-bay'},
+{num:'181',name:'181 Spot',lat:32.44,lon:-117.51,rating:'8.5',depth:'181 fm',bottom:'Hard / Kelp paddies',structure:'Bank',bestFor:['bluefin-tuna','yellowfin-tuna'],season:'Jun - Oct',notes:'Paddy line sets up here on a south swell. Run and gun.',near:'Coronado Islands',wzone:'coronado-islands'},
+{num:'182',name:'182 Spot',lat:32.40,lon:-117.42,rating:'7.0',depth:'182 fm',bottom:'Mixed',structure:'High spot',bestFor:['yellowtail','dorado'],season:'Jun - Oct',notes:'Holds bait on the uphill side; look for foamers.',near:'Coronado Islands',wzone:'coronado-islands'},
+{num:'209',name:'209 Spot',lat:32.35,lon:-117.60,rating:'7.5',depth:'209 fm',bottom:'Hard',structure:'Bank',bestFor:['bluefin-tuna'],season:'May - Nov',notes:'Early-season bluefin lane; glass mornings are best.',near:'Coronado Islands',wzone:'coronado-islands'},
+{num:'265',name:'265 Spot',lat:32.30,lon:-117.38,rating:'7.0',depth:'265 fm',bottom:'Mud / Hard patches',structure:'Edge',bestFor:['yellowfin-tuna','dorado'],season:'Jul - Oct',notes:'Warm-water edge sets up here late summer.',near:'Coronado Islands',wzone:'coronado-islands'},
+{num:'277',name:'277 Spot',lat:32.26,lon:-117.72,rating:'6.5',depth:'277 fm',bottom:'Mud',structure:'Flat',bestFor:['dorado'],season:'Aug - Oct',notes:'Paddy water; cover ground and glass.',near:'Coronado Islands',wzone:'coronado-islands'},
+{num:'289',name:'289 Spot',lat:32.48,lon:-117.78,rating:'7.0',depth:'289 fm',bottom:'Hard ridge',structure:'Ridge',bestFor:['bluefin-tuna','yellowtail'],season:'May - Oct',notes:'Meter the ridge line; fish move through fast.',near:'San Clemente Island',wzone:'san-clemente-island'},
+{num:'302',name:'302 Spot',lat:32.62,lon:-117.68,rating:'8.5',fav:true,depth:'182 ft',bottom:'Kelp / Rock',structure:'Edge / Drop Off',bestFor:['bluefin-tuna','yellowtail','dorado'],season:'Year Round',notes:'Strong bluefin bite on the corners. Look for birds and warm water.',near:'Point Loma',wzone:'coronado-islands'}];
 const CATPINS=[{cat:'harbor',icon:'i-anchor',lat:33.205,lon:-117.395,label:'Oceanside'},{cat:'harbor',icon:'i-anchor',lat:32.72,lon:-117.23,label:'San Diego'},{cat:'pier',icon:'i-pier',lat:32.958,lon:-117.27,label:'Del Mar'},{cat:'pier',icon:'i-pier',lat:32.867,lon:-117.257,label:''},{cat:'spot',icon:'i-fish',lat:32.68,lon:-117.28,label:''},{cat:'spot',icon:'i-fish',lat:32.42,lon:-117.25,label:'Coronado Is.'},{cat:'spot',icon:'i-fish',lat:32.90,lon:-118.50,label:'San Clemente Is.'},{cat:'reef',icon:'i-reef',lat:32.75,lon:-117.30,label:''},{cat:'lake',icon:'i-fish',lat:33.011,lon:-117.010,label:'Poway'},{cat:'lake',icon:'i-fish',lat:32.914,lon:-117.098,label:'Miramar'},{cat:'lake',icon:'i-fish',lat:32.92,lon:-116.93,label:'San Vicente'}];
 
 /* ---- Backend ---- */
@@ -601,8 +786,8 @@ const Backend=(()=>{
 })();
 
 /* ---- helpers ---- */
-function speciesName(slug){const s=SPECIES.find(x=>x.slug===slug);return s?s.name:slug}
-function speciesFx(slug){const s=SPECIES.find(x=>x.slug===slug);return s?s.fx:'fx-tuna'}
+function speciesName(slug){const s=SPECIES.find(x=>x.slug===slug)||(window.SPECIES_FULL||[]).find(x=>x.slug===slug);return s?(s.name||s.common_name):slug}
+function speciesFx(slug){const s=SPECIES.find(x=>x.slug===slug);if(s)return s.fx;const f=(window.SPECIES_FULL||[]).find(x=>x.slug===slug);return f?fxFor(f):'fx-tuna'}
 function zoneName(slug){const z=ZONES.find(x=>x.slug===slug);return z?z.name:slug}
 function locLabel(r){if(r.privacy==='zone')return zoneName(r.zone)+' · zone only';if(r.privacy==='general')return zoneName(r.zone)+' · ~1 km';return zoneName(r.zone)}
 function toast(t,m){const el=$('toast');el.innerHTML='<b>'+t+'</b>'+m;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3400)}
@@ -623,14 +808,26 @@ function back(){stack.pop();show(stack[stack.length-1]||'map')}
 document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',back));
 document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{$('menusheet').classList.remove('open');nav(b.dataset.nav)}));
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{stack.length=1;nav(t.dataset.tab)}));
-document.querySelectorAll('.segrow').forEach(row=>row.addEventListener('click',e=>{const p=e.target.closest('.pill');if(!p)return;row.querySelectorAll('.pill').forEach(x=>x.classList.toggle('on',x===p));if(row.id==='rep-tabs')renderReports(p.dataset.f)}));
+function showPane(prefix,name){document.querySelectorAll('[id^="'+prefix+'pane-"]').forEach(p=>p.classList.toggle('on',p.id===prefix+'pane-'+name))}
+document.querySelectorAll('.segrow').forEach(row=>row.addEventListener('click',e=>{const p=e.target.closest('.pill');if(!p)return;row.querySelectorAll('.pill').forEach(x=>x.classList.toggle('on',x===p));
+ if(row.id==='rep-tabs')renderReports(p.dataset.f);
+ if(row.id==='wx-tabs')showPane('wx',p.dataset.wx);
+ if(row.id==='regs-tabs')showPane('rg',p.dataset.rg);
+ if(row.id==='fav-tabs'){showPane('fv',p.dataset.fv);renderFavs()}
+ if(row.id==='ais-tabs')aisFilter(p.dataset.ak);
+ if(row.id==='wpl-tabs')renderWaypoints(p.dataset.wf);
+}));
+document.querySelectorAll('#spot-tabs .dtab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('#spot-tabs .dtab').forEach(x=>x.classList.toggle('on',x===t));showPane('sp',t.dataset.sp)}));
+document.querySelectorAll('#wpd-tabs .dtab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('#wpd-tabs .dtab').forEach(x=>x.classList.toggle('on',x===t));showPane('wpd',t.dataset.wpd)}));
 $('btn-menu').addEventListener('click',()=>$('menusheet').classList.add('open'));
 $('fab-more').addEventListener('click',()=>$('menusheet').classList.add('open'));
 $('menusheet').addEventListener('click',e=>{if(e.target.id==='menusheet')$('menusheet').classList.remove('open')});
 $('fab-post').addEventListener('click',()=>nav('post'));
 $('fab-fav').addEventListener('click',()=>nav('favs'));
-$('fab-search').addEventListener('click',()=>nav('waypoints'));
-$('btn-bell').addEventListener('click',()=>toast('Notifications','3 sample notifications in this preview build.'));
+$('fab-search').addEventListener('click',()=>{$('searchwrap').classList.add('open');$('searchinput').focus();renderSearch('')});
+$('searchclose').addEventListener('click',()=>$('searchwrap').classList.remove('open'));
+$('searchinput').addEventListener('input',()=>renderSearch($('searchinput').value));
+$('btn-bell').addEventListener('click',()=>{const p=$('notifpanel');p.classList.toggle('open');if(p.classList.contains('open'))$('btn-bell').querySelector('.badge').style.display='none'});
 $('sheet').querySelector('.grab').parentElement.addEventListener('click',e=>{if(e.target.closest('button'))return;$('sheet').classList.toggle('mini')});
 $('hotcard').addEventListener('click',()=>openSpot('coronado-islands'));
 
@@ -639,14 +836,17 @@ let _map=null,speciesFilterOn=false,aisLayerMain=null;
 const favs=new Set(['coronado-islands','san-clemente-island','lake-poway','oceanside-harbor']);
 function catIcon(p){return L.divIcon({className:'',html:'<div class="pin cat c-'+p.cat+'"><svg><use href="#'+p.icon+'"/></svg></div>',iconSize:[28,28],iconAnchor:[14,14]})}
 function wpIcon(w){return L.divIcon({className:'',html:'<div class="pin wp">'+w.num+'</div>',iconSize:[30,30],iconAnchor:[15,15]})}
+const mapGroups={};
 function initMap(){
  _map=L.map('map',{zoomControl:false,attributionControl:true}).setView([32.62,-117.55],8);
  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:15,attribution:'Esri World Imagery · Not for navigation'}).addTo(_map);
  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:15}).addTo(_map);
  L.polyline([[33.30,-118.60],[33.00,-118.20],[32.75,-117.85],[32.69,-117.54],[32.54,-117.70],[32.36,-117.83],[32.17,-117.91],[31.98,-117.88]],{color:'#F2F6FC',weight:1.6,dashArray:'7 7',opacity:.85}).addTo(_map).bindTooltip('12 NM',{permanent:true,direction:'top',className:'mlabel'});
  L.polyline([[32.535,-117.125],[32.515,-117.48],[32.49,-117.94],[32.42,-118.35]],{color:'#E5484D',weight:2,dashArray:'9 6',opacity:.95}).addTo(_map).bindTooltip('Mexico',{permanent:true,direction:'bottom',className:'mlabel'});
- CATPINS.forEach(p=>{const m=L.marker([p.lat,p.lon],{icon:catIcon(p)}).addTo(_map);if(p.label)m.bindTooltip(p.label,{permanent:true,direction:'right',className:'mlabel',offset:[14,0]});m.on('click',()=>{const z=ZONES.find(z=>Math.abs(z.lat-p.lat)<.03&&Math.abs(z.lon-p.lon)<.03);openSpot(z?z.slug:'coronado-islands')})});
- window._wpMarkers=WAYPOINTS.map(w=>{const m=L.marker([w.lat,w.lon],{icon:wpIcon(w)}).addTo(_map);m.on('click',()=>{toast(w.num+' · '+w.name,distNm(SD_ORIGIN,w).toFixed(1)+' nm · public reference · captain verification pending — not for navigation.')});m._w=w;return m});
+ mapGroups.spots=L.layerGroup().addTo(_map);mapGroups.piers=L.layerGroup().addTo(_map);mapGroups.harbors=L.layerGroup().addTo(_map);mapGroups.lakes=L.layerGroup().addTo(_map);mapGroups.wp=L.layerGroup().addTo(_map);
+ CATPINS.forEach(p=>{const m=L.marker([p.lat,p.lon],{icon:catIcon(p)});if(p.label)m.bindTooltip(p.label,{permanent:true,direction:'right',className:'mlabel',offset:[14,0]});m.on('click',()=>{const z=ZONES.find(z=>Math.abs(z.lat-p.lat)<.03&&Math.abs(z.lon-p.lon)<.03);openSpot(z?z.slug:'coronado-islands')});
+  const g=p.cat==='pier'?'piers':p.cat==='harbor'?'harbors':p.cat==='lake'?'lakes':'spots';mapGroups[g].addLayer(m)});
+ window._wpMarkers=WAYPOINTS.map((w,i)=>{const m=L.marker([w.lat,w.lon],{icon:wpIcon(w)});m.on('click',()=>openWaypoint(i));m._w=w;mapGroups.wp.addLayer(m);return m});
 }
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
  const k=c.dataset.chip;
@@ -659,12 +859,23 @@ function vslIcon(deg){return L.divIcon({className:'',html:'<svg class="vsl" widt
 const SAMPLE_VESSELS=[[32.60,-117.42,215],[32.52,-117.30,180],[32.70,-117.50,95],[32.44,-117.60,240],[32.80,-117.42,300],[32.36,-117.36,200]];
 function toggleAisMain(on){if(on){aisLayerMain=L.layerGroup(SAMPLE_VESSELS.map(v=>L.marker([v[0],v[1]],{icon:vslIcon(v[2])}))).addTo(_map);toast('AIS Boats','Sample vessel layer — live AIS ships in V1.1 after terms confirmation.')}else if(aisLayerMain){_map.removeLayer(aisLayerMain);aisLayerMain=null}}
 /* AIS screen map */
-let aisMap=null;
+let aisMap=null,aisFleet=[],aisKind='all';
+const VNAMES=['PACIFIC DAWN','BLUE HORIZON','MAR VIENTO','SWELL RIDER','CORTES RUNNER','KELP CUTTER','BAJA WIND','NORTH EDGE'];
+const VKINDS=['fishing','fishing','fishing','cargo','pleasure','other'];
 function initAis(){if(aisMap){aisMap.invalidateSize();return}
  aisMap=L.map('aismap',{zoomControl:false}).setView([32.58,-117.45],9);
  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:15,attribution:'Esri · sample AIS'}).addTo(aisMap);
- const many=[];for(let i=0;i<40;i++){many.push([32.2+Math.random()*.9,-118.1+Math.random()*.95,Math.random()*360])}
- L.layerGroup(many.map(v=>L.marker([v[0],v[1]],{icon:vslIcon(v[2])}))).addTo(aisMap);
+ for(let i=0;i<40;i++){
+  const v={lat:32.2+Math.random()*.9,lon:-118.1+Math.random()*.95,course:Math.round(Math.random()*360),kn:(4+Math.random()*14).toFixed(1),name:VNAMES[i%VNAMES.length]+(i>=VNAMES.length?' '+(Math.floor(i/VNAMES.length)+1):''),kind:VKINDS[i%VKINDS.length]};
+  v.marker=L.marker([v.lat,v.lon],{icon:vslIcon(v.course)}).addTo(aisMap);
+  v.marker.on('click',()=>{$('vc-name').textContent=v.name;$('vc-kind').textContent=(v.kind[0].toUpperCase()+v.kind.slice(1))+' Vessel · sample track';$('vc-stats').textContent=v.kn+' kn · Course '+v.course+'° · '+distNm(SD_ORIGIN,v).toFixed(1)+' nm away';$('vc-star').classList.remove('on')});
+  aisFleet.push(v);
+ }
+ $('vc-star').addEventListener('click',()=>$('vc-star').classList.toggle('on'));
+}
+function aisFilter(k){aisKind=k;if(!aisMap)return;let n=0;
+ aisFleet.forEach(v=>{const show=k==='all'||v.kind===k;if(show){v.marker.addTo(aisMap);n++}else aisMap.removeLayer(v.marker)});
+ $('ais-banner').textContent='Showing '+(k==='all'?'356':n+' of 356')+' vessels · sample until AIS goes live (V1.1)';
 }
 
 /* ---- spot detail ---- */
@@ -681,6 +892,8 @@ function openSpot(slug){
  $('spot-heart').onclick=()=>{favs.has(z.slug)?favs.delete(z.slug):favs.add(z.slug);toast('Favorites',favs.has(z.slug)?'Saved.':'Removed.')};
  Backend.listApproved().then(rs=>{const mine=rs.filter(r=>r.zone===z.slug).slice(0,2);
   $('spot-reports').innerHTML=mine.length?mine.map(repCardHtml).join(''):'<div class="small-note" style="padding:8px 2px">No approved reports here yet.</div>'});
+ document.querySelectorAll('#spot-tabs .dtab').forEach((t,ix)=>t.classList.toggle('on',ix===0));showPane('sp','overview');
+ fillGallery(z);
  nav('spot');
  loadSpotConditions(z);
 }
@@ -712,23 +925,38 @@ async function renderReports(filter){
 }
 
 /* ---- waypoints list ---- */
-function renderWaypoints(){
- $('wp-list').innerHTML=WAYPOINTS.map((w,i)=>'<div class="lrow"><span class="numdot">'+w.num+'</span><span style="flex:1"><b>'+w.num+' '+(w.name==='Fathom Spot'?'Fathom Spot':w.name)+'</b><small>'+distNm(SD_ORIGIN,w).toFixed(1)+' nm · pending captain verification</small></span><span class="rt"><span class="score sm">'+w.rating+'</span><button class="starbtn '+(w.fav?'on':'')+'" data-i="'+i+'"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></button></span></div>').join('');
- $('wp-list').querySelectorAll('.starbtn').forEach(b=>b.addEventListener('click',()=>{const w=WAYPOINTS[+b.dataset.i];w.fav=!w.fav;b.classList.toggle('on',w.fav)}));
+let wplFilter='all';
+function renderWaypoints(f){
+ if(f)wplFilter=f;
+ const idx=WAYPOINTS.map((w,i)=>({w,i})).filter(x=>wplFilter==='favs'?x.w.fav:wplFilter==='hot'?parseFloat(x.w.rating)>=7.5:true);
+ $('wp-list').innerHTML=idx.map(({w,i})=>'<button class="lrow" data-wp="'+i+'"><span class="numdot">'+w.num+'</span><span style="flex:1"><b>'+w.num+' '+w.name+'</b><small>'+distNm(SD_ORIGIN,w).toFixed(1)+' nm · pending captain verification</small></span><span class="rt"><span class="score sm">'+w.rating+'</span><span class="starbtn '+(w.fav?'on':'')+'" data-i="'+i+'"><svg viewBox="0 0 24 24" style="width:20px;height:20px"><use href="#i-star"/></svg></span></span></button>').join('')||'<div class="small-note" style="padding:16px">Nothing here yet.</div>';
+ $('wp-list').querySelectorAll('.starbtn').forEach(b=>b.addEventListener('click',ev=>{ev.stopPropagation();const w=WAYPOINTS[+b.dataset.i];w.fav=!w.fav;b.classList.toggle('on',w.fav)}));
+ $('wp-list').querySelectorAll('[data-wp]').forEach(b=>b.addEventListener('click',()=>openWaypoint(+b.dataset.wp)));
 }
 
 /* ---- favorites ---- */
-function renderFavs(){
+async function renderFavs(){
  $('fav-list').innerHTML=[...favs].map(slug=>{const z=ZONES.find(x=>x.slug===slug);if(!z)return'';return '<button class="lrow" data-spot="'+z.slug+'"><span class="thumb" style="width:52px;height:52px;background:linear-gradient(145deg,#123055,#0C1D3A)"><svg style="width:40px;height:26px"><use href="#fx-yt"/></svg></span><span style="flex:1"><b>'+z.name+'</b><small>'+z.meta+'</small></span><span class="rt"><span class="score sm">'+z.score+'</span><span class="starbtn on"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--star)"><use href="#i-star"/></svg></span></span></button>'}).join('');
  $('fav-list').querySelectorAll('[data-spot]').forEach(b=>b.addEventListener('click',()=>openSpot(b.dataset.spot)));
+ const rs=(await Backend.listApproved()).slice(0,2);
+ $('fav-reports').innerHTML=rs.map(repCardHtml).join('');
+ $('fav-reports').querySelectorAll('.repcard').forEach(c=>c.addEventListener('click',()=>openSpot(c.dataset.spot)));
+ $('fav-boats').innerHTML='<div class="lrow"><span class="vflag" style="width:44px;height:44px"><svg style="width:22px;height:22px;stroke:#68F09A;fill:none;stroke-width:1.8"><use href="#i-boat"/></svg></span><span style="flex:1"><b>PACIFIC DAWN</b><small>Fishing Vessel · sample AIS track</small></span><span class="starbtn on"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--star)"><use href="#i-star"/></svg></span></div>';
 }
 
 /* ---- post catch ---- */
 let pcPrivacy='general';
 $('pc-species').innerHTML=SPECIES.map(s=>'<option value="'+s.slug+'"'+(s.slug==='bluefin-tuna'?' selected':'')+'>'+s.name+'</option>').join('');
 $('pc-location').innerHTML=ZONES.map(z=>'<option value="'+z.slug+'">'+z.name+'</option>').join('');
-$('pc-date').textContent=new Date().toLocaleString([], {month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-document.querySelectorAll('.unitseg').forEach(seg=>seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))}));
+(function(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());$('pc-date').value=d.toISOString().slice(0,16)})();
+document.querySelectorAll('.unitseg').forEach(seg=>seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.classList.contains('on'))return;
+ const inp=seg.dataset.seg==='len'?$('pc-len'):$('pc-wt'),v=parseFloat(inp.value),to=b.textContent.trim();
+ if(Number.isFinite(v)){
+  if(seg.dataset.seg==='len')inp.value=(to==='cm'?v*2.54:v/2.54).toFixed(1).replace(/\.0$/,'');
+  else inp.value=(to==='kg'?v/2.20462:v*2.20462).toFixed(1).replace(/\.0$/,'');
+ }
+ seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+}));
 $('pc-share').addEventListener('click',()=>$('pc-share').classList.toggle('on'));
 const privNotes={exact:'Exact point shown publicly. Best for piers and public structure.',general:'Shown within about 1 km. Your exact point stays private in the vault.',zone:'Only the zone name is shown. No public pin at all.'};
 $('pc-priv').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;pcPrivacy=b.dataset.p;$('pc-priv').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('pc-privnote').textContent=privNotes[pcPrivacy]});
@@ -760,29 +988,160 @@ async function renderRecent(){
  $('recentcatch').onclick=()=>openSpot(r.zone);
 }
 async function loadHomeTiles(){
- try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.70&longitude=-117.24&current=temperature_2m,relative_humidity_2m,uv_index,surface_pressure,wind_speed_10m,wind_direction_10m,visibility,weather_code&hourly=temperature_2m,weather_code&forecast_hours=8&temperature_unit=fahrenheit&wind_speed_unit=mph');const j=await r.json(),c=j.current||{};
+ try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.70&longitude=-117.24&current=temperature_2m,relative_humidity_2m,uv_index,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,visibility,weather_code&hourly=temperature_2m,weather_code,wind_speed_10m&forecast_hours=8&temperature_unit=fahrenheit&wind_speed_unit=mph');const j=await r.json(),c=j.current||{};
   if(Number.isFinite(+c.temperature_2m)){$('t-air').textContent=Math.round(+c.temperature_2m)+'°';$('wx-air').textContent=Math.round(+c.temperature_2m)+'°F'}
-  if(Number.isFinite(+c.wind_speed_10m)){const w=compass(+c.wind_direction_10m)+' '+Math.round(+c.wind_speed_10m)+' mph';$('t-wind').textContent=w;$('wx-wind').textContent=Math.round(+c.wind_speed_10m);$('wx-wind-s').textContent='mph '+compass(+c.wind_direction_10m)}
+  if(Number.isFinite(+c.wind_speed_10m)){const w=compass(+c.wind_direction_10m)+' '+Math.round(+c.wind_speed_10m)+' mph';$('t-wind').textContent=w;$('wx-wind').textContent=Math.round(+c.wind_speed_10m);$('wx-wind-s').textContent='mph '+compass(+c.wind_direction_10m);
+   $('wxw-big').textContent=Math.round(+c.wind_speed_10m);$('wxw-dir').textContent='mph from '+compass(+c.wind_direction_10m);$('wxw-deg').textContent=Math.round(+c.wind_direction_10m)+'°';
+   if(Number.isFinite(+c.wind_gusts_10m))$('wxw-gust').textContent=Math.round(+c.wind_gusts_10m)+' mph'}
   if(Number.isFinite(+c.relative_humidity_2m))$('wx-hum').textContent=Math.round(+c.relative_humidity_2m)+'%';
   if(Number.isFinite(+c.uv_index))$('wx-uv').textContent=(+c.uv_index).toFixed(0)+(+c.uv_index>=6?' High':+c.uv_index>=3?' Mod':' Low');
   if(Number.isFinite(+c.surface_pressure))$('wx-press').textContent=Math.round(+c.surface_pressure)+' mb';
   if(Number.isFinite(+c.visibility))$('wx-vis').textContent=Math.round(+c.visibility/1609);
   $('wx-cond').textContent=(+c.weather_code===0?'Sunny':+c.weather_code<3?'Mostly Sunny':+c.weather_code<45?'Cloudy':'Marine layer');
-  const hh=j.hourly||{};let cells='';(hh.time||[]).forEach((t,i)=>{const d=new Date(t);cells+='<div class="hcell'+(i===0?' now':'')+'"><div class="hh">'+(i===0?'Now':d.toLocaleTimeString([],{hour:'numeric'}))+'</div><svg><use href="#wx-sun"/></svg><div class="ht">'+Math.round(hh.temperature_2m[i])+'°</div></div>'});$('wx-hourly').innerHTML=cells;
+  const hh=j.hourly||{};let cells='',wcells='';(hh.time||[]).forEach((t,i)=>{const d=new Date(t);const lbl=(i===0?'Now':d.toLocaleTimeString([],{hour:'numeric'}));
+   cells+='<div class="hcell'+(i===0?' now':'')+'"><div class="hh">'+lbl+'</div><svg><use href="#wx-sun"/></svg><div class="ht">'+Math.round(hh.temperature_2m[i])+'°</div></div>';
+   if(hh.wind_speed_10m)wcells+='<div class="hcell'+(i===0?' now':'')+'"><div class="hh">'+lbl+'</div><div class="ht" style="margin-top:12px">'+Math.round(hh.wind_speed_10m[i])+'</div><div class="hh" style="margin-top:4px">mph</div></div>'});
+  $('wx-hourly').innerHTML=cells;$('wxw-hourly').innerHTML=wcells;
   $('sheet-src').textContent='Conditions: Open-Meteo model · live · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
  }catch(e){$('sheet-src').textContent='Conditions: sample (feed blocked)'}
  try{const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=32.55&longitude=-117.35&current=wave_height,swell_wave_height,swell_wave_direction,swell_wave_period,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&length_unit=imperial&wind_speed_unit=kn&cell_selection=sea');const j=await r.json(),c=j.current||{};
-  if(Number.isFinite(+c.sea_surface_temperature)){$('t-water').textContent=Math.round(+c.sea_surface_temperature)+'°';$('t-water-s').textContent='SST · model · live';$('wx-water').textContent=Math.round(+c.sea_surface_temperature)+'°'}
-  if(Number.isFinite(+c.swell_wave_height)){$('wx-swell').textContent=(+c.swell_wave_height).toFixed(1);$('wx-swell-s').textContent='ft '+compass(+c.swell_wave_direction)}
-  if(Number.isFinite(+c.wave_height))$('wx-wave').textContent=(+c.wave_height).toFixed(1);
-  if(Number.isFinite(+c.ocean_current_velocity)){$('wx-cur').textContent=(+c.ocean_current_velocity).toFixed(1);$('wx-cur-s').textContent='kts '+compass(+c.ocean_current_direction)}
+  if(Number.isFinite(+c.sea_surface_temperature)){$('t-water').textContent=Math.round(+c.sea_surface_temperature)+'°';$('t-water-s').textContent='SST · model · live';$('wx-water').textContent=Math.round(+c.sea_surface_temperature)+'°';$('wxt-big').textContent=Math.round(+c.sea_surface_temperature)+'°'}
+  if(Number.isFinite(+c.swell_wave_height)){$('wx-swell').textContent=(+c.swell_wave_height).toFixed(1);$('wx-swell-s').textContent='ft '+compass(+c.swell_wave_direction);$('wxs-big').textContent=(+c.swell_wave_height).toFixed(1);$('wxs-dir').textContent=compass(+c.swell_wave_direction)}
+  if(Number.isFinite(+c.swell_wave_period))$('wxs-per').textContent=Math.round(+c.swell_wave_period)+' s';
+  if(Number.isFinite(+c.wave_height)){$('wx-wave').textContent=(+c.wave_height).toFixed(1);$('wxs-wave').textContent=(+c.wave_height).toFixed(1)+' ft'}
+  if(Number.isFinite(+c.ocean_current_velocity)){$('wx-cur').textContent=(+c.ocean_current_velocity).toFixed(1);$('wx-cur-s').textContent='kts '+compass(+c.ocean_current_direction);$('wxt-cur').textContent=(+c.ocean_current_velocity).toFixed(1)+' kts';$('wxt-dir').textContent=compass(+c.ocean_current_direction)}
  }catch(e){}
 }
 $('wx-loc').textContent='Point Loma · '+new Date().toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'});
 $('wx-star').addEventListener('click',()=>toast('Saved','Conditions alert saved for this water (Pro).'));
 
+/* ================= PHASE 2 — full function pass ================= */
+const SPECIES_FULL=[{"slug": "calico-bass-kelp-bass", "common_name": "Calico Bass (Kelp Bass)", "latin_name": "Paralabrax clathratus", "grouping": "Bass", "water": "Salt shore/kelp/boat", "season_note": "Year-round best May-Oct", "baits": "Red crab swimbaits, weedless plastics along kelp, live sardine", "spot_types": "Kelp lines, reefs, boiler rocks", "regs_note": "14in min · 5 combined bass bag"}, {"slug": "barred-sand-bass", "common_name": "Barred Sand Bass", "latin_name": "Paralabrax nebulifer", "grouping": "Bass", "water": "Bay/flats/boat", "season_note": "Summer spawn Jun-Aug", "baits": "Green sardine swimbaits, squid strips, leadhead + plastic", "spot_types": "Sand flats, drop-offs", "regs_note": "14in min · 5 combined bass bag"}, {"slug": "spotted-bay-bass", "common_name": "Spotted Bay Bass", "latin_name": "Paralabrax maculatofasciatus", "grouping": "Bass", "water": "Bay", "season_note": "Year-round moving water", "baits": "3in grubs, creature baits, small cranks", "spot_types": "Bay structure, eelgrass, docks, riprap", "regs_note": "14in min · 5 combined bass bag"}, {"slug": "california-halibut", "common_name": "California Halibut", "latin_name": "Paralichthys californicus", "grouping": "Flatfish", "water": "Bay/surf/boat", "season_note": "Spring-summer peak", "baits": "Live smelt/anchovy, white swimbaits on flats", "spot_types": "Sandy flats, channels, harbor mouths", "regs_note": "22in min · 5 bag (S of Pt Sur)"}, {"slug": "white-seabass", "common_name": "White Seabass", "latin_name": "Atractoscion nobilis", "grouping": "Croaker (giant)", "water": "Kelp/boat", "season_note": "Squid nests Mar-Jul", "baits": "Live squid at dawn, big white jigs", "spot_types": "Kelp edges, squid grounds, La Jolla", "regs_note": "28in min · 3 bag (1/day Mar15-Jun15)"}, {"slug": "yellowtail", "common_name": "Yellowtail", "latin_name": "Seriola dorsalis", "grouping": "Pelagic", "water": "Offshore/kelp/kayak", "season_note": "May-Nov paddies + kelp", "baits": "Live sardine flyline, surface iron, yoyo iron", "spot_types": "Kelp paddies, La Jolla, the 9, Coronados water", "regs_note": "10 bag · no size min"}, {"slug": "bluefin-tuna", "common_name": "Bluefin Tuna", "latin_name": "Thunnus orientalis", "grouping": "Pelagic", "water": "Offshore", "season_note": "May-Oct foamers + night", "baits": "Flat-fall at night, kite + yummy flyer, sardine", "spot_types": "Offshore banks · the 9, 302, 371, 425", "regs_note": "2/day CA · verify current"}, {"slug": "yellowfin-tuna", "common_name": "Yellowfin Tuna", "latin_name": "Thunnus albacares", "grouping": "Pelagic", "water": "Offshore", "season_note": "Jul-Oct warm water", "baits": "Live sardine, small feathers, poppers", "spot_types": "Offshore banks, temp breaks", "regs_note": "10 bag · verify"}, {"slug": "skipjack-tuna", "common_name": "Skipjack Tuna", "latin_name": "Katsuwonus pelamis", "grouping": "Pelagic", "water": "Offshore", "season_note": "Jul-Oct", "baits": "Feathers, small jigs, sardine", "spot_types": "Offshore, mixed schools", "regs_note": "10 bag · verify"}, {"slug": "dorado-mahi", "common_name": "Dorado (Mahi)", "latin_name": "Coryphaena hippurus", "grouping": "Pelagic", "water": "Offshore", "season_note": "Aug-Oct warm years", "baits": "Sardine at paddies, poppers, feathers", "spot_types": "Kelp paddies, warm eddies", "regs_note": "10 bag"}, {"slug": "pacific-bonito", "common_name": "Pacific Bonito", "latin_name": "Sarda chiliensis", "grouping": "Pelagic", "water": "Pier/bay/boat", "season_note": "Summer-fall runs", "baits": "Chrome Krocodiles, feathers, live anchovy", "spot_types": "Piers, bait receivers, nearshore", "regs_note": "10 bag · size rules · verify"}, {"slug": "pacific-barracuda", "common_name": "Pacific Barracuda", "latin_name": "Sphyraena argentea", "grouping": "Pelagic", "water": "Nearshore/boat", "season_note": "Spring-summer", "baits": "Chrome jigs, anchovies, surface iron", "spot_types": "Kelp edges, nearshore flats", "regs_note": "28in min · 10 bag"}, {"slug": "sculpin-ca-scorpionfish", "common_name": "Sculpin (CA Scorpionfish)", "latin_name": "Scorpaena guttata", "grouping": "Bottom", "water": "Boat/pier", "season_note": "Year-round winter staple", "baits": "Squid strips dropper loop, shrimp flies", "spot_types": "Hard bottom 60-300ft", "regs_note": "10in min · 5 bag · venomous"}, {"slug": "vermilion-rockfish-complex", "common_name": "Vermilion Rockfish (+complex)", "latin_name": "Sebastes miniatus", "grouping": "Bottom", "water": "Boat", "season_note": "Rockfish season depth rules", "baits": "Shrimp flies + squid, dropper rigs", "spot_types": "Deep structure, banks", "regs_note": "10-fish RCG · season/depth rules VERIFY"}, {"slug": "california-sheephead", "common_name": "California Sheephead", "latin_name": "Bodianus pulcher", "grouping": "Bottom", "water": "Kelp/boat", "season_note": "Year-round", "baits": "Live rock crab, shrimp, squid", "spot_types": "Kelp, reefs, hard bottom", "regs_note": "12in min · 5 bag · verify"}, {"slug": "lingcod", "common_name": "Lingcod", "latin_name": "Ophiodon elongatus", "grouping": "Bottom", "water": "Boat", "season_note": "Fall-winter best", "baits": "Big swimbaits, live mackerel, heavy jigs", "spot_types": "Deep reefs, wrecks", "regs_note": "22in min · 2 bag"}, {"slug": "pacific-mackerel", "common_name": "Pacific Mackerel", "latin_name": "Scomber japonicus", "grouping": "Bait/pier", "water": "Pier/bay", "season_note": "Year-round", "baits": "Sabiki rigs, small chrome", "spot_types": "Piers, bait barge, harbor", "regs_note": "No special limit · verify"}, {"slug": "pacific-sardine", "common_name": "Pacific Sardine", "latin_name": "Sardinops sagax", "grouping": "Bait", "water": "Bay/nearshore", "season_note": "Year-round cycles", "baits": "Sabiki · the bait everything eats", "spot_types": "Bait receivers, harbor lights", "regs_note": "Bait regs · verify"}, {"slug": "california-corbina", "common_name": "California Corbina", "latin_name": "Menticirrhus undulatus", "grouping": "Surf", "water": "Surf", "season_note": "Jun-Sep sight-casting", "baits": "Sand crabs, Lucky Craft in troughs, Carolina rig", "spot_types": "Surf troughs, sand flats", "regs_note": "10 bag · no min · verify"}, {"slug": "spotfin-croaker", "common_name": "Spotfin Croaker", "latin_name": "Roncador stearnsii", "grouping": "Surf", "water": "Surf/bay", "season_note": "Summer-fall", "baits": "Fresh mussels, ghost shrimp, bloodworms", "spot_types": "Surf holes, bay channels", "regs_note": "10 bag · verify"}, {"slug": "yellowfin-croaker", "common_name": "Yellowfin Croaker", "latin_name": "Umbrina roncador", "grouping": "Surf", "water": "Surf/pier", "season_note": "Summer", "baits": "Bloodworms, mussels, sand crabs", "spot_types": "Surf, pier surf-line", "regs_note": "10 bag · verify"}, {"slug": "barred-surfperch", "common_name": "Barred Surfperch", "latin_name": "Amphistichus argenteus", "grouping": "Surf", "water": "Surf", "season_note": "Winter-spring best", "baits": "Gulp sandworms Carolina-rigged, sand crabs", "spot_types": "Surf troughs", "regs_note": "10 bag · verify perch rules"}, {"slug": "shortfin-corvina", "common_name": "Shortfin Corvina", "latin_name": "Cynoscion parvipinnis", "grouping": "Bay", "water": "Bay", "season_note": "Summer evenings", "baits": "Small crankbaits, soft jerkbaits at dusk", "spot_types": "South bay channels, warm shallows", "regs_note": "Verify current CDFW"}, {"slug": "bat-ray", "common_name": "Bat Ray", "latin_name": "Myliobatis californica", "grouping": "Ray/shark", "water": "Bay/pier", "season_note": "Year-round summer nights", "baits": "Squid on bottom, mackerel chunks", "spot_types": "Bay flats, pier pilings", "regs_note": "C&R encouraged · verify"}, {"slug": "leopard-shark", "common_name": "Leopard Shark", "latin_name": "Triakis semifasciata", "grouping": "Ray/shark", "water": "Bay/surf", "season_note": "Summer La Jolla shores", "baits": "Mackerel chunks, squid", "spot_types": "Warm shallows, bay mouths", "regs_note": "36in min · 3 bag"}, {"slug": "rainbow-trout", "common_name": "Rainbow Trout", "latin_name": "Oncorhynchus mykiss", "grouping": "Freshwater", "water": "Stocked lakes", "season_note": "Stock season Nov-May", "baits": "PowerBait chartreuse, small spinners, nightcrawlers", "spot_types": "Poway/Murray/Santee/Ramona dock arms after stock", "regs_note": "5 bag + lake permit"}, {"slug": "channel-catfish", "common_name": "Channel Catfish", "latin_name": "Ictalurus punctatus", "grouping": "Freshwater", "water": "Lakes", "season_note": "Summer evenings", "baits": "Mackerel cut bait, nightcrawlers, stink bait", "spot_types": "Lake coves, warm shallows", "regs_note": "Varies by lake · verify"}, {"slug": "largemouth-bass", "common_name": "Largemouth Bass", "latin_name": "Micropterus salmoides", "grouping": "Freshwater", "water": "Lakes", "season_note": "Spring spawn + year-round", "baits": "Plastics, jigs, crankbaits", "spot_types": "Otay, Hodges, El Cap points + brush", "regs_note": "12in min · 5 bag (varies)"}, {"slug": "bluegill", "common_name": "Bluegill", "latin_name": "Lepomis macrochirus", "grouping": "Freshwater", "water": "Lakes", "season_note": "Spring-summer", "baits": "Worms, crickets, tiny jigs", "spot_types": "Lake shallows, docks · kid-friendly", "regs_note": "25 bag · verify per lake"}, {"slug": "blue-catfish", "common_name": "Blue Catfish", "latin_name": "Ictalurus furcatus", "grouping": "Freshwater", "water": "Lakes", "season_note": "Year-round Lower Otay trophy", "baits": "Fresh cut bait, big baits on bottom", "spot_types": "Lower Otay, San Vicente", "regs_note": "Varies by lake · verify"}];
+window.SPECIES_FULL=SPECIES_FULL;
+function fxFor(sp){const g=((sp.grouping||'')+' '+(sp.name||sp.common_name||'')).toLowerCase();
+ if(g.includes('tuna'))return 'fx-tuna';if(g.includes('dorado')||g.includes('dolphinfish'))return 'fx-dorado';
+ if(g.includes('bass')||g.includes('rockfish')||g.includes('sculpin')||g.includes('sheephead')||g.includes('lingcod')||g.includes('halibut')||g.includes('bottom'))return 'fx-calico';
+ return 'fx-yt'}
+const MPAS={officialUrl:"https://wildlife.ca.gov/Conservation/Marine/MPAs",mpas:[
+{name:"Matlahuayl SMR",designation:"SMR",location:"Offshore La Jolla, near UC San Diego",rule:"No take of any living, geological, or cultural marine resource"},
+{name:"San Diego-Scripps Coastal SMCA",designation:"SMCA",location:"Offshore La Jolla, adjacent to Matlahuayl SMR",rule:"No take except hook-and-line for pelagic species (no market squid)"},
+{name:"South La Jolla SMR",designation:"SMR",location:"About 10 miles north of San Diego, off La Jolla",rule:"No take of any living, geological, or cultural marine resource"},
+{name:"South La Jolla SMCA",designation:"SMCA",location:"Adjacent to South La Jolla SMR, offshore La Jolla",rule:"No take except hook-and-line for pelagic finfish only"},
+{name:"Cabrillo SMR",designation:"SMR",location:"Point Loma, near Cabrillo National Monument",rule:"No take of any living, geological, or cultural marine resource"},
+{name:"Tijuana River Mouth SMCA",designation:"SMCA",location:"Imperial Beach, at the US/Mexico border",rule:"No take except limited dip-net/round-haul-net take of pelagic species"},
+{name:"Famosa Slough SMCA (No-Take)",designation:"SMCA",location:"Urban San Diego, between Old Town and Ocean Beach",rule:"No take of any living, geological, or cultural marine resource"},
+{name:"San Dieguito Lagoon SMCA",designation:"SMCA",location:"Just north of Del Mar, at the San Dieguito River mouth",rule:"No take except hook-and-line finfish from shore; boating/swimming banned"},
+{name:"San Elijo Lagoon SMCA (No-Take)",designation:"SMCA",location:"Encinitas, adjacent to Swami's SMCA",rule:"No take; boating, swimming, and wading also prohibited"},
+{name:"Swami's SMCA",designation:"SMCA",location:"Offshore Encinitas, San Diego County's largest MPA",rule:"No take except shore hook-and-line and spearfishing for pelagic species"},
+{name:"Batiquitos Lagoon SMCA (No-Take)",designation:"SMCA",location:"South Carlsbad, just north of Encinitas",rule:"No take of any living, geological, or cultural marine resource"}]};
+
+/* ---- waypoint detail ---- */
+let currentWp=null;
+function openWaypoint(i){
+ const w=WAYPOINTS[i];if(!w)return;currentWp=i;
+ $('wpd-num').textContent=w.num;$('wpd-name').textContent='Waypoint '+w.num+(w.name&&!/^\d/.test(w.name)?' · '+w.name:'');
+ $('wpd-near').textContent=distNm(SD_ORIGIN,w).toFixed(1)+' nm from '+w.near;
+ $('wpd-coords').textContent=w.lat.toFixed(5)+', '+w.lon.toFixed(5);
+ $('wpd-notes').textContent=w.notes;
+ $('wpd-season').textContent=w.season;
+ $('wpd-star').classList.toggle('on',!!w.fav);
+ const bf=w.bestFor.map(speciesName).join(', ');
+ $('wpd-facts').innerHTML=[['i-mpa','Depth',w.depth],['i-reef','Bottom',w.bottom],['i-locate','Structure',w.structure],['i-fish','Best For',bf],['i-cal','Season',w.season],['i-star','Rating',w.rating+' · preview score']].map(f=>'<div class="factrow"><span class="fl"><svg><use href="#'+f[0]+'"/></svg>'+f[1]+'</span><span class="fv">'+f[2]+'</span></div>').join('');
+ $('wpd-fish-strip').innerHTML=w.bestFor.map(s=>'<div class="spec"><svg><use href="#'+speciesFx(s)+'"/></svg><div>'+speciesName(s)+'</div></div>').join('');
+ Backend.listApproved().then(rs=>{const mine=rs.filter(r=>r.zone===w.wzone).slice(0,4);
+  $('wpd-reports').innerHTML=mine.length?mine.map(repCardHtml).join(''):'<div class="small-note" style="padding:8px 2px">No approved reports at this mark yet.</div>';
+  $('wpd-reports').querySelectorAll('.repcard').forEach(c=>c.addEventListener('click',()=>openSpot(c.dataset.spot)))});
+ document.querySelectorAll('#wpd-tabs .dtab').forEach((t,ix)=>t.classList.toggle('on',ix===0));showPane('wpd','overview');
+ loadWpConditions(w);
+ nav('wpdetail');
+}
+async function loadWpConditions(w){
+ ['wpd-swell','wpd-water','wpd-cur','wpd-wind'].forEach(id=>$(id).textContent='—');
+ try{const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude='+w.lat+'&longitude='+w.lon+'&current=swell_wave_height,swell_wave_direction,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&length_unit=imperial&wind_speed_unit=kn&cell_selection=sea');const j=await r.json(),c=j.current||{};
+  if(Number.isFinite(+c.swell_wave_height)){$('wpd-swell').textContent=(+c.swell_wave_height).toFixed(1);$('wpd-swell-s').textContent='ft '+compass(+c.swell_wave_direction)}
+  if(Number.isFinite(+c.sea_surface_temperature))$('wpd-water').textContent=Math.round(+c.sea_surface_temperature)+'°';
+  if(Number.isFinite(+c.ocean_current_velocity)){$('wpd-cur').textContent=(+c.ocean_current_velocity).toFixed(1);$('wpd-cur-s').textContent='kts '+compass(+c.ocean_current_direction)}
+  $('wpd-cond-src').textContent='Open-Meteo model at this mark · live — guidance, not measured truth.';
+ }catch(e){$('wpd-cond-src').textContent='Model unavailable — sample values withheld.'}
+ try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+w.lat+'&longitude='+w.lon+'&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=mph');const j=await r.json(),c=j.current||{};
+  if(Number.isFinite(+c.wind_speed_10m)){$('wpd-wind').textContent=Math.round(+c.wind_speed_10m);$('wpd-wind-s').textContent='mph '+compass(+c.wind_direction_10m)}}catch(e){}
+}
+$('wpd-copy').addEventListener('click',()=>{const t=$('wpd-coords').textContent;if(navigator.clipboard)navigator.clipboard.writeText(t).catch(()=>{});toast('Copied · '+t,'Public-reference number — captain verification pending. Not for navigation.')});
+$('wpd-dir').addEventListener('click',()=>toast('Not for navigation','Open-water marks do not get turn-by-turn directions. Verify official charts, GPS, and weather before departure.'));
+function wpdToggleFav(){const w=WAYPOINTS[currentWp];if(!w)return;w.fav=!w.fav;$('wpd-star').classList.toggle('on',w.fav);toast('Waypoints',w.fav?'Added to Favorites.':'Removed from Favorites.')}
+$('wpd-star').addEventListener('click',wpdToggleFav);
+$('wpd-fav').addEventListener('click',()=>{if(!WAYPOINTS[currentWp].fav)wpdToggleFav();else toast('Waypoints','Already in Favorites.')});
+$('wpd-viewmap').addEventListener('click',()=>{const w=WAYPOINTS[currentWp];stack.length=1;nav('map');setTimeout(()=>{_map.flyTo([w.lat,w.lon],11,{duration:.7})},120)});
+
+/* ---- search ---- */
+function renderSearch(q){
+ q=(q||'').toLowerCase().trim();
+ const sp=(SPECIES_FULL.length?SPECIES_FULL:SPECIES);
+ const rows=[];
+ ZONES.forEach(z=>{if(!q||z.name.toLowerCase().includes(q))rows.push({t:'Spot',n:z.name,s:z.meta,go:()=>openSpot(z.slug),fx:'fx-yt'})});
+ WAYPOINTS.forEach((w,i)=>{if(!q||(w.num+' '+w.name).toLowerCase().includes(q))rows.push({t:'Waypoint',n:w.num+' · '+w.name,s:distNm(SD_ORIGIN,w).toFixed(1)+' nm',go:()=>openWaypoint(i)})});
+ sp.forEach(s=>{const nm=s.name||s.common_name;if(!q||nm.toLowerCase().includes(q))rows.push({t:'Species',n:nm,s:s.latin_name||'',go:()=>openRegsub('fishid'),fx:s.fx||fxFor(s)})});
+ $('searchres').innerHTML='<div class="listcard">'+rows.slice(0,14).map((r,i)=>'<button class="lrow" data-si="'+i+'"><span class="li">'+(r.t==='Waypoint'?'<svg><use href="#i-locate"/></svg>':r.t==='Species'?'<svg><use href="#i-fish"/></svg>':'<svg><use href="#i-map"/></svg>')+'</span><span style="flex:1"><b>'+r.n+'</b><small>'+r.t+(r.s?' · '+r.s:'')+'</small></span><svg class="chev"><use href="#i-chev"/></svg></button>').join('')+'</div>';
+ const shown=rows.slice(0,14);
+ $('searchres').querySelectorAll('[data-si]').forEach(b=>b.addEventListener('click',()=>{$('searchwrap').classList.remove('open');shown[+b.dataset.si].go()}));
+}
+
+/* ---- map layer toggles ---- */
+document.querySelectorAll('.laychip').forEach(c=>c.addEventListener('click',()=>{
+ const k=c.dataset.layer;c.classList.toggle('on');const on=c.classList.contains('on');
+ if(k==='ais'){toggleAisMain(on);return}
+ if(k==='sst'||k==='chl'){
+  const v=$('mapveil');v.className='sstveil'+(k==='chl'?' chl':'');v.classList.toggle('show',on);
+  document.querySelectorAll('.laychip[data-layer=sst],.laychip[data-layer=chl]').forEach(x=>{if(x!==c)x.classList.remove('on')});
+  $('veiltag').textContent=(k==='sst'?'SST':'Chlorophyll')+' · sample field — NOAA CoastWatch in production (Pro)';$('veiltag').classList.toggle('show',on);
+  if(!on)$('veiltag').classList.remove('show');
+  return}
+ if(mapGroups[k]){on?_map.addLayer(mapGroups[k]):_map.removeLayer(mapGroups[k])}
+}));
+
+/* ---- edit profile ---- */
+document.querySelectorAll('#scr-profile .pill').forEach(b=>{if(b.textContent.trim()==='Edit Profile')b.addEventListener('click',()=>$('editsheet').classList.add('open'))});
+$('editsheet').addEventListener('click',e=>{if(e.target.id==='editsheet')$('editsheet').classList.remove('open')});
+$('ep-save').addEventListener('click',()=>{
+ const n=$('ep-name').value.trim()||'Tommy Tran',p=$('ep-port').value.trim()||'San Diego, CA';
+ document.querySelector('#scr-profile .avatar').textContent=n.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
+ const blocks=document.querySelectorAll('#scr-profile > .scroll > div');
+ blocks[1].textContent=n;blocks[2].textContent=p;
+ $('editsheet').classList.remove('open');toast('Profile updated','Display name and home port saved (preview session).');
+});
+
+/* ---- regulations sub-pages ---- */
+function openRegsub(kind){
+ const sp=(SPECIES_FULL.length?SPECIES_FULL:SPECIES);
+ let title='',html='';
+ if(kind==='bagsize'){title='Bag & Size Limits';
+  html='<table class="regtable"><tr><th>Species</th><th>Limit</th></tr>'+sp.map(s=>'<tr><td><b>'+(s.name||s.common_name)+'</b><small>'+(s.latin_name||'')+'</small></td><td><small style="margin-top:0;color:var(--text)">'+((s.regs_note||s.regs||'See CDFW')+'').replace(/·/g,'·')+'</small></td></tr>').join('')+'</table>';
+ }
+ if(kind==='fishid'){title='Learn Fish ID';
+  html='<div class="listcard">'+sp.map(s=>'<div class="lrow"><span class="thumb" style="width:56px;height:44px;background:linear-gradient(145deg,#0E2B4E,#134B7A)"><svg style="width:48px;height:30px"><use href="#'+(s.fx||fxFor(s))+'"/></svg></span><span style="flex:1"><b>'+(s.name||s.common_name)+'</b><small>'+(s.latin_name||'')+(s.water?' · '+s.water:'')+'</small>'+(s.spot_types?'<small>Where: '+s.spot_types+'</small>':'')+'</span></div>').join('')+'</div>';
+ }
+ if(kind==='seasons'){title='Seasons';
+  html='<div class="listcard">'+sp.map(s=>'<div class="lrow"><span class="li"><svg><use href="#i-cal"/></svg></span><span style="flex:1"><b>'+(s.name||s.common_name)+'</b><small>'+(s.season_note||s.season||'Year-round — verify with CDFW')+'</small></span></div>').join('')+'</div>';
+ }
+ if(kind==='mpas'){title='Marine Protected Areas';
+  html='<div class="small-note" style="margin:2px 0 10px">San Diego County MPAs — verified against CDFW. SMR = no take. Boundaries and full rules: official CDFW source below.</div><div class="listcard">'+MPAS.mpas.map(m=>'<div class="lrow"><span class="li" style="background:'+(m.designation==='SMR'?'rgba(229,72,77,.15)':'rgba(245,166,35,.14)')+'"><svg style="stroke:'+(m.designation==='SMR'?'var(--red)':'var(--orange)')+'"><use href="#i-mpa"/></svg></span><span style="flex:1"><b>'+m.name+'</b><small>'+m.location+'</small><small style="color:var(--text);opacity:.85">'+m.rule+'</small></span></div>').join('')+'</div><a class="btn ghost" style="margin-top:12px;text-decoration:none" href="'+MPAS.officialUrl+'" target="_blank" rel="noopener noreferrer">Official CDFW MPA source</a>';
+ }
+ $('regsub-title').innerHTML=title;
+ $('regsub-body').innerHTML=html+'<div class="small-note" style="margin:12px 0 16px">Rules change in season. Always verify with CDFW before fishing — the official rule controls.</div>';
+ nav('regsub');
+}
+document.querySelectorAll('[data-regsub]').forEach(b=>b.addEventListener('click',()=>openRegsub(b.dataset.regsub)));
+$('spot-fishid').addEventListener('click',()=>openRegsub('fishid'));
+
+/* ---- spot gallery ---- */
+function fillGallery(z){
+ const views=[[0.20,'800,480'],[0.055,'800,480'],[0.42,'800,480'],[0.10,'800,480']];
+ $('spot-gallery').innerHTML=views.map(v=>{const d=v[0];return '<div class="photobox filled" style="aspect-ratio:5/3;padding:0;overflow:hidden;border-style:solid"><img alt="Satellite view" style="width:100%;height:100%;object-fit:cover" src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox='+(z.lon-d*1.7)+','+(z.lat-d)+','+(z.lon+d*1.7)+','+(z.lat+d)+'&bboxSR=4326&size='+v[1]+'&format=jpg&f=image"></div>'}).join('');
+}
+
 /* ---- boot ---- */
 initMap();renderRecent();loadHomeTiles();renderReports();
+if(SPECIES_FULL.length){$('pc-species').innerHTML=SPECIES_FULL.map(s=>'<option value="'+s.slug+'"'+(s.slug==='bluefin-tuna'?' selected':'')+'>'+s.common_name+'</option>').join('')}
 </script>
 </body>
 </html>
