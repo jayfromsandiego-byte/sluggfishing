@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project OffingCue // San Diego Fishing Intelligence Preview</title>
+<meta name="description" content="Private product preview for an all-in-one San Diego fishing intelligence app.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<style>
+:root{
+  --paper:#EFE9DC;--paper-2:#F7F3EA;--ink:#191C1D;--ink-2:#3A4145;--faded:#757C74;--paper-line:#D6CEBC;
+  --board:#14181B;--board-2:#1B2126;--board-3:#20272C;--board-line:#2A3238;--bone:#E9E4D6;--muted:#93998F;--dim:#5C645F;
+  --red:#C8472E;--kelp:#3E7D52;--amber:#D78535;--yellow:#C7A94A;--ocean:#57A7B7;--deep:#1A3D55;
+  --display:'Archivo',sans-serif;--mono:'IBM Plex Mono',monospace;--body:'Inter',sans-serif;
+  --shadow:0 26px 70px rgba(4,8,10,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:#0B0E10;color:var(--bone);font-family:var(--body);padding:22px 5vw 44px;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--bone);outline-offset:3px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.app{max-width:1480px;margin:0 auto;border:1px solid var(--board-line);background:var(--board);box-shadow:var(--shadow);min-height:calc(100vh - 66px);display:grid;grid-template-columns:210px minmax(0,1fr);overflow:hidden}
+.side{border-right:1px solid var(--board-line);background:#101417;display:flex;flex-direction:column;min-height:calc(100vh - 66px)}
+.brand{padding:24px 22px 20px;border-bottom:1px solid var(--board-line)}
+.brand-kicker{font:500 .62rem/1.4 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.brand-name{font:900 1.28rem/1 var(--display);letter-spacing:.05em;text-transform:uppercase;margin-top:8px}
+.brand-name span{color:var(--red)}
+.brand-note{font:.58rem/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.side-nav{padding:14px 0;display:flex;flex-direction:column;gap:2px}
+.nav-btn{appearance:none;border:0;border-left:3px solid transparent;background:transparent;color:var(--muted);display:flex;align-items:center;gap:11px;text-align:left;padding:12px 19px;font:500 .68rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase}
+.nav-btn:hover{color:var(--bone);background:rgba(255,255,255,.025)}
+.nav-btn.active{color:var(--bone);border-left-color:var(--red);background:var(--board-2)}
+.nav-btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.side-meta{margin-top:auto;padding:17px 19px;border-top:1px solid var(--board-line);font:.55rem/1.75 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+.side-meta b{color:var(--muted);font-weight:500}
+.shell{min-width:0;display:flex;flex-direction:column;min-height:calc(100vh - 66px)}
+.topbar{height:67px;border-bottom:1px solid var(--board-line);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;background:rgba(20,24,27,.97);position:sticky;top:0;z-index:500}
+.top-left{min-width:0}.screen-label{font:800 .86rem/1 var(--display);text-transform:uppercase;letter-spacing:.08em}.screen-sub{font:.55rem/1.5 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-actions{display:flex;align-items:center;gap:8px}
+.net-btn,.outline-btn,.solid-btn,.text-btn{border:1px solid var(--board-line);background:var(--board-2);color:var(--bone);padding:9px 12px;font:600 .58rem/1 var(--mono);letter-spacing:.07em;text-transform:uppercase}
+.net-btn{display:flex;align-items:center;gap:7px;color:var(--muted)}
+.net-btn.off{border-color:rgba(200,71,46,.65);color:var(--red)}
+.net-dot{width:7px;height:7px;background:var(--kelp);display:inline-block;border-radius:50%}.net-btn.off .net-dot{background:var(--red);border-radius:1px}
+.outline-btn:hover,.net-btn:hover{border-color:var(--muted)}
+.solid-btn{background:var(--red);border-color:var(--red);color:var(--paper-2);font-family:var(--display);font-weight:800}
+.text-btn{background:transparent;border-color:transparent;color:var(--muted);padding:8px 5px}.text-btn:hover{color:var(--bone)}
+.content{padding:24px;flex:1;min-width:0}
+.page{display:none}.page.active{display:block;animation:fade .18s ease-out}
+@keyframes fade{from{opacity:.25;transform:translateY(3px)}to{opacity:1;transform:none}}
+.eyebrow{font:500 .58rem/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.page-title{font:900 clamp(1.55rem,2.8vw,2.65rem)/.98 var(--display);text-transform:uppercase;letter-spacing:-.02em;margin:8px 0 0;max-width:800px}
+.page-title em{font-style:normal;color:var(--red)}
+.lede{font-size:.86rem;line-height:1.7;color:var(--muted);max-width:760px;margin:11px 0 0}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:26px 0 10px}
+.section-head h2{font:800 .92rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;margin:0}.section-head span{font:.54rem/1.4 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.grid{display:grid;gap:12px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.panel{border:1px solid var(--board-line);background:var(--board-2)}
+.panel-pad{padding:16px}
+.hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:12px;margin-top:18px}
+.hero-board{border:1px solid var(--board-line);background:linear-gradient(140deg,#192127,#121619);padding:24px;min-height:282px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.hero-board:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 54%,rgba(87,167,183,.08) 54%,transparent 72%);pointer-events:none}
+.hero-copy{position:relative;z-index:1}.hero-copy h2{font:900 clamp(1.8rem,4vw,3.5rem)/.9 var(--display);letter-spacing:-.04em;text-transform:uppercase;margin:10px 0}.hero-copy p{max-width:590px;color:var(--muted);font-size:.84rem;line-height:1.6}
+.hero-actions{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:9px;position:relative;z-index:2}
+.hero-action{border:1px solid var(--board-line);background:rgba(20,24,27,.88);color:var(--bone);text-align:left;padding:17px 15px;min-height:92px;display:flex;flex-direction:column;justify-content:space-between}
+.hero-action:hover{border-color:var(--bone)}.hero-action b{font:900 1.15rem/1 var(--display);letter-spacing:.04em;text-transform:uppercase}.hero-action span{font:.54rem/1.4 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.conditions{display:grid;grid-template-rows:auto 1fr;background:var(--paper-2);color:var(--ink);border:1px solid var(--paper-line);min-height:282px}
+.conditions-head{padding:14px 15px;border-bottom:1px solid var(--paper-line);display:flex;justify-content:space-between;gap:12px;align-items:center}.conditions-head b{font:800 .75rem/1 var(--display);text-transform:uppercase}.conditions-head span{font:.52rem/1.4 var(--mono);letter-spacing:.05em;color:var(--faded);text-align:right}
+.condition-list{padding:5px 15px}.data-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid var(--paper-line)}.data-row:last-child{border:0}.data-row .label{font-size:.7rem;color:var(--faded)}.data-row .value{font:600 .74rem/1 var(--mono);font-variant-numeric:tabular-nums;text-align:right}.data-row .value small{font-size:.55rem;color:var(--faded);font-weight:400}
+.alert-line{border-left:3px solid var(--red);padding:12px 14px;background:rgba(200,71,46,.08);font-size:.7rem;line-height:1.55;color:var(--muted)}.alert-line b{color:var(--red);font:600 .56rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:4px}
+.quick-card{border:1px solid var(--board-line);background:var(--board-2);padding:15px;min-height:140px;display:flex;flex-direction:column}.quick-card .kicker{font:.53rem/1.4 var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--dim)}.quick-card h3{font:800 .84rem/1.15 var(--display);letter-spacing:.04em;text-transform:uppercase;margin:9px 0 5px}.quick-card p{font-size:.68rem;line-height:1.55;color:var(--muted);margin:0}.quick-card .foot{margin-top:auto;padding-top:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;font:.52rem/1.3 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+.source-tag{color:var(--kelp)}.today{color:var(--red)}.yesterday{color:var(--amber)}.older{color:var(--yellow)}
+/* Map */
+.map-shell{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.65fr);border:1px solid var(--board-line);min-height:690px;margin-top:15px;background:#0D1216}
+.map-main{position:relative;min-width:0;border-right:1px solid var(--board-line);display:flex;flex-direction:column}.map-toolbar{padding:10px;background:var(--board);border-bottom:1px solid var(--board-line);display:flex;gap:6px;align-items:center;flex-wrap:wrap}.layer-btn{border:1px solid var(--board-line);background:transparent;color:var(--dim);padding:8px 11px;font:600 .54rem/1 var(--mono);letter-spacing:.07em;text-transform:uppercase}.layer-btn.active{background:var(--bone);border-color:var(--bone);color:var(--board)}.layer-btn.boundary{color:var(--ocean);margin-left:auto}.layer-btn.boundary.active{background:var(--ocean);border-color:var(--ocean);color:#071014}
+.map-wrap{position:relative;flex:1;min-height:530px}.live-map{position:absolute;inset:0;background:#0D1216}.wave-svg{position:absolute;inset:0;z-index:590;pointer-events:none;display:none;overflow:visible}.wave-svg.active{display:block}.wave-path{fill:none;stroke:#F4F0E5;stroke-width:1.45;stroke-linecap:round;stroke-dasharray:5 8;animation:waveFlow 1.65s linear infinite,waveAdvance var(--dur,1.8s) linear infinite;transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 0 1.5px rgba(0,58,76,.86))}@keyframes waveFlow{to{stroke-dashoffset:-26}}@keyframes waveAdvance{0%{transform:translate(0,0);opacity:.12}18%{opacity:.82}82%{opacity:.82}100%{transform:translate(var(--dx),var(--dy));opacity:.12}}.current-canvas{position:absolute;inset:0;z-index:620;pointer-events:none;display:none}.current-canvas.active{display:block}.current-svg{position:absolute;inset:0;z-index:625;pointer-events:none;display:none;overflow:visible}.current-svg.active{display:block}.current-origin{fill:rgba(20,24,27,.82);stroke:#42CAD7;stroke-width:2}.current-flow{fill:none;stroke:#007C8D;stroke-width:3.2;stroke-linecap:round;stroke-dasharray:8 8;animation:currentFlow 1.05s linear infinite;filter:drop-shadow(0 0 2px rgba(233,228,214,.92))}@keyframes currentFlow{to{stroke-dashoffset:-32}}.current-status,.wave-status{position:absolute;right:10px;top:10px;z-index:900;background:rgba(20,24,27,.92);border:1px solid var(--board-line);color:var(--bone);padding:7px 9px;font:500 .5rem/1.35 var(--mono);letter-spacing:.05em;text-transform:uppercase;display:none}.current-status.show,.wave-status.show{display:block}.current-status b,.wave-status b{color:var(--ocean);font-weight:600}.map-data-veil{position:absolute;inset:0;z-index:350;pointer-events:none;opacity:.23;mix-blend-mode:screen;transition:background .2s}.map-data-veil.swell{background:radial-gradient(circle at 20% 70%,rgba(37,93,162,.8),transparent 31%),radial-gradient(circle at 72% 28%,rgba(87,167,183,.9),transparent 34%)}.map-data-veil.wind{background:repeating-linear-gradient(128deg,transparent 0 24px,rgba(233,228,214,.14) 24px 26px)}.map-data-veil.speed{background:radial-gradient(circle at 48% 46%,rgba(62,125,82,.8),transparent 22%),radial-gradient(circle at 78% 70%,rgba(215,133,53,.7),transparent 26%)}.map-data-veil.currents{background:linear-gradient(145deg,rgba(87,167,183,.12),transparent 56%);opacity:.12}
+.map-notice{position:absolute;left:10px;right:10px;bottom:10px;z-index:900;background:rgba(20,24,27,.92);border:1px solid var(--board-line);padding:9px 11px;font:.51rem/1.55 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);pointer-events:none}.map-notice b{color:var(--bone)}
+.crosshair{position:absolute;z-index:930;width:24px;height:24px;border:1px solid var(--bone);border-radius:50%;transform:translate(-50%,-50%);display:none;pointer-events:none}.crosshair:before,.crosshair:after{content:"";position:absolute;background:var(--bone)}.crosshair:before{width:36px;height:1px;left:-7px;top:11px}.crosshair:after{height:36px;width:1px;top:-7px;left:11px}
+.map-side{background:var(--board);display:flex;flex-direction:column;min-width:0}.map-inspector{padding:17px;border-bottom:1px solid var(--board-line)}.map-inspector .num{font:600 .62rem/1 var(--mono);color:var(--red);letter-spacing:.1em}.map-inspector h3{font:900 1.2rem/1 var(--display);text-transform:uppercase;letter-spacing:.02em;margin:7px 0}.map-inspector p{font-size:.67rem;line-height:1.55;color:var(--muted);margin:0}.coord{font:600 .68rem/1.5 var(--mono);font-variant-numeric:tabular-nums;margin:12px 0;color:var(--bone)}
+.inspector-actions{display:flex;gap:6px;margin-top:12px}.inspector-actions button{flex:1}
+.inspector-list{padding:5px 14px 12px;overflow:auto;max-height:360px}.inspect-row{padding:11px 0;border-bottom:1px solid var(--board-line);display:grid;grid-template-columns:45px 1fr auto;gap:9px;align-items:center}.inspect-row .n{font:600 .58rem/1 var(--mono);color:var(--bone)}.inspect-row b{font:700 .69rem/1.2 var(--display);text-transform:uppercase;letter-spacing:.03em}.inspect-row small{display:block;margin-top:4px;color:var(--dim);font:.48rem/1.3 var(--mono);letter-spacing:.04em;text-transform:uppercase}.inspect-row .age{font:.48rem/1 var(--mono);letter-spacing:.04em;text-transform:uppercase}.inspect-row.pending{opacity:.58}
+.cross-readout{margin-top:auto;padding:13px 15px;border-top:1px solid var(--board-line);background:var(--board-2)}.cross-readout b{font:700 .62rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}.cross-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.metric{border:1px solid var(--board-line);padding:9px}.metric span{display:block;font:.47rem/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}.metric strong{display:block;font:600 .72rem/1.2 var(--mono);margin-top:5px}
+.leaflet-container{font-family:var(--mono);background:#0D1216}.leaflet-control-attribution{background:rgba(20,24,27,.86)!important;color:#6E7772!important;font-size:8px!important}.leaflet-control-attribution a{color:#A0ABA5!important}.leaflet-control-zoom a{background:var(--board-2)!important;color:var(--bone)!important;border-color:var(--board-line)!important}.leaflet-tooltip.bound-label{background:rgba(20,24,27,.9);border:1px solid var(--board-line);color:var(--bone);box-shadow:none;border-radius:0;font:500 8px/1.2 var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:5px 7px}.leaflet-tooltip:before{display:none}
+.wp-wrap{display:flex;align-items:center;gap:5px}.wp-dot{width:19px;height:19px;border:2px solid currentColor;background:rgba(20,24,27,.88);display:grid;place-items:center;box-shadow:0 2px 7px rgba(0,0,0,.5)}.wp-dot:after{content:"";width:4px;height:4px;background:currentColor}.wp-today{color:var(--red)}.wp-yesterday{color:var(--amber)}.wp-older{color:var(--yellow)}.wp-copy{background:rgba(20,24,27,.88);border:1px solid var(--board-line);padding:4px 6px;white-space:nowrap}.wp-num{font:600 8px/1 var(--mono);letter-spacing:.06em}.wp-name{font:500 8px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;margin-left:5px;display:none}.map-zoomed .wp-name{display:inline}
+/* Reports and counts */
+.report-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:12px;margin-top:16px}.report-card{border:1px solid var(--board-line);background:var(--board-2);padding:16px;margin-bottom:10px}.report-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.report-top h3{font:800 .92rem/1.1 var(--display);text-transform:uppercase;margin:0}.report-meta{font:.5rem/1.55 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--dim);margin-top:5px}.trust{font:600 .5rem/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--kelp);border:1px solid rgba(62,125,82,.6);padding:5px 7px;white-space:nowrap}.report-body{font-size:.72rem;line-height:1.65;color:var(--muted);margin:13px 0}.report-data{display:flex;gap:6px;flex-wrap:wrap}.report-data span{border:1px solid var(--board-line);padding:6px 8px;font:.53rem/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--bone)}.report-links{display:flex;gap:7px;margin-top:13px}.report-links button{flex:1}
+.report-aside .panel{margin-bottom:10px}.aside-title{padding:12px 14px;border-bottom:1px solid var(--board-line);font:800 .68rem/1 var(--display);letter-spacing:.05em;text-transform:uppercase}.aside-body{padding:13px}.privacy-line{display:grid;grid-template-columns:58px 1fr;gap:9px;padding:8px 0;border-bottom:1px solid var(--board-line)}.privacy-line:last-child{border:0}.privacy-line b{font:600 .53rem/1 var(--mono);text-transform:uppercase}.privacy-line span{font-size:.62rem;line-height:1.4;color:var(--muted)}
+.count-table,.ops-table{width:100%;border-collapse:collapse;font-size:.65rem}.count-table th,.ops-table th{text-align:left;padding:10px 11px;border-bottom:1px solid var(--board-line);font:500 .5rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}.count-table td,.ops-table td{padding:12px 11px;border-bottom:1px solid var(--board-line);vertical-align:top}.count-table tr:last-child td,.ops-table tr:last-child td{border:0}.count-table .boat{font:700 .71rem/1 var(--display);text-transform:uppercase}.count-table .count{font:600 .68rem/1.45 var(--mono);font-variant-numeric:tabular-nums}.count-table small,.ops-table small{display:block;color:var(--dim);font:.48rem/1.4 var(--mono);margin-top:4px;text-transform:uppercase}.permission{font:600 .5rem/1 var(--mono);letter-spacing:.05em;text-transform:uppercase}.permission.pending{color:var(--amber)}.permission.public{color:var(--kelp)}
+.count-summary{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--board-line);margin-top:15px}.count-cell{padding:15px;border-right:1px solid var(--board-line)}.count-cell:last-child{border:0}.count-cell span{display:block;font:.5rem/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}.count-cell strong{font:800 1.35rem/1 var(--display);display:block;margin-top:6px}.count-cell small{font:.48rem/1 var(--mono);color:var(--dim)}
+/* Rules */
+.rule-card{border:1px solid var(--paper-line);background:var(--paper-2);color:var(--ink);padding:17px;display:flex;flex-direction:column;min-height:248px}.rule-card .species{font:900 1rem/1 var(--display);text-transform:uppercase}.rule-card .latin{font:.49rem/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faded);margin-top:5px}.rule-state{font:600 .54rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--kelp);margin:13px 0}.rule-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--paper-line);border-left:1px solid var(--paper-line)}.rule-grid div{border-right:1px solid var(--paper-line);border-bottom:1px solid var(--paper-line);padding:9px}.rule-grid span{display:block;font:.45rem/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faded)}.rule-grid b{display:block;font:600 .64rem/1.35 var(--mono);margin-top:4px}.rule-foot{margin-top:auto;padding-top:12px;font:.49rem/1.55 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--faded)}.rule-foot a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+/* Account and Ops */
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.price-card{border:1px solid var(--board-line);background:var(--board-2);padding:19px}.price-card.featured{border:2px solid var(--bone)}.price-card h3{font:900 1rem/1 var(--display);text-transform:uppercase;margin:0}.price{font:900 2.2rem/1 var(--display);margin:14px 0}.price small{font:500 .56rem/1 var(--mono);color:var(--dim)}.price-list{margin:13px 0 0;padding:0;list-style:none}.price-list li{padding:7px 0;border-bottom:1px solid var(--board-line);font-size:.66rem;color:var(--muted)}.price-list li:last-child{border:0}.upgrade-note{border-left:3px solid var(--red);background:rgba(200,71,46,.08);padding:12px;font:.62rem/1.55 var(--mono);margin-top:12px}.upgrade-note b{color:var(--red)}
+.settings-row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--board-line)}.settings-row:last-child{border:0}.settings-row b{font-size:.7rem}.settings-row span{font:.52rem/1.3 var(--mono);text-transform:uppercase;color:var(--dim);text-align:right}
+.ops-banner{border:1px solid rgba(62,125,82,.65);background:rgba(62,125,82,.08);padding:12px 14px;font:.6rem/1.55 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-top:15px}.ops-banner b{color:var(--kelp)}
+.queue-item{border:1px solid var(--board-line);background:var(--board-2);padding:15px;margin-bottom:9px}.queue-head{display:flex;justify-content:space-between;gap:10px}.queue-head h3{font:800 .8rem/1 var(--display);text-transform:uppercase;margin:0}.queue-head span{font:600 .49rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--amber)}.queue-item p{font-size:.66rem;line-height:1.55;color:var(--muted)}.queue-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.queue-facts div{border:1px solid var(--board-line);padding:8px}.queue-facts span{display:block;font:.45rem/1.2 var(--mono);color:var(--dim);text-transform:uppercase}.queue-facts b{display:block;font:600 .58rem/1.3 var(--mono);margin-top:4px}.queue-actions{display:flex;gap:6px;margin-top:12px}.queue-actions button{flex:1}.kill{border:1px solid var(--board-line);background:transparent;color:var(--muted);padding:7px 9px;font:.49rem/1 var(--mono);text-transform:uppercase}.kill.off{color:var(--red);border-color:rgba(200,71,46,.6)}
+/* Modals */
+.modal{position:fixed;inset:0;background:rgba(5,8,10,.82);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px 5vw}.modal.open{display:flex}.modal-card{width:min(760px,100%);max-height:90vh;overflow:auto;background:var(--paper-2);color:var(--ink);border:1px solid var(--ink);box-shadow:0 35px 90px rgba(0,0,0,.4)}.modal-head{display:flex;justify-content:space-between;gap:15px;padding:16px 18px;border-bottom:1px solid var(--paper-line)}.modal-head b{font:900 .86rem/1 var(--display);text-transform:uppercase}.modal-close{border:0;background:transparent;font:.55rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faded)}.modal-body{padding:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;font:.48rem/1.4 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--faded);margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--paper-line);background:var(--paper);color:var(--ink);padding:10px;border-radius:0}.field textarea{min-height:92px;resize:vertical}.privacy-seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--paper-line);margin-top:7px}.privacy-choice{border:0;border-right:1px solid var(--paper-line);background:var(--paper-2);padding:11px 6px;font:600 .53rem/1.2 var(--mono);text-transform:uppercase;color:var(--faded)}.privacy-choice:last-child{border:0}.privacy-choice.active{background:var(--ink);color:var(--paper-2)}.privacy-explain{font-size:.62rem;line-height:1.5;color:var(--faded);margin:8px 0 0}.modal-submit{width:100%;border:0;background:var(--red);color:var(--paper-2);padding:13px;font:800 .72rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;margin-top:14px}.print-card{border:1px solid var(--paper-line);background:var(--paper-2);padding:17px}.print-top{display:flex;justify-content:space-between;font:.5rem/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faded)}.fish-print{color:var(--ink);width:100%;height:150px;margin:5px 0}.print-card h3{font:900 1.55rem/1 var(--display);text-transform:uppercase;margin:0}.print-latin{font:.51rem/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faded)}.print-data{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--paper-line);border-left:1px solid var(--paper-line);margin-top:10px}.print-data div{padding:9px;border-right:1px solid var(--paper-line);border-bottom:1px solid var(--paper-line)}.print-data span{display:block;font:.45rem/1.2 var(--mono);text-transform:uppercase;color:var(--faded)}.print-data b{display:block;font:600 .64rem/1.3 var(--mono);margin-top:4px}.print-bottom{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;margin-top:12px}.print-status{font:.55rem/1.55 var(--mono);color:var(--faded)}.seal{width:48px;height:48px;border:2px dashed var(--faded);display:grid;place-items:center;color:var(--faded);font:900 .95rem/1 var(--display);transform:rotate(-6deg)}
+.footer{border-top:1px solid var(--board-line);margin-top:28px;padding:17px 0 0;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;font:.49rem/1.65 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--dim)}.footer a{color:var(--muted);text-decoration:underline;text-underline-offset:3px}.footer-links{display:flex;gap:14px;flex-wrap:wrap}
+.toast{position:fixed;right:5vw;bottom:28px;z-index:3000;width:min(360px,90vw);background:var(--board-2);border:1px solid var(--board-line);border-left:3px solid var(--kelp);padding:12px 14px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s;color:var(--bone);font-size:.65rem;line-height:1.5}.toast.show{opacity:1;transform:none}.toast b{font:600 .53rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:4px}
+.mobile-nav{display:none}
+@media(max-width:1050px){.app{grid-template-columns:174px minmax(0,1fr)}.brand{padding-left:16px}.nav-btn{padding-left:14px}.content{padding:18px}.hero{grid-template-columns:1fr}.grid.four{grid-template-columns:repeat(2,1fr)}.map-shell{grid-template-columns:minmax(0,1fr) 280px}.report-layout{grid-template-columns:1fr}.report-aside{display:grid;grid-template-columns:1fr 1fr;gap:10px}.count-summary{grid-template-columns:repeat(2,1fr)}.count-cell:nth-child(2){border-right:0}.count-cell:nth-child(-n+2){border-bottom:1px solid var(--board-line)}}
+@media(max-width:760px){body{padding:10px 5vw 90px}.app{display:block;min-height:calc(100vh - 100px)}.side{display:none}.shell{min-height:auto}.topbar{height:62px;padding:0 13px}.screen-sub{max-width:55vw}.top-actions .outline-btn{display:none}.content{padding:14px}.page-title{font-size:1.7rem}.hero-board{padding:18px;min-height:315px}.hero-actions{grid-template-columns:1fr}.conditions{min-height:260px}.grid.two,.grid.three,.grid.four{grid-template-columns:1fr}.map-shell{display:block;min-height:0}.map-main{border-right:0}.map-wrap{height:485px}.map-notice{bottom:76px}.map-side{border-top:1px solid var(--board-line)}.inspector-list{max-height:290px}.report-aside{display:block}.count-table,.ops-table{display:block;overflow-x:auto;white-space:nowrap}.count-summary{grid-template-columns:1fr 1fr}.price-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.queue-facts{grid-template-columns:1fr}.mobile-nav{position:fixed;z-index:1200;left:5vw;right:5vw;bottom:12px;height:62px;background:rgba(16,20,23,.97);border:1px solid var(--board-line);display:grid;grid-template-columns:repeat(7,1fr);box-shadow:0 16px 44px rgba(0,0,0,.45)}.mobile-nav button{border:0;background:transparent;color:var(--dim);font:.4rem/1.1 var(--mono);text-transform:uppercase;padding:2px}.mobile-nav button.active{color:var(--bone);border-top:2px solid var(--red)}.mobile-nav svg{display:block;margin:0 auto 4px;width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7}.toast{bottom:84px}.modal{padding:12px 5vw}.footer{padding-bottom:12px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+<defs>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11 12 4l8.5 7v8.5H15v-6H9v6H3.5z"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></symbol>
+  <symbol id="i-count" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM7 9h10M7 13h10M7 17h6"/></symbol>
+  <symbol id="i-rules" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6zM15 3v4h4M9 11h6M9 15h6"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.4-3.4 4-5 7-5s5.6 1.6 7 5"/></symbol>
+  <symbol id="i-ops" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16M8 4v6M16 14v6"/></symbol>
+  <symbol id="i-cross" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <filter id="inkrough"><feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" seed="7" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="4"/></filter>
+  <symbol id="gyofish" viewBox="0 0 320 150"><g filter="url(#inkrough)"><path d="M22 78C46 36 116 24 172 38c33 8 58 20 75 32l37-26c-7 17-10 32-7 50l-29-17c-18 15-46 27-80 31-56 6-122 0-146-30Z" fill="currentColor"/><path d="M92 37c18-17 58-22 84-12l-10 14c-28-8-54-6-70 4Z" fill="currentColor"/><path d="M120 106c12 10 32 14 48 10l-8-11Z" fill="currentColor"/></g><circle cx="52" cy="62" r="7" fill="#F7F3EA"/><circle cx="52" cy="62" r="2.7" fill="currentColor"/></symbol>
+</defs>
+</svg>
+<div class="app" id="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="brand-kicker">Private product preview</div>
+      <div class="brand-name">Offing<span>Cue</span></div>
+      <div class="brand-note">Working codename<br>Clearance pending</div>
+    </div>
+    <nav class="side-nav" aria-label="Primary">
+      <button class="nav-btn active" data-page="home"><svg><use href="#i-home"/></svg>Home</button>
+      <button class="nav-btn" data-page="map"><svg><use href="#i-map"/></svg>Map</button>
+      <button class="nav-btn" data-page="reports"><svg><use href="#i-report"/></svg>Reports</button>
+      <button class="nav-btn" data-page="count"><svg><use href="#i-count"/></svg>Dock Totals</button>
+      <button class="nav-btn" data-page="rules"><svg><use href="#i-rules"/></svg>Regulations</button>
+      <button class="nav-btn" data-page="account"><svg><use href="#i-user"/></svg>You</button>
+      <button class="nav-btn" data-page="ops"><svg><use href="#i-ops"/></svg>Operator</button>
+    </nav>
+    <div class="side-meta"><b>Region</b> San Diego only<br><b>Build</b> Preview 0.2<br><b>Mode</b> Jay + Tommy<br><b>Data</b> Sample unless live</div>
+  </aside>
+  <section class="shell">
+    <header class="topbar">
+      <div class="top-left"><div class="screen-label" id="screen-label">Home</div><div class="screen-sub" id="screen-sub">What the water is doing · what is being caught · what is legal</div></div>
+      <div class="top-actions">
+        <button class="outline-btn" data-open-report>Log report</button>
+        <button class="net-btn" id="net-btn"><span class="net-dot"></span><span id="net-label">Live feeds</span></button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="page active" id="page-home">
+        <div class="eyebrow">San Diego fishing intelligence // private preview</div>
+        <h1 class="page-title">One decision system.<br><em>No tab juggling.</em></h1>
+        <p class="lede">Map, conditions, verified reports, dock totals, and current regulations share one source-aware workflow. The app does not replace a chart, captain, or official rulebook.</p>
+        <div class="hero">
+          <div class="hero-board">
+            <div class="hero-copy"><div class="eyebrow">Start with the two jobs that matter</div><h2>Where?<br>Worth it?</h2><p>Open the map to read water and structure. Open reports to see what has been verified. Every path crosses back in one tap.</p></div>
+            <div class="hero-actions">
+              <button class="hero-action" data-go="map"><b>Open map</b><span>Conditions · boundaries · waypoints</span></button>
+              <button class="hero-action" data-go="reports"><b>Read reports</b><span>Verified · sourced · privacy-safe</span></button>
+            </div>
+          </div>
+          <div class="conditions">
+            <div class="conditions-head"><b>Point Loma right now</b><span id="home-source">OPEN-METEO PREVIEW<br>FETCHING</span></div>
+            <div class="condition-list">
+              <div class="data-row"><span class="label">Swell</span><span class="value" id="home-swell">— <small>FT @ —S</small></span></div>
+              <div class="data-row"><span class="label">Wind</span><span class="value" id="home-wind">— <small>KT</small></span></div>
+              <div class="data-row"><span class="label">Water</span><span class="value" id="home-water">— <small>°F</small></span></div>
+              <div class="data-row"><span class="label">Surface current</span><span class="value" id="home-current">— <small>KT · MODEL</small></span></div>
+              <div class="data-row"><span class="label">Next tide</span><span class="value">HIGH 5.1 <small>FT · 15:02 · PREVIEW</small></span></div>
+              <div class="data-row"><span class="label">Official alert</span><span class="value">NONE <small>NWS · PREVIEW</small></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-head"><h2>Decision board</h2><span>Every item shows source + time</span></div>
+        <div class="grid four">
+          <article class="quick-card"><div class="kicker today">Latest verified · 42 min</div><h3>North 9</h3><p>Yellowtail marks on the north edge. General location only; latest report stays privacy-safe.</p><div class="foot"><span class="source-tag">Human review</span><button class="text-btn" data-go="reports">Open report</button></div></article>
+          <article class="quick-card"><div class="kicker">Dock totals · demo</div><h3>3 landings</h3><p>Daily count structure is ready. Production ingestion remains permission-gated.</p><div class="foot"><span class="yesterday">Rights pending</span><button class="text-btn" data-go="count">View board</button></div></article>
+          <article class="quick-card"><div class="kicker source-tag">CDFW · updated Jul 1</div><h3>Halibut open</h3><p>Five fish south of Point Sur. Minimum 22 inches total length. Verify before fishing.</p><div class="foot"><span>Official source</span><button class="text-btn" data-go="rules">Open rules</button></div></article>
+          <article class="quick-card"><div class="kicker">Offline pack</div><h3>San Diego</h3><p>Chart context, five lakes, spot pages, rules, and report outbox remain on the phone.</p><div class="foot"><span>146 MB estimate</span><button class="text-btn" data-go="account">Manage</button></div></article>
+        </div>
+        <div class="section-head"><h2>Trust line</h2><span>What this preview refuses to fake</span></div>
+        <div class="grid three">
+          <div class="alert-line"><b>Captain gate</b>Public-reference waypoint numbers are not production coordinates until Tommy or an approved captain signs them.</div>
+          <div class="alert-line"><b>Rights gate</b>Landing pages may use third-party publishers. No automated production feed ships without source rights evidence.</div>
+          <div class="alert-line"><b>Legal gate</b>Maritime lines and fishing rules are informational. Current official charts and authorities control.</div>
+        </div>
+      </section>
+
+      <section class="page" id="page-map">
+        <div class="eyebrow">Core surface // chart + water + intel</div>
+        <h1 class="page-title">Read the water.<br><em>Then the report.</em></h1>
+        <p class="lede">Zoomed out shows numbers. Zoom in reveals names and details. Click open water to move the water crosshair for swell or current guidance; click a waypoint to open coordinates and the latest approved report.</p>
+        <div class="map-shell">
+          <div class="map-main">
+            <div class="map-toolbar">
+              <button class="layer-btn active" data-map-layer="swell">Swells</button>
+              <button class="layer-btn" data-map-layer="wind">Wind</button>
+              <button class="layer-btn" data-map-layer="speed">Speed</button>
+              <button class="layer-btn" data-map-layer="currents">Currents</button>
+              <button class="layer-btn boundary active" id="boundary-toggle">Border + 12 NM</button>
+            </div>
+            <div class="map-wrap"><div class="live-map" id="live-map"></div><div class="map-data-veil swell" id="map-veil"></div><svg class="wave-svg" id="wave-svg" aria-hidden="true"></svg><div class="wave-status" id="wave-status"><b>Swells</b><br>Load live model</div><canvas class="current-canvas" id="current-canvas" aria-hidden="true"></canvas><svg class="current-svg" id="current-svg" aria-hidden="true"></svg><div class="current-status" id="current-status"><b>Currents</b><br>Load live model</div><div class="crosshair" id="crosshair"></div><div class="map-notice"><b>Not for navigation.</b> Preview geometry and public-reference points. Verify with current official charts, GPS, weather products, and the responsible authority before departure.</div></div>
+          </div>
+          <aside class="map-side">
+            <div class="map-inspector" id="map-inspector"><div class="num">SELECT A WAYPOINT</div><h3>Tap a number</h3><p>Waypoint details, coordinates, verification status, source, and the latest approved report appear here.</p><div class="coord">LAT —<br>LON —</div></div>
+            <div class="inspector-list" id="waypoint-list"></div>
+            <div class="cross-readout"><b>Water crosshair</b><div class="cross-grid"><div class="metric"><span>Position</span><strong id="x-pos">Tap map</strong></div><div class="metric"><span>Layer</span><strong id="x-layer">SWELL</strong></div><div class="metric"><span id="x-label-a">Height</span><strong id="x-height">— FT</strong></div><div class="metric"><span id="x-label-b">Period</span><strong id="x-period">— SEC</strong></div></div><div class="report-meta" id="x-source">OPEN-METEO MARINE · PREVIEW ACCESS</div></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-reports">
+        <div class="eyebrow">Approved intelligence // sources stay visible</div>
+        <h1 class="page-title">Reports with<br><em>receipts.</em></h1>
+        <p class="lede">Facts, timestamp, trust tier, and privacy state travel together. No raw competitor prose. No approval means no publication.</p>
+        <div class="report-layout">
+          <div>
+            <article class="report-card" data-report-waypoint="north9"><div class="report-top"><div><h3>North 9 · yellowtail marks</h3><div class="report-meta">Today 06:42 · General approximately 1 km · Report 0189</div></div><span class="trust">Human approved</span></div><p class="report-body">Preview copy: scattered yellowtail marks on the northern edge with workable current before the wind increase. Exact source geometry remains private.</p><div class="report-data"><span>Yellowtail</span><span>General location</span><span class="today">42 min old</span><span>Source: Joseph preview</span></div><div class="report-links"><button class="outline-btn" data-map-target="north9">Show on map</button><button class="outline-btn" data-go="count">Open dock totals</button></div></article>
+            <article class="report-card"><div class="report-top"><div><h3>Point Loma fleet mark</h3><div class="report-meta">Today 09:18 · Zone only · Fleet mark 0312</div></div><span class="trust">Fact extract</span></div><p class="report-body">A normalized fleet mark derived from a public count record. Production publication requires source-rights clearance; this preview uses sample facts only.</p><div class="report-data"><span>Bonito</span><span>Zone only</span><span class="today">Today</span><span>Source rights pending</span></div><div class="report-links"><button class="outline-btn" data-go="map">Open zone</button><button class="outline-btn" data-go="count">See count source</button></div></article>
+            <article class="report-card"><div class="report-top"><div><h3>Lake Poway · stock window</h3><div class="report-meta">Jul 13 · Public location · CDFW stock record</div></div><span class="trust">Official data</span></div><p class="report-body">Stocking records and shop observations appear together but never merge into an unexplained score. Each input keeps its own source and time.</p><div class="report-data"><span>Rainbow trout</span><span>Public water</span><span class="older">7 days old</span><span>CDFW open data</span></div><div class="report-links"><button class="outline-btn" data-go="map">Show lake</button><button class="outline-btn" data-go="rules">Open rules</button></div></article>
+          </div>
+          <aside class="report-aside">
+            <div class="panel"><div class="aside-title">Location privacy</div><div class="aside-body"><div class="privacy-line"><b>Exact</b><span>Public structure only when the angler chooses it.</span></div><div class="privacy-line"><b>General</b><span>Approximately 1 km; database transform, never client-only.</span></div><div class="privacy-line"><b>Zone</b><span>Named area only. No public pin or raw geometry.</span></div></div></div>
+            <div class="panel"><div class="aside-title">Publish SLA</div><div class="aside-body"><div class="data-row"><span class="label">60 min</span><span class="value">REMIND</span></div><div class="data-row"><span class="label">90 min</span><span class="value">BACKUP</span></div><div class="data-row"><span class="label">120 min</span><span class="value">EXPIRE</span></div><div class="report-meta">AUTO-PUBLISH · OFF · NEVER</div></div></div>
+            <button class="solid-btn" style="width:100%;padding:13px" data-open-report>Log a catch</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-count">
+        <div class="eyebrow">Dock Totals // facts, boats, passengers</div>
+        <h1 class="page-title">The count board.<br><em>Not copied prose.</em></h1>
+        <p class="lede">This preview demonstrates the normalized daily-count product. Values are sample data until permissions and publisher rights are confirmed.</p>
+        <div class="count-summary"><div class="count-cell"><span>Sample trips</span><strong class="mono">07</strong><small>Demo records</small></div><div class="count-cell"><span>Anglers</span><strong class="mono">146</strong><small>Sample total</small></div><div class="count-cell"><span>Yellowtail</span><strong class="mono">34</strong><small>Sample total</small></div><div class="count-cell"><span>Bluefin</span><strong class="mono">12</strong><small>Sample total</small></div></div>
+        <div class="section-head"><h2>San Diego daily board</h2><span>Sample values · structure approved</span></div>
+        <div class="panel" style="overflow:hidden"><table class="count-table"><thead><tr><th>Landing / boat</th><th>Trip</th><th>Passengers</th><th>Count</th><th>Source status</th><th>Fetched</th></tr></thead><tbody>
+          <tr><td><span class="boat">Seaforth · New Seaforth</span><small>Mission Bay</small></td><td>Full day</td><td class="mono">28</td><td class="count">18 YELLOWTAIL<br>66 ROCKFISH</td><td><span class="permission pending">Publisher permission</span><small>Landing page credits third party</small></td><td class="mono">DEMO<br><small>12:00</small></td></tr>
+          <tr><td><span class="boat">H&amp;M · Malihini</span><small>San Diego Bay</small></td><td>Full day</td><td class="mono">24</td><td class="count">12 BLUEFIN<br>09 YELLOWTAIL</td><td><span class="permission pending">Contact landing</span><small>Manual fallback ready</small></td><td class="mono">DEMO<br><small>11:40</small></td></tr>
+          <tr><td><span class="boat">Fisherman's · Liberty</span><small>San Diego Bay</small></td><td>1.5 day</td><td class="mono">30</td><td class="count">07 YELLOWTAIL<br>22 BONITO</td><td><span class="permission pending">Publisher permission</span><small>Page credits third party</small></td><td class="mono">DEMO<br><small>11:25</small></td></tr>
+        </tbody></table></div>
+        <div class="grid three" style="margin-top:12px"><div class="alert-line"><b>Fact model</b>Date, boat, trip type, passengers, species, count, source URL, and fetched-at time.</div><div class="alert-line"><b>Health model</b>Each parser has a 48-hour unchanged alert and a per-source kill switch.</div><div class="alert-line"><b>Rights model</b>A landing-domain page can still be published by an aggregator. Authorization lives in the source registry.</div></div>
+      </section>
+
+      <section class="page" id="page-rules">
+        <div class="eyebrow">CDFW rules // versioned, sourced, reviewed</div>
+        <h1 class="page-title">Know the rule.<br><em>Verify the source.</em></h1>
+        <p class="lede">The clean rule view is part of the product; the official rule controls. In-season changes and MPAs can override a general species card.</p>
+        <div class="grid three" style="margin-top:16px">
+          <article class="rule-card"><div class="species">California Halibut</div><div class="latin">Paralichthys californicus</div><div class="rule-state">Open year-round · Southern region</div><div class="rule-grid"><div><span>Bag / possession</span><b>5 fish</b></div><div><span>Minimum</span><b>22 in total</b></div><div><span>Method</span><b>Check gear rules</b></div><div><span>Region</span><b>South of Pt. Sur</b></div></div><div class="rule-foot">CDFW · JUL 01 2026 · <a href="https://wildlife.ca.gov/Fishing/Ocean/Regulations/Fishing-Map/Southern" target="_blank" rel="noopener noreferrer">Official source</a><br>Verify with CDFW before fishing.</div></article>
+          <article class="rule-card"><div class="species">Yellowtail</div><div class="latin">Seriola dorsalis</div><div class="rule-state">Open year-round</div><div class="rule-grid"><div><span>Bag / possession</span><b>10 fish</b></div><div><span>Minimum</span><b>24 in fork</b></div><div><span>Exception</span><b>Up to 5 under</b></div><div><span>Measure</span><b>Fork length</b></div></div><div class="rule-foot">CDFW · JUL 01 2026 · <a href="https://wildlife.ca.gov/Fishing/Ocean/Regulations/Fishing-Map/Southern" target="_blank" rel="noopener noreferrer">Official source</a><br>Verify with CDFW before fishing.</div></article>
+          <article class="rule-card"><div class="species">California Sheephead</div><div class="latin">Bodianus pulcher</div><div class="rule-state">Boat season Mar 1–Dec 31</div><div class="rule-grid"><div><span>Bag / possession</span><b>2 fish</b></div><div><span>Minimum</span><b>12 in total</b></div><div><span>Shore / diver</span><b>Year-round</b></div><div><span>Boat</span><b>Seasonal</b></div></div><div class="rule-foot">CDFW · JUL 01 2026 · <a href="https://wildlife.ca.gov/Fishing/Ocean/Regulations/Fishing-Map/Southern" target="_blank" rel="noopener noreferrer">Official source</a><br>Verify with CDFW before fishing.</div></article>
+        </div>
+        <div class="section-head"><h2>Mexico and boundary guidance</h2><span>Do not reduce jurisdiction to one line</span></div>
+        <div class="grid two"><div class="panel panel-pad"><div class="eyebrow">Mexican waters</div><h3 style="font:800 .86rem/1.2 var(--display);text-transform:uppercase">Permit requirements follow jurisdiction, not the app label</h3><p style="font-size:.7rem;line-height:1.65;color:var(--muted)">Fishing in Mexican waters requires current Mexican authorization. Passport, FMM, vessel, and protected-area requirements depend on route and proximity to Mexico's coast or islands. Verify with CONAPESCA, INM, the Mexican Consulate, and the captain or landing.</p><a class="outline-btn" style="display:inline-block;text-decoration:none;margin-top:8px" href="https://www.gob.mx/conapesca/documentos/conapesca-01-016-pesca-deportivo-recreativa" target="_blank" rel="noopener noreferrer">CONAPESCA source</a></div><div class="panel panel-pad"><div class="eyebrow">Map meaning</div><h3 style="font:800 .86rem/1.2 var(--display);text-transform:uppercase">12 nm is a territorial-sea limit, not a universal “international water” switch</h3><p style="font-size:.7rem;line-height:1.65;color:var(--muted)">The map separates the U.S.–Mexico maritime boundary from the 12 nm territorial-sea line. A coastal state can retain fisheries jurisdiction beyond its territorial sea in its EEZ.</p><a class="outline-btn" style="display:inline-block;text-decoration:none;margin-top:8px" href="https://nauticalcharts.noaa.gov/data/us-maritime-limits-and-boundaries.html" target="_blank" rel="noopener noreferrer">NOAA source</a></div></div>
+      </section>
+
+      <section class="page" id="page-account">
+        <div class="eyebrow">Free stays useful // one paid tier</div>
+        <h1 class="page-title">Try monthly.<br><em>Lock the year.</em></h1>
+        <p class="lede">The free tier never shrinks. Privacy and community reporting are never paywalled.</p>
+        <div class="price-grid"><div class="price-card"><h3>Free</h3><div class="price">$0</div><ul class="price-list"><li>Baseline map and public waypoints</li><li>Current approved reports</li><li>Daily dock totals</li><li>Current regulations</li><li>Catch Print after approval</li></ul><button class="outline-btn" style="width:100%;margin-top:14px">Current plan</button></div><div class="price-card featured"><h3>OffingCue Pro</h3><div class="price">$99 <small>/ YEAR</small></div><ul class="price-list"><li>Full spot playbooks</li><li>Offline regional packs</li><li>Saved conditions and alerts</li><li>SST and chlorophyll history</li><li>Advanced crosshair and trip planning</li></ul><div class="upgrade-note"><b>Upgrade within 30 days.</b> Your first $9.99 monthly payment counts toward annual.</div><button class="solid-btn" style="width:100%;margin-top:14px;padding:12px" data-demo-buy>Preview upgrade</button></div></div>
+        <div class="section-head"><h2>Trip settings</h2><span>Account and offline state</span></div><div class="grid two"><div class="panel panel-pad"><div class="settings-row"><b>San Diego offline pack</b><span>Ready · 146 MB</span></div><div class="settings-row"><b>Default report privacy</b><span>General approximately 1 km</span></div><div class="settings-row"><b>Saved-water alerts</b><span>3 active</span></div><div class="settings-row"><b>Restore purchases</b><span>Available</span></div></div><div class="panel panel-pad"><div class="settings-row"><b>Miramar</b><span>Included</span></div><div class="settings-row"><b>Poway</b><span>Included</span></div><div class="settings-row"><b>San Vicente</b><span>Included</span></div><div class="settings-row"><b>Dixon + Barrett</b><span>Included</span></div><div class="settings-row"><b>Riverside + tribal waters</b><span>Validate first</span></div></div></div>
+      </section>
+
+      <section class="page" id="page-ops">
+        <div class="eyebrow">Jay + Tommy only // private operator mode</div>
+        <h1 class="page-title">Freshness without<br><em>founder bottlenecks.</em></h1>
+        <p class="lede">Approval stays human. Escalation and backup coverage solve the two-hour freshness problem; silent auto-publication does not.</p>
+        <div class="ops-banner"><b>Auto-publish is off.</b> 60 minutes reminds the primary reviewer. 90 minutes routes to backup. 120 minutes expires the draft from the freshness queue.</div>
+        <div class="report-layout">
+          <div><div class="section-head"><h2>Approval queue</h2><span>3 drafts</span></div>
+            <article class="queue-item" id="queue-joseph"><div class="queue-head"><h3>Joseph · Telegram draft</h3><span>Agreement required</span></div><p>“32.63, -117.43. Yellowtail marks on the north edge…” Raw message retained for review only. Generated copy is a fact-based draft.</p><div class="queue-facts"><div><span>Coordinates</span><b>32.6300, -117.4300</b></div><div><span>Privacy</span><b>General 1 km</b></div><div><span>Confidence</span><b>High · format valid</b></div></div><div class="queue-actions"><button class="outline-btn" data-queue-action="edit">Edit</button><button class="outline-btn" data-queue-action="reject">Reject</button><button class="solid-btn" data-queue-action="locked">Approve locked</button></div></article>
+            <article class="queue-item"><div class="queue-head"><h3>Community · Calico bass</h3><span>18 min waiting</span></div><p>Photo GPS stripped. User selected zone-only privacy. Duplicate and region checks passed.</p><div class="queue-facts"><div><span>Location</span><b>Point Loma Kelp</b></div><div><span>Privacy</span><b>Zone only</b></div><div><span>Photo</span><b>EXIF removed</b></div></div><div class="queue-actions"><button class="outline-btn" data-queue-action="edit">Edit</button><button class="outline-btn" data-queue-action="reject">Reject</button><button class="solid-btn" data-queue-action="approve">Approve</button></div></article>
+            <article class="queue-item"><div class="queue-head"><h3>Landing count · sample facts</h3><span>Rights hold</span></div><p>Parser extracted trip, passengers, species, and counts. Publication is blocked until source authorization is recorded.</p><div class="queue-facts"><div><span>Items</span><b>4 normalized facts</b></div><div><span>Source</span><b>Landing page</b></div><div><span>Rights</span><b>Pending</b></div></div><div class="queue-actions"><button class="outline-btn" data-queue-action="edit">Inspect</button><button class="solid-btn" data-queue-action="locked">Approval locked</button></div></article>
+          </div>
+          <aside class="report-aside"><div class="section-head"><h2>Waypoint intake</h2><span>2 unresolved</span></div><div class="panel"><div class="aside-body"><div class="privacy-line"><b>RF32</b><span>Rockfish 32 location is not published until Tommy confirms the exact mark.</span></div><div class="privacy-line"><b>PYR</b><span>Pyramid Head fishing mark is distinct from the public geographic cape; captain verification required.</span></div><div class="privacy-line"><b>Text</b><span>“Lohue Canyon” normalized to La Jolla Canyon; “Tana Bank” normalized to Tanner Bank pending confirmation.</span></div></div></div></aside>
+        </div>
+        <div class="section-head"><h2>Source health and rights</h2><span>Every adapter isolated</span></div>
+        <div class="panel" style="overflow:hidden"><table class="ops-table"><thead><tr><th>Source</th><th>Last run</th><th>Facts</th><th>Rights</th><th>Health</th><th>Kill switch</th></tr></thead><tbody>
+          <tr><td>NOAA CO-OPS<small>Tides and currents</small></td><td class="mono">12:00</td><td class="mono">48</td><td><span class="permission public">Public</span></td><td><span class="source-tag">Healthy</span></td><td><button class="kill">Enabled</button></td></tr>
+          <tr><td>NDBC<small>Observed waves</small></td><td class="mono">11:50</td><td class="mono">16</td><td><span class="permission public">Public</span></td><td><span class="source-tag">Healthy</span></td><td><button class="kill">Enabled</button></td></tr>
+          <tr><td>CDFW<small>Rules and stocking</small></td><td class="mono">09:00</td><td class="mono">31</td><td><span class="permission public">Public</span></td><td><span class="source-tag">Healthy</span></td><td><button class="kill">Enabled</button></td></tr>
+          <tr><td>Seaforth page<small>Third-party publisher credit</small></td><td class="mono">DEMO</td><td class="mono">0</td><td><span class="permission pending">Pending</span></td><td><span class="yesterday">Held</span></td><td><button class="kill off">Disabled</button></td></tr>
+          <tr><td>Fisherman's page<small>Third-party publisher credit</small></td><td class="mono">DEMO</td><td class="mono">0</td><td><span class="permission pending">Pending</span></td><td><span class="yesterday">Held</span></td><td><button class="kill off">Disabled</button></td></tr>
+          <tr><td>Joseph Telegram<small>Written agreement pending</small></td><td class="mono">11:31</td><td class="mono">1</td><td><span class="permission pending">Pending</span></td><td><span class="yesterday">Draft only</span></td><td><button class="kill off">Publish off</button></td></tr>
+        </tbody></table></div>
+      </section>
+
+      <footer class="footer"><div>PROJECT OFFINGCUE · PRIVATE PREVIEW · SAMPLE DATA UNLESS LABELED LIVE<br>NOT FOR NAVIGATION · VERIFY REGULATIONS WITH CDFW</div><div class="footer-links"><a href="https://www.gob.mx/conapesca/documentos/conapesca-01-016-pesca-deportivo-recreativa" target="_blank" rel="noopener noreferrer">Mexican fishing permit</a><a href="https://travel.state.gov/en/international-travel/travel-advisories/mexico.html" target="_blank" rel="noopener noreferrer">Mexico entry guidance</a><a href="https://wildlife.ca.gov/Fishing/Ocean/Regulations/Fishing-Map/Southern" target="_blank" rel="noopener noreferrer">CDFW rules</a><a href="https://nauticalcharts.noaa.gov/data/us-maritime-limits-and-boundaries.html" target="_blank" rel="noopener noreferrer">NOAA boundaries</a></div></footer>
+    </main>
+  </section>
+</div>
+<nav class="mobile-nav" aria-label="Mobile primary"><button class="active" data-page="home"><svg><use href="#i-home"/></svg>Home</button><button data-page="map"><svg><use href="#i-map"/></svg>Map</button><button data-page="reports"><svg><use href="#i-report"/></svg>Reports</button><button data-page="count"><svg><use href="#i-count"/></svg>Count</button><button data-page="rules"><svg><use href="#i-rules"/></svg>Rules</button><button data-page="account"><svg><use href="#i-user"/></svg>You</button><button data-page="ops"><svg><use href="#i-ops"/></svg>Ops</button></nav>
+
+<div class="modal" id="report-modal" role="dialog" aria-modal="true" aria-labelledby="report-modal-title"><div class="modal-card"><div class="modal-head"><b id="report-modal-title">New catch report</b><button class="modal-close" data-close-modal>Close</button></div><div class="modal-body"><div class="form-grid"><div class="field"><label>Species</label><select id="report-species"><option>Yellowtail</option><option>California Halibut</option><option>Calico Bass</option><option>Bluefin Tuna</option><option>Rainbow Trout</option></select></div><div class="field"><label>Waypoint or water</label><select id="report-place"><option>North 9</option><option>Point Loma Kelp</option><option>Lake Poway</option><option>Open water</option></select></div><div class="field"><label>Length</label><input id="report-length" value="24.0 IN"></div><div class="field"><label>Bait or technique</label><input id="report-bait" value="LIVE SARDINE"></div></div><div class="field" style="margin-top:11px"><label>Field note</label><textarea id="report-note">One fish on the edge before the wind came up. Current was moving north.</textarea></div><div class="field" style="margin-top:11px"><label>Location privacy · enforced in PostGIS/RLS</label><div class="privacy-seg" id="privacy-seg"><button class="privacy-choice" data-privacy="exact">Exact</button><button class="privacy-choice active" data-privacy="general">General 1 km</button><button class="privacy-choice" data-privacy="zone">Zone only</button></div><p class="privacy-explain" id="privacy-explain">Approximately 1 km. Credit stays public; the exact source point stays private.</p></div><button class="modal-submit" id="submit-report">Submit for human review</button><p style="font:.5rem/1.6 var(--mono);color:var(--faded);text-align:center;text-transform:uppercase">No auto-publish · photo GPS removed · pending print created</p></div></div></div>
+<div class="modal" id="print-modal" role="dialog" aria-modal="true" aria-labelledby="print-modal-title"><div class="modal-card"><div class="modal-head"><b id="print-modal-title">Catch Print · pending review</b><button class="modal-close" data-close-modal>Close</button></div><div class="modal-body"><article class="print-card"><div class="print-top"><span>Catch Print · No. 0190</span><span>OC · SD</span></div><svg class="fish-print" viewBox="0 0 320 150"><use href="#gyofish"/></svg><h3 id="print-species">Yellowtail</h3><div class="print-latin" id="print-latin">Seriola dorsalis</div><div class="print-data"><div><span>Length</span><b id="print-length">24.0 IN</b></div><div><span>Status</span><b>PENDING REVIEW</b></div><div><span>Where</span><b id="print-place">NORTH 9 · GENERAL</b></div><div><span>When</span><b id="print-time">TODAY · 12:00</b></div></div><div class="print-bottom"><div class="print-status">LOCATION MATCHES THE ANGLER'S PRIVACY SELECTION<br>@YOU · HUMAN REVIEW REQUIRED</div><div class="seal">OC</div></div></article></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const pageCopy={
+ home:['Home','What the water is doing · what is being caught · what is legal'],
+ map:['Map','Chart · crosshair · boundaries · curated marks'],
+ reports:['Reports','Approved intelligence · source · time · privacy'],
+ count:['Dock Totals','Daily facts by landing · boat · trip · species'],
+ rules:['Regulations','Official source · effective date · verify before fishing'],
+ account:['You','Offline packs · privacy · subscription'],
+ ops:['Operator','Approval queue · source health · rights registry']
+};
+let currentPage='home',offline=false,map=null,boundaryGroup=null,crossMarker=null,currentLayer='swell',privacy='general',currentField=[],currentFieldAt=null,currentFieldSource='NONE',currentFieldKey='',currentFieldLoadedAt=0,currentParticles=[],currentAnimation=null,currentLoadTimer=null,waveField=[],waveFieldAt=null,waveFieldKey='',waveFieldLoadedAt=0,waveLoadTimer=null;
+const $=id=>document.getElementById(id);
+function toast(title,msg){const t=$('toast');t.innerHTML='<b>'+title+'</b>'+msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),3500)}
+function go(page){
+ currentPage=page;
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+ const p=$('page-'+page);if(p)p.classList.add('active');
+ document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===page));
+ $('screen-label').textContent=pageCopy[page][0];$('screen-sub').textContent=pageCopy[page][1];
+ if(page==='map'){setTimeout(initMap,40)}else{stopCurrentAnimation();stopWaveAnimation()}
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+$('net-btn').addEventListener('click',()=>{
+ offline=!offline;$('net-btn').classList.toggle('off',offline);$('net-label').textContent=offline?'Offline pack':'Live feeds';
+ toast(offline?'Offline pack active':'Live feeds resumed',offline?'Map context, five lakes, spot pages, rules, and the report outbox remain available.':'Condition requests and source refreshes are active.');
+ if(offline){
+  $('home-source').innerHTML='CACHED PREVIEW<br>AS OF '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  if(currentLayer==='currents'){
+   if(currentField.length){setCurrentStatus('CACHED MODEL',currentFieldAt||'LAST LOAD');startCurrentAnimation()}
+   else{stopCurrentAnimation();setCurrentStatus('OFFLINE','NO CACHED GRID')}
+  }
+  if(currentLayer==='swell'){
+   if(waveField.length){setWaveStatus('CACHED MODEL',waveFieldAt||'LAST LOAD');startWaveAnimation()}
+   else{stopWaveAnimation();setWaveStatus('OFFLINE','NO CACHED SWELL GRID')}
+  }
+ }else{
+  loadHomeConditions();
+  if(currentLayer==='currents')loadCurrentField(true);
+  if(currentLayer==='swell')loadWaveField(true);
+ }
+});
+
+document.querySelectorAll('[data-open-report]').forEach(b=>b.addEventListener('click',()=>$('report-modal').classList.add('open')));
+document.querySelectorAll('[data-close-modal]').forEach(b=>b.addEventListener('click',()=>b.closest('.modal').classList.remove('open')));
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+const privacyText={exact:'Exact coordinates appear publicly. Use for piers and public structure only.',general:'Approximately 1 km. Credit stays public; the exact source point stays private.',zone:'Named zone only. No public point. The exact source point stays private.'};
+document.querySelectorAll('.privacy-choice').forEach(b=>b.addEventListener('click',()=>{privacy=b.dataset.privacy;document.querySelectorAll('.privacy-choice').forEach(x=>x.classList.toggle('active',x===b));$('privacy-explain').textContent=privacyText[privacy]}));
+const latin={Yellowtail:'Seriola dorsalis','California Halibut':'Paralichthys californicus','Calico Bass':'Paralabrax clathratus','Bluefin Tuna':'Thunnus orientalis','Rainbow Trout':'Oncorhynchus mykiss'};
+$('submit-report').addEventListener('click',()=>{
+ const species=$('report-species').value,place=$('report-place').value,len=$('report-length').value;
+ $('print-species').textContent=species;$('print-latin').textContent=latin[species]||'';$('print-length').textContent=len;
+ const privLabel=privacy==='exact'?'EXACT':privacy==='general'?'GENERAL 1 KM':'ZONE ONLY';$('print-place').textContent=place.toUpperCase()+' · '+privLabel;
+ const d=new Date();$('print-time').textContent='TODAY · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+ $('report-modal').classList.remove('open');$('print-modal').classList.add('open');
+});
+
+document.querySelectorAll('[data-demo-buy]').forEach(b=>b.addEventListener('click',()=>toast('Preview only','Production purchase flow uses RevenueCat and the current App Store or web-billing rules.')));
+document.querySelectorAll('[data-queue-action]').forEach(b=>b.addEventListener('click',()=>{
+ const action=b.dataset.queueAction;if(action==='locked')return toast('Approval locked','Record source rights or the Joseph agreement before publication.');
+ if(action==='approve'){b.closest('.queue-item').style.opacity='.48';toast('Approved','Named moderator action recorded. The item can now publish at its privacy-safe location.');}
+ if(action==='reject'){b.closest('.queue-item').style.opacity='.48';toast('Rejected','Draft remains in the audit log and never appears publicly.');}
+ if(action==='edit')toast('Edit mode','The final build opens the normalized facts and original source side by side.');
+}));
+document.querySelectorAll('.kill').forEach(b=>b.addEventListener('click',()=>{b.classList.toggle('off');b.textContent=b.classList.contains('off')?'Disabled':'Enabled';toast('Source switch',b.classList.contains('off')?'This adapter will not run or publish.':'Adapter enabled; rights and approval gates still apply.')}));
+
+async function loadHomeConditions(){
+ if(offline)return;
+ const url='https://marine-api.open-meteo.com/v1/marine?latitude=32.70&longitude=-117.29&current=wave_height,swell_wave_height,swell_wave_period,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&wind_speed_unit=kn&temperature_unit=fahrenheit&length_unit=imperial';
+ try{const ctl=new AbortController();const timer=setTimeout(()=>ctl.abort(),6500);const r=await fetch(url,{signal:ctl.signal});clearTimeout(timer);if(!r.ok)throw new Error('feed');const j=await r.json();const c=j.current||{};
+  const swell=Number(c.swell_wave_height||c.wave_height),period=Number(c.swell_wave_period),water=Number(c.sea_surface_temperature),curVel=Number(c.ocean_current_velocity),curDir=Number(c.ocean_current_direction);
+  $('home-swell').innerHTML=(Number.isFinite(swell)?swell.toFixed(1):'—')+' <small>FT @ '+(Number.isFinite(period)?period.toFixed(0):'—')+'S</small>';
+  $('home-water').innerHTML=(Number.isFinite(water)?water.toFixed(1):'—')+' <small>°F</small>';$('home-wind').innerHTML='— <small>KT · NWS IN PROD</small>';
+  $('home-current').innerHTML=(Number.isFinite(curVel)?curVel.toFixed(1):'—')+' <small>KT'+(Number.isFinite(curDir)?' · '+Math.round(curDir)+'°':'')+' · MODEL</small>';
+  $('home-source').innerHTML='OPEN-METEO MODEL GUIDANCE<br>'+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+ }catch(e){$('home-swell').innerHTML='2.8 <small>FT @ 12S · SAMPLE</small>';$('home-wind').innerHTML='7.4 <small>KT · SAMPLE</small>';$('home-water').innerHTML='67.1 <small>°F · SAMPLE</small>';$('home-current').innerHTML='— <small>MODEL UNAVAILABLE</small>';$('home-source').innerHTML='SAMPLE · FEED BLOCKED<br>NOT LIVE';}
+}
+loadHomeConditions();
+
+const waypoints=[
+ {id:'north9',num:'N9',name:'North 9',lat:32.63333,lon:-117.43333,age:'TODAY 06:42',fresh:'today',primary:true,source:'PUBLIC REFERENCE · CAPTAIN VERIFY',species:'Yellowtail',report:'Marks on the north edge before the wind increase.'},
+ {id:'south9',num:'S9',name:'South 9',lat:32.53333,lon:-117.35000,age:'YESTERDAY',fresh:'yesterday',primary:true,source:'PUBLIC REFERENCE · CAPTAIN VERIFY',species:'Bonito',report:'Mixed marks around the southern end. Preview report.'},
+ {id:'corner',num:'CNR',name:'The Corner',lat:32.62667,lon:-117.82333,age:'3 DAYS',fresh:'older',primary:true,source:'PUBLIC REFERENCE · CAPTAIN VERIFY',species:'Bluefin',report:'No approved live report in this preview.'},
+ {id:'bank60',num:'60',name:'60 Mile Bank',lat:32.06597,lon:-118.24701,age:'YESTERDAY',fresh:'yesterday',primary:true,source:'PUBLIC REFERENCE · CAPTAIN VERIFY',species:'Bluefin',report:'Outer-bank preview mark; permit and route checks required.'},
+ {id:'knuckle475',num:'475',name:'475 Knuckle',lat:32.06667,lon:-117.11667,age:'5 DAYS',fresh:'older',primary:true,source:'PUBLIC REFERENCE · CAPTAIN VERIFY',species:'Yellowfin',report:'Coordinate requires current-chart and captain confirmation.'},
+ {id:'tanner',num:'TAN',name:'Tanner Bank',lat:32.70000,lon:-119.13334,age:'6 DAYS',fresh:'older',primary:true,source:'PUBLIC REFERENCE · CAPTAIN VERIFY',species:'Yellowtail',report:'Outer-bank reference. “Tana” normalized to Tanner.'},
+ {id:'ljcanyon',num:'LJC',name:'La Jolla Canyon',lat:32.88333,lon:-117.28333,age:'2 DAYS',fresh:'older',primary:false,source:'PUBLIC GEOGRAPHIC FEATURE',species:'Mixed',report:'“Lohue Canyon” normalized to La Jolla Canyon pending Tommy confirmation.'}
+];
+let wpMarkers={};
+function waypointIcon(w){return L.divIcon({className:'',html:'<div class="wp-wrap"><div class="wp-dot wp-'+w.fresh+'"></div><div class="wp-copy"><span class="wp-num">'+w.num+'</span><span class="wp-name">'+w.name+'</span></div></div>',iconSize:[138,24],iconAnchor:[11,12]})}
+function buildWaypointList(){
+ $('waypoint-list').innerHTML=waypoints.map(w=>'<button class="inspect-row" data-list-waypoint="'+w.id+'" style="width:100%;border-left:0;border-right:0;border-top:0;background:transparent;color:inherit;text-align:left"><span class="n">'+w.num+'</span><span><b>'+w.name+'</b><small>'+w.source+'</small></span><span class="age '+w.fresh+'">'+w.age+'</span></button>').join('')+
+ '<div class="inspect-row pending"><span class="n">RF32</span><span><b>Rockfish 32</b><small>Exact mark withheld</small></span><span class="age">VERIFY</span></div><div class="inspect-row pending"><span class="n">PYR</span><span><b>Pyramid Head</b><small>Fishing mark unresolved</small></span><span class="age">VERIFY</span></div>';
+ document.querySelectorAll('[data-list-waypoint]').forEach(b=>b.addEventListener('click',()=>selectWaypoint(b.dataset.listWaypoint,true)));
+}
+buildWaypointList();
+function selectWaypoint(id,pan){
+ const w=waypoints.find(x=>x.id===id);if(!w)return;
+ $('map-inspector').innerHTML='<div class="num '+w.fresh+'">'+w.num+' · '+w.age+'</div><h3>'+w.name+'</h3><p>'+w.report+'</p><div class="coord">LAT '+w.lat.toFixed(5)+'<br>LON '+w.lon.toFixed(5)+'</div><div class="report-meta">'+w.source+'<br>NOT FOR NAVIGATION</div><div class="inspector-actions"><button class="outline-btn" data-inspect-reports>Reports</button><button class="outline-btn" data-inspect-count>Count</button></div>';
+ $('map-inspector').querySelector('[data-inspect-reports]').onclick=()=>go('reports');$('map-inspector').querySelector('[data-inspect-count]').onclick=()=>go('count');
+ if(pan&&map)map.flyTo([w.lat,w.lon],Math.max(map.getZoom(),9),{duration:.55});
+}
+function initMap(){
+ if(map){map.invalidateSize();resizeCurrentCanvas();if(currentLayer==='currents')scheduleCurrentField(false);if(currentLayer==='swell')scheduleWaveField(false);return}
+ map=L.map('live-map',{zoomControl:true,attributionControl:true,minZoom:5,maxZoom:13}).setView([32.55,-117.65],8);
+ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}',{maxZoom:13,attribution:'Esri Ocean · GEBCO/NOAA'}).addTo(map);
+ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:13}).addTo(map);
+ waypoints.forEach(w=>{const m=L.marker([w.lat,w.lon],{icon:waypointIcon(w),opacity:w.primary?1:.82}).addTo(map).on('click',()=>selectWaypoint(w.id,false));m._secondary=!w.primary;wpMarkers[w.id]=m});
+ boundaryGroup=L.layerGroup().addTo(map);
+ const border=L.polyline([[32.535,-117.125],[32.515,-117.48],[32.49,-117.94],[32.42,-118.35]],{color:'#D9DFDC',weight:1.7,dashArray:'8 6',opacity:.9}).addTo(boundaryGroup);border.bindTooltip('US/MX BOUNDARY · PREVIEW',{permanent:true,direction:'top',className:'bound-label'});
+ const line12=L.polyline([[32.69,-117.54],[32.54,-117.70],[32.36,-117.83],[32.17,-117.91],[31.98,-117.88]],{color:'#57A7B7',weight:1.6,dashArray:'3 6',opacity:.9}).addTo(boundaryGroup);line12.bindTooltip('MEXICO 12 NM · PREVIEW',{permanent:true,direction:'bottom',className:'bound-label'});
+ map.on('zoomend',()=>{const z=map.getZoom();$('live-map').classList.toggle('map-zoomed',z>=9);Object.values(wpMarkers).forEach(m=>m.setOpacity(m._secondary&&z<9?0:(m._secondary?.82:1)));resizeCurrentCanvas();if(currentLayer==='currents')scheduleCurrentField(false);if(currentLayer==='swell')scheduleWaveField(false)});
+ map.on('moveend',()=>{resizeCurrentCanvas();if(currentLayer==='currents')scheduleCurrentField(false);if(currentLayer==='swell')scheduleWaveField(false)});
+ map.on('click',e=>moveCrosshair(e.latlng));
+ window.addEventListener('resize',resizeCurrentCanvas);
+ setTimeout(()=>{map.invalidateSize();resizeCurrentCanvas();if(currentLayer==='swell')loadWaveField(false)},100);
+}
+function compassPoint(deg){const pts=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];return pts[Math.round((((deg%360)+360)%360)/22.5)%16]}
+function coastLonAt(lat){if(lat>=33.5)return-118.0;if(lat>=32.7)return-117.2-(lat-32.7);if(lat>=32.0)return-117.2+(32.7-lat)*.18;if(lat>=31.5)return-117.074+(32.0-lat)*.4;return-116.85}
+function isOceanPoint(ll){return ll.lng<coastLonAt(ll.lat)-.015}
+function setCrossLabels(){
+ $('x-layer').textContent=currentLayer.toUpperCase();
+ if(currentLayer==='currents'){$('x-label-a').textContent='Velocity';$('x-label-b').textContent='Heading';$('x-height').textContent='— KT';$('x-period').textContent='— DEG'}
+ else{$('x-label-a').textContent='Height';$('x-label-b').textContent='Period';$('x-height').textContent='— FT';$('x-period').textContent='— SEC'}
+}
+function nearestCurrent(latlng){
+ if(!currentField.length)return null;let best=null,dist=Infinity;
+ currentField.forEach(f=>{const d=(f.lat-latlng.lat)*(f.lat-latlng.lat)+(f.lon-latlng.lng)*(f.lon-latlng.lng);if(d<dist){dist=d;best=f}});return best;
+}
+function resizeCurrentCanvas(){
+ const cv=$('current-canvas');if(!cv)return;const box=cv.parentElement.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);if(!box.width||!box.height)return;
+ cv.width=Math.round(box.width*dpr);cv.height=Math.round(box.height*dpr);cv.style.width=box.width+'px';cv.style.height=box.height+'px';const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);currentParticles=[];if(currentLayer==='currents'&&currentField.length)renderCurrentSvg();if(currentLayer==='swell'&&waveField.length)renderWaveSvg();
+}
+function setWaveStatus(title,detail){const s=$('wave-status');if(!s)return;s.innerHTML='<b>'+title+'</b><br>'+detail;s.classList.toggle('show',currentLayer==='swell')}
+function renderWaveSvg(){
+ const svg=$('wave-svg');if(!svg||!map||currentLayer!=='swell'||!waveField.length){if(svg){svg.innerHTML='';svg.classList.remove('active')}return}const box=svg.parentElement.getBoundingClientRect();svg.setAttribute('viewBox','0 0 '+box.width+' '+box.height);svg.setAttribute('width',box.width);svg.setAttribute('height',box.height);let paths='';
+ waveField.forEach((f,i)=>{const pt=map.latLngToContainerPoint([f.lat,f.lon]);if(pt.x<0||pt.x>box.width||pt.y<0||pt.y>box.height)return;const travel=(f.direction+180)%360,rad=travel*Math.PI/180,fx=Math.sin(rad),fy=-Math.cos(rad),tx=Math.cos(rad),ty=Math.sin(rad),span=26+Math.min(f.period,18)*1.5,amp=2+Math.min(f.height,8)*.55,spacing=7+Math.min(f.period,18)*.55,dur=(1.05+Math.min(f.period,18)*.075).toFixed(2),alpha=Math.min(.92,.48+f.height*.08).toFixed(2);
+  for(let k=-1;k<=2;k++){const off=k*spacing,cx=pt.x+fx*off,cy=pt.y+fy*off,sx=cx-tx*span*.5,sy=cy-ty*span*.5,ex=cx+tx*span*.5,ey=cy+ty*span*.5,qx=cx+fx*amp,qy=cy+fy*amp,dx=(fx*spacing).toFixed(1),dy=(fy*spacing).toFixed(1),delay=(-((i+k+4)%4)*.22).toFixed(2);paths+='<path class="wave-path" d="M'+sx.toFixed(1)+' '+sy.toFixed(1)+' Q'+qx.toFixed(1)+' '+qy.toFixed(1)+' '+ex.toFixed(1)+' '+ey.toFixed(1)+'" style="--dx:'+dx+'px;--dy:'+dy+'px;--dur:'+dur+'s;animation-delay:'+delay+'s,'+delay+'s;opacity:'+alpha+'" />'}});
+ svg.innerHTML=paths;svg.classList.add('active');
+}
+function stopWaveAnimation(){const svg=$('wave-svg');if(svg){svg.innerHTML='';svg.classList.remove('active')}const s=$('wave-status');if(s)s.classList.remove('show')}
+function startWaveAnimation(){if(currentLayer!=='swell'||currentPage!=='map'||!map||!waveField.length)return;stopWaveAnimation();renderWaveSvg();setWaveStatus(offline?'CACHED MODEL':'LIVE MODEL','OPEN-METEO · '+(waveFieldAt||'MODEL TIME')+' · '+waveField.length+' CELLS')}
+function scheduleWaveField(force){clearTimeout(waveLoadTimer);waveLoadTimer=setTimeout(()=>loadWaveField(!!force),260)}
+async function loadWaveField(force){
+ if(!map||currentLayer!=='swell')return;const center=map.getCenter(),key=center.lat.toFixed(1)+':'+center.lng.toFixed(1)+':'+map.getZoom();
+ if(offline){if(waveField.length){setWaveStatus('CACHED MODEL',waveFieldAt||'LAST LOAD');startWaveAnimation()}else{stopWaveAnimation();setWaveStatus('OFFLINE','NO CACHED SWELL GRID')}return}
+ if(!force&&waveField.length&&waveFieldKey===key&&(Date.now()-waveFieldLoadedAt)<300000){setWaveStatus('LIVE MODEL',waveFieldAt+' · '+waveField.length+' CELLS');startWaveAnimation();return}
+ setWaveStatus('SWELLS','LOADING MODEL GRID');const b=map.getBounds(),rows=5,cols=9,lats=[],lons=[];for(let r=0;r<rows;r++){for(let c=0;c<cols;c++){const lat=b.getSouth()+(r+.5)/rows*(b.getNorth()-b.getSouth()),lon=b.getWest()+(c+.5)/cols*(b.getEast()-b.getWest());if(isOceanPoint({lat,lng:lon})){lats.push(lat.toFixed(4));lons.push(lon.toFixed(4))}}}
+ const url='https://marine-api.open-meteo.com/v1/marine?latitude='+lats.join(',')+'&longitude='+lons.join(',')+'&current=wave_height,swell_wave_height,swell_wave_direction,swell_wave_period&length_unit=imperial&cell_selection=sea';
+ try{const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),8500),res=await fetch(url,{signal:ctl.signal});clearTimeout(timer);if(!res.ok)throw new Error('swell grid');let data=await res.json();if(!Array.isArray(data))data=[data];const parsed=data.map(item=>{const c=item.current||{},height=Number(c.swell_wave_height||c.wave_height),direction=Number(c.swell_wave_direction),period=Number(c.swell_wave_period);return{lat:Number(item.latitude),lon:Number(item.longitude),height,direction,period,time:c.time,elevation:Number(item.elevation||0)}}).filter(f=>Number.isFinite(f.lat)&&Number.isFinite(f.lon)&&Number.isFinite(f.height)&&Number.isFinite(f.direction)&&Number.isFinite(f.period)&&f.elevation<=5&&isOceanPoint({lat:f.lat,lng:f.lon}));if(parsed.length<5)throw new Error('sparse swell grid');waveField=parsed;waveFieldKey=key;waveFieldLoadedAt=Date.now();waveFieldAt=(parsed[0].time||'').slice(11,16)+' UTC';setWaveStatus('LIVE MODEL',waveFieldAt+' · '+waveField.length+' CELLS');startWaveAnimation();
+ }catch(e){if(waveField.length){setWaveStatus('CACHED MODEL',(waveFieldAt||'LAST LOAD')+' · REFRESH FAILED');startWaveAnimation()}else{stopWaveAnimation();setWaveStatus('MODEL UNAVAILABLE','NO SWELL FIELD')}}
+}
+function setCurrentStatus(title,detail){const s=$('current-status');if(!s)return;s.innerHTML='<b>'+title+'</b><br>'+detail;s.classList.toggle('show',currentLayer==='currents')}
+function renderCurrentSvg(){
+ const svg=$('current-svg');if(!svg||!map||currentLayer!=='currents'||!currentField.length){if(svg){svg.innerHTML='';svg.classList.remove('active')}return}const box=svg.parentElement.getBoundingClientRect();svg.setAttribute('viewBox','0 0 '+box.width+' '+box.height);svg.setAttribute('width',box.width);svg.setAttribute('height',box.height);
+ let lines='';currentField.forEach((f,i)=>{const pt=map.latLngToContainerPoint([f.lat,f.lon]);if(pt.x<0||pt.x>box.width||pt.y<0||pt.y>box.height)return;const rad=f.direction*Math.PI/180,len=17+Math.min(f.velocity,2)*24,dx=Math.sin(rad)*len,dy=-Math.cos(rad)*len,x1=pt.x-dx*.34,y1=pt.y-dy*.34,x2=pt.x+dx*.66,y2=pt.y+dy*.66,dur=(1.55-Math.min(f.velocity,1.5)*.42).toFixed(2),delay=(-.12*(i%8)).toFixed(2),opacity=Math.min(.96,.58+f.velocity*.22).toFixed(2);lines+='<circle class="current-origin" cx="'+pt.x.toFixed(1)+'" cy="'+pt.y.toFixed(1)+'" r="3.1" /><line class="current-flow" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" marker-end="url(#current-arrow)" style="animation-duration:'+dur+'s;animation-delay:'+delay+'s;opacity:'+opacity+'" />'});
+ svg.innerHTML='<defs><marker id="current-arrow" markerWidth="7" markerHeight="7" refX="6.1" refY="3.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3.5 L0,7 Z" fill="#007C8D" /></marker></defs>'+lines;svg.classList.add('active');
+}
+function stopCurrentAnimation(){
+ if(currentAnimation)cancelAnimationFrame(currentAnimation);currentAnimation=null;currentParticles=[];const cv=$('current-canvas'),svg=$('current-svg');if(cv){const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);cv.classList.remove('active')}if(svg){svg.innerHTML='';svg.classList.remove('active')}
+}
+function spawnCurrentParticle(width,height){return{x:Math.random()*width,y:Math.random()*height,life:25+Math.random()*75}}
+function startCurrentAnimation(){
+ if(currentLayer!=='currents'||currentPage!=='map'||!map||!currentField.length)return;
+ stopCurrentAnimation();renderCurrentSvg();
+}
+function scheduleCurrentField(force){clearTimeout(currentLoadTimer);currentLoadTimer=setTimeout(()=>loadCurrentField(!!force),260)}
+async function loadCurrentField(force){
+ if(!map||currentLayer!=='currents')return;const center=map.getCenter(),key=center.lat.toFixed(1)+':'+center.lng.toFixed(1)+':'+map.getZoom();
+ if(offline){if(currentField.length){setCurrentStatus('CACHED MODEL',currentFieldAt||'LAST LOAD');startCurrentAnimation()}else{stopCurrentAnimation();setCurrentStatus('OFFLINE','NO CACHED GRID')}return}
+ if(!force&&currentField.length&&currentFieldKey===key&&(Date.now()-currentFieldLoadedAt)<300000){setCurrentStatus('LIVE MODEL',currentFieldAt+' · '+currentField.length+' VECTORS');startCurrentAnimation();return}
+ setCurrentStatus('CURRENTS','LOADING MODEL GRID');const b=map.getBounds(),rows=3,cols=5,lats=[],lons=[];
+ for(let r=0;r<rows;r++){for(let c=0;c<cols;c++){const lat=b.getSouth()+(r+.5)/rows*(b.getNorth()-b.getSouth()),lon=b.getWest()+(c+.5)/cols*(b.getEast()-b.getWest());if(isOceanPoint({lat,lng:lon})){lats.push(lat.toFixed(4));lons.push(lon.toFixed(4))}}}
+ const url='https://marine-api.open-meteo.com/v1/marine?latitude='+lats.join(',')+'&longitude='+lons.join(',')+'&current=ocean_current_velocity,ocean_current_direction&wind_speed_unit=kn&cell_selection=sea';
+ try{const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),8500),res=await fetch(url,{signal:ctl.signal});clearTimeout(timer);if(!res.ok)throw new Error('current grid');let data=await res.json();if(!Array.isArray(data))data=[data];const parsed=data.map(item=>{const c=item.current||{},velocity=Number(c.ocean_current_velocity),direction=Number(c.ocean_current_direction);return{lat:Number(item.latitude),lon:Number(item.longitude),velocity,direction,time:c.time,elevation:Number(item.elevation||0)}}).filter(f=>Number.isFinite(f.lat)&&Number.isFinite(f.lon)&&Number.isFinite(f.velocity)&&Number.isFinite(f.direction)&&f.elevation<=5&&isOceanPoint({lat:f.lat,lng:f.lon}));if(parsed.length<4)throw new Error('sparse grid');currentField=parsed;currentFieldKey=key;currentFieldLoadedAt=Date.now();currentFieldAt=(parsed[0].time||'').slice(11,16)+' UTC';currentFieldSource='OPEN-METEO OCEAN CURRENT MODEL';setCurrentStatus('LIVE MODEL',currentFieldAt+' · '+currentField.length+' VECTORS');startCurrentAnimation();
+ }catch(e){if(currentField.length){setCurrentStatus('CACHED MODEL',(currentFieldAt||'LAST LOAD')+' · REFRESH FAILED');startCurrentAnimation()}else{stopCurrentAnimation();setCurrentStatus('MODEL UNAVAILABLE','NO CURRENT VECTORS')}}
+}
+async function moveCrosshair(latlng){
+ const p=map.latLngToContainerPoint(latlng),ch=$('crosshair');ch.style.display='block';ch.style.left=p.x+'px';ch.style.top=p.y+'px';
+ if(crossMarker)crossMarker.setLatLng(latlng);else crossMarker=L.circleMarker(latlng,{radius:5,color:'#E9E4D6',weight:1,fillColor:'#14181B',fillOpacity:1}).addTo(map);
+ $('x-pos').textContent=latlng.lat.toFixed(3)+', '+latlng.lng.toFixed(3);setCrossLabels();$('x-height').textContent='FETCH';$('x-period').textContent='FETCH';
+ if(currentLayer==='currents'){
+  if(!isOceanPoint(latlng)){$('x-height').textContent='— KT';$('x-period').textContent='— DEG';$('x-source').textContent='CURRENT MODEL · SELECT OPEN WATER';return}
+  const cached=nearestCurrent(latlng);if(offline){$('x-height').textContent=cached?cached.velocity.toFixed(2)+' KT':'— KT';$('x-period').textContent=cached?Math.round(cached.direction)+'° '+compassPoint(cached.direction):'— DEG';$('x-source').textContent=cached?'CACHED OPEN-METEO MODEL · '+(currentFieldAt||'LAST LOAD'):'OFFLINE · NO CACHED CURRENT';return}
+  $('x-source').textContent='OPEN-METEO CURRENT MODEL · REQUESTING';const url='https://marine-api.open-meteo.com/v1/marine?latitude='+latlng.lat.toFixed(4)+'&longitude='+latlng.lng.toFixed(4)+'&current=ocean_current_velocity,ocean_current_direction&wind_speed_unit=kn&cell_selection=sea';
+  try{const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),6000),r=await fetch(url,{signal:ctl.signal});clearTimeout(timer);if(!r.ok)throw new Error('current');const j=await r.json(),c=j.current||{},velocity=Number(c.ocean_current_velocity),direction=Number(c.ocean_current_direction);$('x-height').textContent=Number.isFinite(velocity)?velocity.toFixed(2)+' KT':'— KT';$('x-period').textContent=Number.isFinite(direction)?Math.round(direction)+'° '+compassPoint(direction):'— DEG';$('x-source').textContent='OPEN-METEO MODEL GUIDANCE · '+((c.time||'').slice(11,16)||'NOW')+' UTC';
+  }catch(e){$('x-height').textContent=cached?cached.velocity.toFixed(2)+' KT':'— KT';$('x-period').textContent=cached?Math.round(cached.direction)+'° '+compassPoint(cached.direction):'— DEG';$('x-source').textContent=cached?'CACHED MODEL · POINT REQUEST FAILED':'MODEL CURRENT UNAVAILABLE'}return;
+ }
+ $('x-source').textContent=offline?'CACHED PREVIEW · LIVE REQUEST PAUSED':'OPEN-METEO MARINE · REQUESTING';if(offline){$('x-height').textContent='2.8 FT';$('x-period').textContent='12 SEC';return}
+ const url='https://marine-api.open-meteo.com/v1/marine?latitude='+latlng.lat.toFixed(4)+'&longitude='+latlng.lng.toFixed(4)+'&current=wave_height,swell_wave_height,swell_wave_period,swell_wave_direction&length_unit=imperial';
+ try{const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),6000),r=await fetch(url,{signal:ctl.signal});clearTimeout(timer);if(!r.ok)throw new Error('feed');const j=await r.json(),c=j.current||{},h=Number(c.swell_wave_height||c.wave_height),per=Number(c.swell_wave_period),dir=Number(c.swell_wave_direction);$('x-height').textContent=(Number.isFinite(h)?h.toFixed(1):'—')+' FT';$('x-period').textContent=(Number.isFinite(per)?per.toFixed(0):'—')+' SEC';$('x-source').textContent='OPEN-METEO MODEL GUIDANCE · '+(Number.isFinite(dir)?dir.toFixed(0)+' DEG · ':'')+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+ }catch(e){$('x-height').textContent='— FT';$('x-period').textContent='— SEC';$('x-source').textContent='MODEL GUIDANCE UNAVAILABLE'}
+}
+document.querySelectorAll('[data-map-layer]').forEach(b=>b.addEventListener('click',()=>{
+ currentLayer=b.dataset.mapLayer;document.querySelectorAll('[data-map-layer]').forEach(x=>x.classList.toggle('active',x===b));$('map-veil').className='map-data-veil '+currentLayer;setCrossLabels();
+ if(currentLayer==='currents'){if(!map)initMap();$('current-status').classList.add('show');loadCurrentField(false)}else{stopCurrentAnimation();$('current-status').classList.remove('show')}
+ if(currentLayer==='swell'){if(!map)initMap();$('wave-status').classList.add('show');loadWaveField(false)}else{stopWaveAnimation()}
+ const msg=currentLayer==='speed'?'Speed is an explained preview rule from wave height and period, not a safety score.':currentLayer==='currents'?'Animated vectors use live Open-Meteo ocean-current model velocity and direction. Model guidance is not a measured current.':currentLayer==='swell'?'Animated wavefronts use live Open-Meteo swell height, period, and coming-from direction converted into travel direction.':'Wind preview selected. Source and timestamp stay attached.';toast('Map layer',msg)
+}));
+$('boundary-toggle').addEventListener('click',()=>{if(!map)initMap();const on=map.hasLayer(boundaryGroup);on?map.removeLayer(boundaryGroup):map.addLayer(boundaryGroup);$('boundary-toggle').classList.toggle('active',!on)});
+document.querySelectorAll('[data-map-target]').forEach(b=>b.addEventListener('click',()=>{go('map');setTimeout(()=>selectWaypoint(b.dataset.mapTarget,true),160)}));
+</script>
+</body>
+</html>

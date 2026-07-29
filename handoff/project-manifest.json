@@ -1,0 +1,1093 @@
+{
+  "schemaVersion": "2.0.0",
+  "handoffId": "offingcue-2026-07-29",
+  "packageVersion": "2026.07.29",
+  "generatedAt": "2026-07-29T12:35:00-07:00",
+  "quickStart": {
+    "currentProject": "Project OffingCue",
+    "status": "Neutral working codename; not final trademark clearance",
+    "publicPreview": "https://hyperagent.com/s/WtwpIqoVY0OA442wmEv6Bw",
+    "previewSource": "preview/offingcue-preview.html",
+    "geography": "San Diego ocean/coast plus Miramar, Poway, San Vicente, Dixon, Barrett; no Los Angeles",
+    "pricing": "Free plus Pro at $9.99/month or $99/year; free tier never shrinks",
+    "moderation": "Never auto-publish; 60-minute reminder, 90-minute backup, 120-minute expiry",
+    "nextTechnicalAction": "Supabase/PostGIS/RLS/auth privacy foundation after approval and partnership-gate acknowledgement",
+    "p0Gates": [
+      "50-50 operating/IP agreement",
+      "Source permissions",
+      "Captain waypoint verification",
+      "Final brand clearance"
+    ],
+    "doNotUseAsCurrent": "historical/sluggfishing-app decisions unless root files explicitly preserve them",
+    "receivingAgentFirstRead": [
+      "START_HERE.md",
+      "project-manifest.json",
+      "HANDOFF.md",
+      "SUPERSEDED.md"
+    ]
+  },
+  "compatibility": {
+    "target": "Any receiving Hyperagent with file access",
+    "githubRequired": false,
+    "selfContainedZip": true,
+    "instructions": "Upload the zip and paste boot.firstMessage."
+  },
+  "authority": {
+    "authoritativeFile": "project-manifest.json",
+    "humanCompanion": "HANDOFF.md",
+    "readOrder": [
+      "START_HERE.md",
+      "project-manifest.json",
+      "HANDOFF.md",
+      "SUPERSEDED.md",
+      "docs/product-reset-architecture.md",
+      "docs/tommy-review-sheet.md"
+    ],
+    "conflictRule": "Root project-manifest.json overrides every other file. Root HANDOFF.md overrides historical files for human nuance.",
+    "historicalFolder": "historical/sluggfishing-app",
+    "historicalIsCurrent": false
+  },
+  "identity": {
+    "project": "Project OffingCue",
+    "workingCodename": "OffingCue",
+    "workingCodenameStatus": "Preliminary screen only; not legal trademark clearance",
+    "legacyName": "SluggFishing",
+    "legacyNameStatus": "Superseded as customer-facing app name",
+    "productCategory": "San Diego fishing intelligence and trip decision system",
+    "productThesis": "Tell a San Diego angler what the water is doing, what is being caught, and what is legal, with sourced marks, protected locations, and offline trip depth.",
+    "primaryWedge": "San Diego ocean/coastal anglers plus five core lakes; broad usefulness before multi-region expansion"
+  },
+  "partners": {
+    "Jay": {
+      "role": "Technical partner",
+      "owns": [
+        "backend",
+        "engineering",
+        "automation",
+        "infrastructure",
+        "landing page",
+        "advertising",
+        "technical operations"
+      ]
+    },
+    "Tommy": {
+      "role": "Fishing-domain and distribution partner",
+      "owns": [
+        "fishing expertise",
+        "design/content approval",
+        "shop/customer distribution",
+        "network",
+        "captain waypoint verification"
+      ]
+    },
+    "recommendedEntity": "New 50-50 app LLC with operating agreement and founder IP assignments",
+    "rejectedDefault": "DBA under only Tommy's existing company",
+    "majorBuildGate": "Signed or replacement 50-50 operating/IP agreement before major native production work and revenue"
+  },
+  "moats": [
+    "Captain-verified permanent waypoints with real coordinates and version history",
+    "Offline spot pages, rules, and map packs that remain useful with zero signal",
+    "Human-moderated reports with exact/general approximately 1 km/zone-only privacy enforced in PostGIS/RLS",
+    "Stocking plus AIS bundle, strengthened by landing counts and local human intel"
+  ],
+  "preservedMechanics": {
+    "DockTotals": "Fish-count interface",
+    "CatchPrint": "Earned proof-of-catch artifact generated after report submission/approval state",
+    "privacy": "Exact, general approximately 1 km, zone-only",
+    "freeTier": "Never shrinks",
+    "offline": "Never lapses mid-trip",
+    "dataTrust": "Every data point shows source, timestamp, model where applicable, and stale state"
+  },
+  "brandSystem": {
+    "status": "Dock Totals/Catch Print visual mechanics preserved while app identity is neutralized",
+    "board": "#14181B",
+    "bone": "#E9E4D6",
+    "hairline": "#2A3238",
+    "paper": "#EFE9DC",
+    "ink": "#191C1D",
+    "countRed": "#C8472E",
+    "kelpVerified": "#3E7D52",
+    "fonts": [
+      "Archivo 800-900 display",
+      "IBM Plex Mono for numerals",
+      "Inter for body"
+    ],
+    "laws": [
+      "No emoji as iconography",
+      "No badges, mascots, streaks, or confetti",
+      "Real data is the only celebration",
+      "Numbers are tabular mono",
+      "No unexplained scores",
+      "Clone capability, never identity"
+    ]
+  },
+  "currentDecisions": {
+    "geography": {
+      "deepLaunch": [
+        "San Diego ocean and coastal waters",
+        "Lake Miramar",
+        "Lake Poway",
+        "San Vicente Reservoir",
+        "Dixon Lake",
+        "Barrett Lake"
+      ],
+      "removed": [
+        "Los Angeles"
+      ],
+      "validationRequired": [
+        "East County lakes beyond named launch set",
+        "Riverside lakes",
+        "Indian tribal lakes"
+      ]
+    },
+    "pricing": {
+      "free": {
+        "price": 0,
+        "includes": [
+          "baseline map",
+          "public waypoints",
+          "current approved reports",
+          "daily Dock Totals",
+          "current rules",
+          "privacy controls",
+          "Catch Prints"
+        ]
+      },
+      "pro": {
+        "monthlyUsd": 9.99,
+        "annualUsd": 99,
+        "includes": [
+          "full spot playbooks",
+          "offline packs",
+          "alerts",
+          "SST/chlorophyll history",
+          "advanced crosshair and planning",
+          "stocking alerts"
+        ]
+      },
+      "conversionCopy": "Upgrade within 30 days and the first $9.99 counts toward annual.",
+      "freeTierNeverShrinks": true
+    },
+    "moderation": {
+      "autoPublish": false,
+      "minute60": "Remind primary reviewer",
+      "minute90": "Route to backup reviewer",
+      "minute120": "Expire from freshness queue; retain draft",
+      "humanApprovalRequired": true
+    },
+    "roadmap": {
+      "now": "Page-by-page neutral-brand web preview and partner review",
+      "next": "Supabase/PostGIS/RLS/auth foundation, then narrow San Diego TestFlight beta",
+      "later": [
+        "Source adapters after permission",
+        "Mapbox/GRDB offline packs",
+        "AIS",
+        "Android",
+        "East County/Riverside/tribal expansion",
+        "deeper satellite history"
+      ],
+      "notNow": [
+        "Los Angeles",
+        "Patents",
+        "Windy production dependency",
+        "Auto-published reports"
+      ]
+    },
+    "stack": [
+      "SwiftUI iOS 17+",
+      "Supabase Postgres/PostGIS/RLS/Auth/Storage",
+      "Mapbox iOS offline",
+      "GRDB/SQLite mirror",
+      "NOAA CO-OPS/NDBC/NWS/ENC/CoastWatch",
+      "Commercial Open-Meteo Marine",
+      "RevenueCat",
+      "PostHog",
+      "APNs",
+      "Telegram Bot API",
+      "AISstream later after terms confirmation"
+    ]
+  },
+  "productLaws": [
+    "Privacy is never for sale",
+    "Free tier never shrinks",
+    "Reports never auto-publish",
+    "Model guidance is never labeled measured truth",
+    "Maps and model data are not for navigation",
+    "Regulations say verify with CDFW",
+    "No competitor content, identity, source prose, processed charts, or images",
+    "No production waypoint without captain and current-chart verification",
+    "No source adapter without documented rights, health checks, and kill switch",
+    "No credentials or secrets in code or handoff"
+  ],
+  "latestPreview": {
+    "sourcePath": "preview/offingcue-preview.html",
+    "publicUrl": "https://hyperagent.com/s/WtwpIqoVY0OA442wmEv6Bw",
+    "originalArtifactId": "cmrtnt3nb063m07ad47e1r12b",
+    "recordedArtifactVersion": 11,
+    "baselinePath": "preview/sluggfishing-prototype-baseline.html",
+    "capabilities": [
+      "Responsive desktop and 390-pixel mobile",
+      "Home, Map, Reports, Dock Totals, Regulations, You/Pricing, Operator",
+      "Esri Ocean basemap",
+      "Live Open-Meteo model swell, water temperature, current velocity, current direction",
+      "Animated ocean-only current vectors with arrowheads and dash flow",
+      "Animated ocean-only curved swell wavefronts driven by height, period, and travel direction",
+      "Swell direction converted from coming-from to travel direction",
+      "Source, model time, grid/vector count, and offline cached state",
+      "Swell/current crosshair data paths",
+      "Waypoint freshness and boundary previews",
+      "Exact/general/zone privacy selector",
+      "Privacy-correct pending Catch Print",
+      "Staged Dock Totals, regulations, pricing, operator queue, source-health views"
+    ],
+    "qa": [
+      "JavaScript syntax passed",
+      "Desktop render passed",
+      "390-pixel mobile render passed",
+      "Layer switching passed",
+      "Offline cached model state passed",
+      "Privacy to Catch Print passed",
+      "External-link safety attributes passed"
+    ]
+  },
+  "connectionState": {
+    "live": [
+      "Esri Ocean tiles",
+      "Open-Meteo model swell",
+      "Open-Meteo model water temperature",
+      "Open-Meteo model current velocity/direction",
+      "Animated model fields",
+      "Official reference links",
+      "Local UI interactions"
+    ],
+    "reviewedStatic": [
+      "Three CDFW species regulation cards with official links"
+    ],
+    "stagedOrSample": [
+      "Community reports",
+      "Joseph reports",
+      "Landing counts",
+      "Fleet marks",
+      "Tide summary",
+      "NWS alert summary",
+      "Operator queue",
+      "Source-health rows",
+      "Purchase action",
+      "Offline-pack size",
+      "Saved alerts",
+      "Waypoint coordinates",
+      "Maritime geometry"
+    ],
+    "disconnected": [
+      "Supabase/PostGIS/RLS/Auth/Storage",
+      "Telegram webhook",
+      "Source adapters and rights registry",
+      "Automated CDFW ingest",
+      "NOAA production condition pipelines",
+      "Mapbox/GRDB offline",
+      "RevenueCat",
+      "Notifications",
+      "Analytics",
+      "Production admin auth"
+    ],
+    "truth": "Live marine values are fetched model guidance, not measured observations or navigation data."
+  },
+  "dataRights": {
+    "landingFinding": "Seaforth and Fisherman's pages credit third-party publishers; landing-domain access is not proof of content rights.",
+    "policy": "Normalize facts only. Preserve source URL and timestamp. Do not republish source prose/images. Require permission or compatible terms before automated production ingestion.",
+    "manualFallbackRequired": true,
+    "appleGuidelineRisk": "App Review 5.2.2 may require proof of permission for third-party service/content use."
+  },
+  "waypointStatus": {
+    "productionReady": false,
+    "policy": "Captain plus current-chart validation, datum, alias, source evidence, verifier, and version history required.",
+    "unresolved": [
+      "Rockfish 32",
+      "Pyramid Head fishing mark"
+    ],
+    "normalizationsPendingTommy": {
+      "Lohue Canyon": "La Jolla Canyon",
+      "Tana Bank": "Tanner Bank"
+    },
+    "maritimeGeometry": "Preview only; production must use current official U.S. and Mexican sources."
+  },
+  "openGates": [
+    {
+      "priority": "P0",
+      "owner": "Jay and Tommy",
+      "gate": "Sign or replace 50-50 operating/IP agreement",
+      "blocks": "Major native production work and revenue"
+    },
+    {
+      "priority": "P0",
+      "owner": "Tommy/Jay",
+      "gate": "Obtain source permissions",
+      "blocks": "Automated landing/lake ingestion"
+    },
+    {
+      "priority": "P0",
+      "owner": "Tommy or approved captain",
+      "gate": "Verify production waypoints",
+      "blocks": "Navigation-number publication"
+    },
+    {
+      "priority": "P0",
+      "owner": "Jay and trademark counsel",
+      "gate": "Clear final neutral brand",
+      "blocks": "Paid media and final store identity"
+    },
+    {
+      "priority": "P1",
+      "owner": "Jay",
+      "gate": "Create Supabase foundation after approval",
+      "blocks": "Real reports, privacy enforcement, moderation, operator workflows"
+    }
+  ],
+  "nextRecommendedAction": {
+    "name": "Supabase privacy foundation",
+    "owner": "Jay / receiving Hyperagent",
+    "preconditions": [
+      "Jay approves migrated state",
+      "Partnership gate acknowledged"
+    ],
+    "deliverables": [
+      "SQL migrations",
+      "PostGIS extensions and indexes",
+      "Exact/general/zone privacy model",
+      "RLS policies",
+      "Auth/session foundation",
+      "Moderation audit tables",
+      "Seed/import contract",
+      "Automated tests for raw API privacy"
+    ],
+    "doNotStart": [
+      "Landing scrapers without rights",
+      "GitHub repository unless Jay asks",
+      "Large native feature phase before business gate"
+    ]
+  },
+  "superseded": [
+    {
+      "old": "SluggFishing customer-facing name",
+      "new": "Neutral brand; OffingCue is working codename only"
+    },
+    {
+      "old": "Los Angeles next",
+      "new": "No Los Angeles in current roadmap"
+    },
+    {
+      "old": "$2.99/month and $19.99/year",
+      "new": "$9.99/month and $99/year"
+    },
+    {
+      "old": "Separate Offshore/AIS/Full Boat ladder",
+      "new": "Current preview is Free plus Pro; final packaging open"
+    },
+    {
+      "old": "Any two-hour auto-publish",
+      "new": "Never auto-publish; 60/90 escalation, 120 expiry"
+    },
+    {
+      "old": "Windy V1 dependency",
+      "new": "NOAA plus commercial Open-Meteo V1; Windy later"
+    },
+    {
+      "old": "DBA under one partner",
+      "new": "Recommended new 50-50 app LLC"
+    },
+    {
+      "old": "Patent as priority",
+      "new": "Trademark, rights, contracts, operations first"
+    }
+  ],
+  "artifactsAndReferences": {
+    "originThreadId": "cmrtkkjgy0av907ad40jy46sn",
+    "originThreadUrl": "https://hyperagent.com/thread/cmrtkkjgy0av907ad40jy46sn",
+    "originAgentId": "cmrtkd61o043n07ad3trs29bn",
+    "originAgentName": "SluggFishing Product Command",
+    "architectureDocumentId": "cmrtnl66t05sl07adstsrr758",
+    "architectureDocumentVersion": 3,
+    "tommyReviewDocumentId": "cmrtoms6y06io07ad0huspzra",
+    "tommyReviewDocumentVersion": 3,
+    "previewArtifactId": "cmrtnt3nb063m07ad47e1r12b",
+    "previewArtifactVersion": 11,
+    "publicPreviewUrl": "https://hyperagent.com/s/WtwpIqoVY0OA442wmEv6Bw",
+    "note": "IDs may not be accessible from another account; portable copies are included in this package."
+  },
+  "boot": {
+    "firstMessage": "Read START_HERE.md first. Parse project-manifest.json as the authoritative state, then read HANDOFF.md, SUPERSEDED.md, docs/product-reset-architecture.md, and docs/tommy-review-sheet.md. Confirm the current decisions, connected versus staged systems, P0 gates, and exact next technical action. Do not create GitHub or start a major native build until I approve.",
+    "expectedConfirmation": [
+      "Working name is Project OffingCue and not legally cleared",
+      "No Los Angeles; San Diego/coast plus five named lakes",
+      "Free plus $9.99/month or $99/year",
+      "Reports never auto-publish",
+      "Preview source and public link identified",
+      "Live, reviewed-static, staged, and disconnected systems distinguished",
+      "P0 business/data/waypoint/brand gates listed",
+      "Supabase/PostGIS/RLS/auth recommended next"
+    ],
+    "allowedNextChoices": [
+      "Build Supabase privacy foundation",
+      "Revise the web preview",
+      "Address partner/data/brand gate"
+    ],
+    "stopConditions": [
+      "Specified resource cannot be accessed",
+      "Destination is ambiguous",
+      "Consequential external write was not requested"
+    ]
+  },
+  "security": {
+    "containsSecrets": false,
+    "forbiddenContent": [
+      "Supabase keys",
+      "Mapbox tokens",
+      "Telegram bot tokens",
+      "Apple credentials",
+      "RevenueCat keys",
+      "API secrets",
+      "cookies",
+      "OAuth tokens",
+      "private keys"
+    ],
+    "credentialInstruction": "Use the receiving environment's secure credential flow; never paste secrets into chat or commit them."
+  },
+  "sourceReferences": [
+    {
+      "name": "Apple App Review Guidelines",
+      "url": "https://developer.apple.com/app-store/review/guidelines/",
+      "use": "UGC, subscriptions, external links, third-party content authorization"
+    },
+    {
+      "name": "U.S. Copyright Office FAQ",
+      "url": "https://www.copyright.gov/help/faq/faq-protect.html",
+      "use": "facts versus protected expression"
+    },
+    {
+      "name": "USPTO comprehensive clearance",
+      "url": "https://www.uspto.gov/trademarks/search/comprehensive-clearance-search-similar-trademarks",
+      "use": "brand clearance process"
+    },
+    {
+      "name": "California Secretary of State entity types",
+      "url": "https://www.sos.ca.gov/business-programs/business-entities/starting-business/types",
+      "use": "LLC versus sole proprietor/DBA structure"
+    },
+    {
+      "name": "California FTB LLC",
+      "url": "https://www.ftb.ca.gov/file/business/types/limited-liability-company/index.html",
+      "use": "California LLC tax and filing facts"
+    },
+    {
+      "name": "NOAA U.S. Maritime Limits and Boundaries",
+      "url": "https://nauticalcharts.noaa.gov/data/us-maritime-limits-and-boundaries.html",
+      "use": "maritime layers and legal-use warnings"
+    },
+    {
+      "name": "NOAA ENC GIS services",
+      "url": "https://www.nauticalcharts.noaa.gov/data/gis-data-and-services.html",
+      "use": "chart context and offline MBTiles"
+    },
+    {
+      "name": "NOAA CO-OPS API",
+      "url": "https://api.tidesandcurrents.noaa.gov/api/prod/",
+      "use": "tides, currents, water levels"
+    },
+    {
+      "name": "NWS API",
+      "url": "https://www.weather.gov/documentation/services-web-api",
+      "use": "marine forecasts and advisories"
+    },
+    {
+      "name": "NOAA CoastWatch SST",
+      "url": "https://coastwatch.pfeg.noaa.gov/erddap/griddap/erdMBsstd1day.html",
+      "use": "satellite SST"
+    },
+    {
+      "name": "NOAA CoastWatch chlorophyll",
+      "url": "https://coastwatch.pfeg.noaa.gov/erddap/griddap/erdMWchla3day.html",
+      "use": "chlorophyll"
+    },
+    {
+      "name": "NOAA WCOFS Southern California",
+      "url": "https://tidesandcurrents.noaa.gov/ofs/dev/wcofs/wcofs_southernca.html",
+      "use": "preferred production current nowcast when data access is available"
+    },
+    {
+      "name": "Open-Meteo Marine",
+      "url": "https://open-meteo.com/en/docs/marine-weather-api",
+      "use": "preview swell, wave, current, and SST model guidance; production requires commercial terms"
+    },
+    {
+      "name": "Windy Point Forecast pricing",
+      "url": "https://api.windy.com/point-forecast/pricing",
+      "use": "later API evaluation"
+    },
+    {
+      "name": "Windy Map Forecast pricing",
+      "url": "https://api.windy.com/map-forecast/pricing",
+      "use": "later animated-map evaluation"
+    },
+    {
+      "name": "Windy API terms",
+      "url": "https://account.windy.com/agreements/windy-forecast-api-terms-of-use",
+      "use": "licensing and access restrictions"
+    },
+    {
+      "name": "CDFW Southern Region regulations",
+      "url": "https://wildlife.ca.gov/Fishing/Ocean/Regulations/Fishing-Map/Southern",
+      "use": "current Southern California rules"
+    },
+    {
+      "name": "CDFW Recent Stocked Waters",
+      "url": "https://data.ca.gov/dataset/recent-stocked-waters-california-ds7781",
+      "use": "official stocking data"
+    },
+    {
+      "name": "CDFW Fishing Guide",
+      "url": "https://data.ca.gov/dataset/cdfw-fishing-guide2",
+      "use": "fishing locations, regulations, MPAs, stocking layers"
+    },
+    {
+      "name": "CONAPESCA sport-fishing permit",
+      "url": "https://www.gob.mx/conapesca/documentos/conapesca-01-016-pesca-deportivo-recreativa",
+      "use": "Mexican fishing permit guidance"
+    },
+    {
+      "name": "U.S. State Department Mexico guidance",
+      "url": "https://travel.state.gov/en/international-travel/travel-advisories/mexico.html",
+      "use": "entry and private-boat guidance"
+    }
+  ],
+  "package": {
+    "root": ".",
+    "entryPoint": "START_HERE.md",
+    "manifest": "project-manifest.json",
+    "fileIndexHashExclusions": [
+      "project-manifest.json",
+      "CHECKSUMS.sha256"
+    ],
+    "fileIndex": [
+      {
+        "path": "AGENT_OPERATING_BRIEF.md",
+        "category": "root_entry",
+        "bytes": 2401,
+        "sha256": "f0102a54ec8561636e41ec866b6ab6539b5677f155a5859ee41914d5d34e36f9",
+        "required": true
+      },
+      {
+        "path": "BOOT_PROMPT.md",
+        "category": "root_entry",
+        "bytes": 2136,
+        "sha256": "2cf73dcc4c2f40f2170d1f1895dba716d6c4f9b8ce7faf332234b463ae35239e",
+        "required": true
+      },
+      {
+        "path": "HANDOFF.md",
+        "category": "root_entry",
+        "bytes": 7578,
+        "sha256": "5cd71a8b0d4a324c23da20666a58e3fc713a5c16573f273ce3a8b2f9a952fb74",
+        "required": true
+      },
+      {
+        "path": "MIGRATION_INSTRUCTIONS.md",
+        "category": "root_entry",
+        "bytes": 1407,
+        "sha256": "1ece9703e00bf8a6277242f2b12f56692b71994e3c9f64ff67d708d84bc1a6ab",
+        "required": true
+      },
+      {
+        "path": "README.md",
+        "category": "root_entry",
+        "bytes": 2965,
+        "sha256": "a915eb3036f0e8921d67233be0d0de7a503beacc5e222244849121610b1d9f7b",
+        "required": true
+      },
+      {
+        "path": "START_HERE.md",
+        "category": "root_entry",
+        "bytes": 2320,
+        "sha256": "1a71e0c1b53fc7d8d340bad93bb91801bd5fd489bec06686a4c8dedbcca280e4",
+        "required": true
+      },
+      {
+        "path": "SUPERSEDED.md",
+        "category": "root_entry",
+        "bytes": 2542,
+        "sha256": "32d3968970e61c9517d86c350655947f094d88fc0745e645ce0ed347a27b5c52",
+        "required": true
+      },
+      {
+        "path": "VALIDATION_REPORT.md",
+        "category": "root_entry",
+        "bytes": 2494,
+        "sha256": "824bdc18bff3e0e652d59cfe5c88fa75b274e261e1b8b8988aca3b2dc878f650",
+        "required": true
+      },
+      {
+        "path": "docs/connection-status.md",
+        "category": "portable_doc",
+        "bytes": 1232,
+        "sha256": "77bdc7d7d0d98e20d5e55f320fc85d37b7a22032cede3f6ab1a6aca2ede54061",
+        "required": true
+      },
+      {
+        "path": "docs/preserved-pride-codex.md",
+        "category": "portable_doc",
+        "bytes": 2437,
+        "sha256": "ecfc07ed14607f4602fddc256cc0979cd8d9ebb0acce5f181183034f942065d1",
+        "required": true
+      },
+      {
+        "path": "docs/product-reset-architecture.md",
+        "category": "portable_doc",
+        "bytes": 10126,
+        "sha256": "ea86bf4941c67c1145c2d9681ca6633a6d9333f0eab5e6a809e5b87e81cf8222",
+        "required": true
+      },
+      {
+        "path": "docs/source-references.md",
+        "category": "portable_doc",
+        "bytes": 2681,
+        "sha256": "a1a8ab681e74fff73c66916f8d8d5f88ed1ab1a3b4ec4f731905e5da96249519",
+        "required": true
+      },
+      {
+        "path": "docs/tommy-review-sheet.md",
+        "category": "portable_doc",
+        "bytes": 4069,
+        "sha256": "4bf907758b3cb1cbb5a18fe04e055d3a36c5831bd1c5b1ab773da9bd36149d06",
+        "required": true
+      },
+      {
+        "path": "historical/sluggfishing-app/.gitignore",
+        "category": "historical_reference",
+        "bytes": 190,
+        "sha256": "edb52974744e78fb2c2e5f611ddbe4e16a26942be7925912ce3406d54e938ee0",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/BOOT_PROMPT.md",
+        "category": "historical_reference",
+        "bytes": 1582,
+        "sha256": "96011b82cd83c2455679d32f2b819ec33264624e8a330d27d6f65e32483fb7da",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/HANDOFF.md",
+        "category": "historical_reference",
+        "bytes": 5260,
+        "sha256": "8bd7aca49b3199bed01757719a441835eca88a8fc67ffe04e3f7ab63aac6d1aa",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/README.md",
+        "category": "historical_reference",
+        "bytes": 1832,
+        "sha256": "6ed6f41d017abb97786b1bcfdad875f099f29f9c82078335246f947825f410e8",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/SYSTEM_PROMPT.md",
+        "category": "historical_reference",
+        "bytes": 6787,
+        "sha256": "b092bc40fe34eff6bcdf9777363cefafb434e560cbd7fd4c07d17aa1aadea56c",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/data/competitor-matrix.csv",
+        "category": "historical_reference",
+        "bytes": 1618,
+        "sha256": "592066619502e3643f8bbc490765cbfbeb6ed6dabee92bd47749c6e58574ad4f",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/data/species-catalog.csv",
+        "category": "historical_reference",
+        "bytes": 5526,
+        "sha256": "e03d2f4a64b782d36e19a37a3abdd97ba752cb2d69e02b47a493b2801e801bf1",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/design/01-brandbook-v1.html",
+        "category": "historical_reference",
+        "bytes": 44724,
+        "sha256": "c482a7377c4e4ee31c92adb3075adf7c36e1175768aa145503a57ca9ad65acb6",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/design/02-three-directions.html",
+        "category": "historical_reference",
+        "bytes": 52220,
+        "sha256": "36a8a80c3ab9b42ba25d0e0452c0b1c665a4669fc4968e86830b413c10657de5",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/design/03-dock-totals-direction.html",
+        "category": "historical_reference",
+        "bytes": 31882,
+        "sha256": "524aee9f6497e319445775b846cad2e59b68e8bae6ee1860db181d397051919a",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/design/04-live-demo.html",
+        "category": "historical_reference",
+        "bytes": 65660,
+        "sha256": "1f2eebf4e784e1dedc6b88207f1ef2062f3fa65df7987fbbb9cf692b5ee4879e",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/architecture.md",
+        "category": "historical_reference",
+        "bytes": 4931,
+        "sha256": "512e2bb37b33171b1b6031a3b2d669abf67971988c799e2c349ecbf06791aba6",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/brand/dock-totals-direction.md",
+        "category": "historical_reference",
+        "bytes": 1896,
+        "sha256": "8678de5a716b5ff658f2f236414c0425969c51186a8e0acba95ba3c096e3d7fe",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/brand/pride-codex.md",
+        "category": "historical_reference",
+        "bytes": 2437,
+        "sha256": "ecfc07ed14607f4602fddc256cc0979cd8d9ebb0acce5f181183034f942065d1",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/competitive/fishdope-clone-map.md",
+        "category": "historical_reference",
+        "bytes": 1393,
+        "sha256": "2295d850c64ff55462a53145eb9ea91d61691995a67b2aa4ad2a832099081ffa",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/competitive/where-we-win.md",
+        "category": "historical_reference",
+        "bytes": 2051,
+        "sha256": "339a4f2d38fe4ea10e4f73ba1da1633d30ea81615158e9a0253dca28a40c7ce6",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/data/fish-data-supply-chain.md",
+        "category": "historical_reference",
+        "bytes": 2071,
+        "sha256": "85cb0b713543c1af58530fa3a426b0f2fba70f541182cb5405730c49546f2e1d",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/data-model.md",
+        "category": "historical_reference",
+        "bytes": 625,
+        "sha256": "96b97d34b474aebf60203488e5113d9adc3531e33c8763a6aa4b76daeed0aa5a",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/deal-memo.md",
+        "category": "historical_reference",
+        "bytes": 2252,
+        "sha256": "59edd52c8ceb65c0aa6d5bf5b2da8fe2760e0c8bd21e9028e7711d4797e5b5ad",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/prd.md",
+        "category": "historical_reference",
+        "bytes": 2432,
+        "sha256": "7a2df71bc1571f22e9fb9bbffa1785e1aee3cc0d666dc32f7722a484575599fc",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/qa-launch-pack.md",
+        "category": "historical_reference",
+        "bytes": 2333,
+        "sha256": "972fccb0b140e8972acc8dd7c372fac421518b17e9818e65925d0fafb991d87d",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/docs/sprint-plan.md",
+        "category": "historical_reference",
+        "bytes": 1092,
+        "sha256": "eb2625a8fe21ecf17f946c352624ab8268285062b60a09aef8f26234af97cdfb",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/App/AppState.swift",
+        "category": "historical_reference",
+        "bytes": 573,
+        "sha256": "38889c46b260e5f1ffb670f09d554c9461c415c524cb720096f593cff85cd1f3",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/App/SluggFishingApp.swift",
+        "category": "historical_reference",
+        "bytes": 333,
+        "sha256": "042922fd9adfde303d630d638e6fad74614f94f58d29857f2eaf736a87fa53bb",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Core/Models/Models.swift",
+        "category": "historical_reference",
+        "bytes": 2457,
+        "sha256": "001bf338ae4b38954d11305ab869f8318c05c91c33f75b649b3ad4951959a6aa",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Core/Services/ConditionsService.swift",
+        "category": "historical_reference",
+        "bytes": 679,
+        "sha256": "eaf35b7bbc1fbe440554b38ad28aa1c3c9c236f02c5525dda99fb9be97240116",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Core/Services/OfflineStore.swift",
+        "category": "historical_reference",
+        "bytes": 715,
+        "sha256": "eb8a037e914d6eb82c4321753f3dae054e41588956aaa7eb4769960f6beabf00",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Core/Services/SupabaseService.swift",
+        "category": "historical_reference",
+        "bytes": 529,
+        "sha256": "59f0a31748dfd557092f9864d5f1a8d3bb43fda797992e3748220711d7c61679",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Core/Theme/Theme.swift",
+        "category": "historical_reference",
+        "bytes": 1316,
+        "sha256": "e1f279d30a303de9e117b19f7fa69e97f96da328a48e437d3f2dc257a4bef12b",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Features/Location/LocationDetailView.swift",
+        "category": "historical_reference",
+        "bytes": 923,
+        "sha256": "867c0fbb741a074a4fc6647d4888151677a5f615faa772599b7bb3e194051a10",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Features/Map/MapHomeView.swift",
+        "category": "historical_reference",
+        "bytes": 1298,
+        "sha256": "9092eee6247fb3ee7b33851a51d81e874ade6337194d2b8f3eb0ae04ca71e816",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Features/Offline/OfflineBanner.swift",
+        "category": "historical_reference",
+        "bytes": 546,
+        "sha256": "43f4abfd1a74e63e6e996c98815c0a188f1b26b8df7fb050ec5480d50fc82b61",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Features/Paywall/PaywallView.swift",
+        "category": "historical_reference",
+        "bytes": 689,
+        "sha256": "e717cbb10ea562d5e954b6b873275611516b4cdb92c64121296a2d5601a18e6d",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Features/Reports/NewReportView.swift",
+        "category": "historical_reference",
+        "bytes": 973,
+        "sha256": "9b2e830dd9e408091953a000f53a32dd16463394c4101be837d553099733e890",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/ios/SluggFishing/Features/Reports/ReportOutbox.swift",
+        "category": "historical_reference",
+        "bytes": 435,
+        "sha256": "c8c776d524cc97029517c1431746db6d68ffd36d8288a996c4e23dbfebd20cbb",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/project-manifest.json",
+        "category": "historical_reference",
+        "bytes": 2180,
+        "sha256": "e2984650b32efec707aae1907f55ab6189dd3dea434cdfb1fd6efbbcb6096235",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/project.yml",
+        "category": "historical_reference",
+        "bytes": 942,
+        "sha256": "0a2a77549cf46f9650d6f4fe1e87f211974c1bc8d8f695ac0af4bcc1fb998718",
+        "required": false
+      },
+      {
+        "path": "historical/sluggfishing-app/supabase/schema.sql",
+        "category": "historical_reference",
+        "bytes": 6331,
+        "sha256": "3b72387459165ceaf266a9d28c2c7ecb7f7188276ba046a36c778d2d2428c44b",
+        "required": false
+      },
+      {
+        "path": "preview/offingcue-preview.html",
+        "category": "preview",
+        "bytes": 91640,
+        "sha256": "c90762e9cf9314263c3bf6fd3c999e31dc9ccb4a26b2a5c0d33c0d3d236a5e78",
+        "required": true
+      },
+      {
+        "path": "preview/sluggfishing-prototype-baseline.html",
+        "category": "preview",
+        "bytes": 65660,
+        "sha256": "1f2eebf4e784e1dedc6b88207f1ef2062f3fa65df7987fbbb9cf692b5ee4879e",
+        "required": true
+      },
+      {
+        "path": "scaffold/data/competitor-matrix.csv",
+        "category": "current_scaffold",
+        "bytes": 1618,
+        "sha256": "592066619502e3643f8bbc490765cbfbeb6ed6dabee92bd47749c6e58574ad4f",
+        "required": true
+      },
+      {
+        "path": "scaffold/data/species-catalog.csv",
+        "category": "current_scaffold",
+        "bytes": 5526,
+        "sha256": "e03d2f4a64b782d36e19a37a3abdd97ba752cb2d69e02b47a493b2801e801bf1",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/App/AppState.swift",
+        "category": "current_scaffold",
+        "bytes": 573,
+        "sha256": "38889c46b260e5f1ffb670f09d554c9461c415c524cb720096f593cff85cd1f3",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/App/SluggFishingApp.swift",
+        "category": "current_scaffold",
+        "bytes": 333,
+        "sha256": "042922fd9adfde303d630d638e6fad74614f94f58d29857f2eaf736a87fa53bb",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Core/Models/Models.swift",
+        "category": "current_scaffold",
+        "bytes": 2457,
+        "sha256": "001bf338ae4b38954d11305ab869f8318c05c91c33f75b649b3ad4951959a6aa",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Core/Services/ConditionsService.swift",
+        "category": "current_scaffold",
+        "bytes": 679,
+        "sha256": "eaf35b7bbc1fbe440554b38ad28aa1c3c9c236f02c5525dda99fb9be97240116",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Core/Services/OfflineStore.swift",
+        "category": "current_scaffold",
+        "bytes": 715,
+        "sha256": "eb8a037e914d6eb82c4321753f3dae054e41588956aaa7eb4769960f6beabf00",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Core/Services/SupabaseService.swift",
+        "category": "current_scaffold",
+        "bytes": 529,
+        "sha256": "59f0a31748dfd557092f9864d5f1a8d3bb43fda797992e3748220711d7c61679",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Core/Theme/Theme.swift",
+        "category": "current_scaffold",
+        "bytes": 1316,
+        "sha256": "e1f279d30a303de9e117b19f7fa69e97f96da328a48e437d3f2dc257a4bef12b",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Features/Location/LocationDetailView.swift",
+        "category": "current_scaffold",
+        "bytes": 923,
+        "sha256": "867c0fbb741a074a4fc6647d4888151677a5f615faa772599b7bb3e194051a10",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Features/Map/MapHomeView.swift",
+        "category": "current_scaffold",
+        "bytes": 1298,
+        "sha256": "9092eee6247fb3ee7b33851a51d81e874ade6337194d2b8f3eb0ae04ca71e816",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Features/Offline/OfflineBanner.swift",
+        "category": "current_scaffold",
+        "bytes": 546,
+        "sha256": "43f4abfd1a74e63e6e996c98815c0a188f1b26b8df7fb050ec5480d50fc82b61",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Features/Paywall/PaywallView.swift",
+        "category": "current_scaffold",
+        "bytes": 689,
+        "sha256": "e717cbb10ea562d5e954b6b873275611516b4cdb92c64121296a2d5601a18e6d",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Features/Reports/NewReportView.swift",
+        "category": "current_scaffold",
+        "bytes": 973,
+        "sha256": "9b2e830dd9e408091953a000f53a32dd16463394c4101be837d553099733e890",
+        "required": true
+      },
+      {
+        "path": "scaffold/ios/SluggFishing/Features/Reports/ReportOutbox.swift",
+        "category": "current_scaffold",
+        "bytes": 435,
+        "sha256": "c8c776d524cc97029517c1431746db6d68ffd36d8288a996c4e23dbfebd20cbb",
+        "required": true
+      },
+      {
+        "path": "scaffold/project.yml",
+        "category": "current_scaffold",
+        "bytes": 942,
+        "sha256": "0a2a77549cf46f9650d6f4fe1e87f211974c1bc8d8f695ac0af4bcc1fb998718",
+        "required": true
+      },
+      {
+        "path": "scaffold/supabase/schema.sql",
+        "category": "current_scaffold",
+        "bytes": 6331,
+        "sha256": "3b72387459165ceaf266a9d28c2c7ecb7f7188276ba046a36c778d2d2428c44b",
+        "required": true
+      }
+    ],
+    "fileCountIndexed": 70,
+    "totalIndexedBytes": 489284
+  },
+  "validation": {
+    "required": [
+      "all manifest paths exist",
+      "JSON parses",
+      "CSV row counts preserved",
+      "preview JavaScript syntax passes",
+      "no obvious credentials/secrets",
+      "checksums generated",
+      "zip integrity passes"
+    ],
+    "status": "PASS",
+    "completedChecks": [
+      "70 indexed package files matched path, size, and SHA-256",
+      "All root entry files present",
+      "All JSON and CSV files parsed",
+      "Species seed rows=30",
+      "Competitor rows=10",
+      "Preview JavaScript passed node --check",
+      "Preview feature markers present",
+      "Nine high-risk secret patterns returned no hits",
+      "No symbolic links",
+      "Zip test returned no bad entries"
+    ],
+    "zipFile": "project-offingcue-handoff-2026-07-29.zip",
+    "zipIntegrity": "PASS",
+    "report": "VALIDATION_REPORT.md",
+    "checksums": "CHECKSUMS.sha256"
+  }
+}

@@ -1,0 +1,33 @@
+name: SluggFishing
+options:
+  bundleIdPrefix: com.sluggfishing
+  deploymentTarget:
+    iOS: "17.0"
+packages:
+  MapboxMaps:
+    url: https://github.com/mapbox/mapbox-maps-ios.git
+    from: 11.0.0
+  Supabase:
+    url: https://github.com/supabase/supabase-swift.git
+    from: 2.0.0
+  GRDB:
+    url: https://github.com/groue/GRDB.swift.git
+    from: 6.0.0
+  RevenueCat:
+    url: https://github.com/RevenueCat/purchases-ios.git
+    from: 5.0.0
+targets:
+  SluggFishing:
+    type: application
+    platform: iOS
+    sources: [ios/SluggFishing]
+    dependencies:
+      - package: MapboxMaps
+      - package: Supabase
+      - package: GRDB
+      - package: RevenueCat
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.sluggfishing.app
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "SluggFishing shows your position on the map and helps you drop accurate catch reports."
+        INFOPLIST_KEY_UIBackgroundModes: "processing"

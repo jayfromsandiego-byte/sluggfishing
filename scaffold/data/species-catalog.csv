@@ -1,0 +1,31 @@
+species,latin,group,water,season,baits_lures,spot_types,regs_note_verify_cdfw,icon_key
+Calico Bass (Kelp Bass),Paralabrax clathratus,Bass,Salt shore/kelp/boat,Year-round best May-Oct,"Red crab swimbaits, weedless plastics along kelp, live sardine","Kelp lines, reefs, boiler rocks",14in min · 5 combined bass bag,bass_calico
+Barred Sand Bass,Paralabrax nebulifer,Bass,Bay/flats/boat,Summer spawn Jun-Aug,"Green sardine swimbaits, squid strips, leadhead + plastic","Sand flats, drop-offs",14in min · 5 combined bass bag,bass_sand
+Spotted Bay Bass,Paralabrax maculatofasciatus,Bass,Bay,Year-round moving water,"3in grubs, creature baits, small cranks","Bay structure, eelgrass, docks, riprap",14in min · 5 combined bass bag,bass_spotty
+California Halibut,Paralichthys californicus,Flatfish,Bay/surf/boat,Spring-summer peak,"Live smelt/anchovy, white swimbaits on flats","Sandy flats, channels, harbor mouths",22in min · 5 bag (S of Pt Sur),flat_halibut
+White Seabass,Atractoscion nobilis,Croaker (giant),Kelp/boat,Squid nests Mar-Jul,"Live squid at dawn, big white jigs","Kelp edges, squid grounds, La Jolla",28in min · 3 bag (1/day Mar15-Jun15),wsb
+Yellowtail,Seriola dorsalis,Pelagic,Offshore/kelp/kayak,May-Nov paddies + kelp,"Live sardine flyline, surface iron, yoyo iron","Kelp paddies, La Jolla, the 9, Coronados water",10 bag · no size min,pelagic_yt
+Bluefin Tuna,Thunnus orientalis,Pelagic,Offshore,May-Oct foamers + night,"Flat-fall at night, kite + yummy flyer, sardine","Offshore banks · the 9, 302, 371, 425",2/day CA · verify current,pelagic_bft
+Yellowfin Tuna,Thunnus albacares,Pelagic,Offshore,Jul-Oct warm water,"Live sardine, small feathers, poppers","Offshore banks, temp breaks",10 bag · verify,pelagic_yft
+Skipjack Tuna,Katsuwonus pelamis,Pelagic,Offshore,Jul-Oct,"Feathers, small jigs, sardine","Offshore, mixed schools",10 bag · verify,pelagic_skip
+Dorado (Mahi),Coryphaena hippurus,Pelagic,Offshore,Aug-Oct warm years,"Sardine at paddies, poppers, feathers","Kelp paddies, warm eddies",10 bag,pelagic_dodo
+Pacific Bonito,Sarda chiliensis,Pelagic,Pier/bay/boat,Summer-fall runs,"Chrome Krocodiles, feathers, live anchovy","Piers, bait receivers, nearshore",10 bag · size rules · verify,pelagic_bonito
+Pacific Barracuda,Sphyraena argentea,Pelagic,Nearshore/boat,Spring-summer,"Chrome jigs, anchovies, surface iron","Kelp edges, nearshore flats",28in min · 10 bag,cuda
+Sculpin (CA Scorpionfish),Scorpaena guttata,Bottom,Boat/pier,Year-round winter staple,"Squid strips dropper loop, shrimp flies","Hard bottom 60-300ft",10in min · 5 bag · venomous,bottom_sculpin
+Vermilion Rockfish (+complex),Sebastes miniatus,Bottom,Boat,Rockfish season depth rules,"Shrimp flies + squid, dropper rigs","Deep structure, banks",10-fish RCG · season/depth rules VERIFY,bottom_rock
+California Sheephead,Bodianus pulcher,Bottom,Kelp/boat,Year-round,"Live rock crab, shrimp, squid","Kelp, reefs, hard bottom",12in min · 5 bag · verify,bottom_goat
+Lingcod,Ophiodon elongatus,Bottom,Boat,Fall-winter best,"Big swimbaits, live mackerel, heavy jigs","Deep reefs, wrecks",22in min · 2 bag,bottom_ling
+Pacific Mackerel,Scomber japonicus,Bait/pier,Pier/bay,Year-round,"Sabiki rigs, small chrome","Piers, bait barge, harbor",No special limit · verify,bait_mack
+Pacific Sardine,Sardinops sagax,Bait,Bay/nearshore,Year-round cycles,Sabiki · the bait everything eats,"Bait receivers, harbor lights",Bait regs · verify,bait_dine
+California Corbina,Menticirrhus undulatus,Surf,Surf,Jun-Sep sight-casting,"Sand crabs, Lucky Craft in troughs, Carolina rig","Surf troughs, sand flats",10 bag · no min · verify,surf_corbina
+Spotfin Croaker,Roncador stearnsii,Surf,Surf/bay,Summer-fall,"Fresh mussels, ghost shrimp, bloodworms","Surf holes, bay channels",10 bag · verify,surf_spotfin
+Yellowfin Croaker,Umbrina roncador,Surf,Surf/pier,Summer,"Bloodworms, mussels, sand crabs","Surf, pier surf-line",10 bag · verify,surf_yfc
+Barred Surfperch,Amphistichus argenteus,Surf,Surf,Winter-spring best,"Gulp sandworms Carolina-rigged, sand crabs",Surf troughs,10 bag · verify perch rules,surf_perch
+Shortfin Corvina,Cynoscion parvipinnis,Bay,Bay,Summer evenings,"Small crankbaits, soft jerkbaits at dusk","South bay channels, warm shallows",Verify current CDFW,bay_corvina
+Bat Ray,Myliobatis californica,Ray/shark,Bay/pier,Year-round summer nights,"Squid on bottom, mackerel chunks","Bay flats, pier pilings",C&R encouraged · verify,ray_bat
+Leopard Shark,Triakis semifasciata,Ray/shark,Bay/surf,Summer La Jolla shores,"Mackerel chunks, squid","Warm shallows, bay mouths",36in min · 3 bag,shark_leopard
+Rainbow Trout,Oncorhynchus mykiss,Freshwater,Stocked lakes,Stock season Nov-May,"PowerBait chartreuse, small spinners, nightcrawlers",Poway/Murray/Santee/Ramona dock arms after stock,5 bag + lake permit,fresh_trout
+Channel Catfish,Ictalurus punctatus,Freshwater,Lakes,Summer evenings,"Mackerel cut bait, nightcrawlers, stink bait","Lake coves, warm shallows",Varies by lake · verify,fresh_cat
+Largemouth Bass,Micropterus salmoides,Freshwater,Lakes,Spring spawn + year-round,"Plastics, jigs, crankbaits","Otay, Hodges, El Cap points + brush",12in min · 5 bag (varies),fresh_lmb
+Bluegill,Lepomis macrochirus,Freshwater,Lakes,Spring-summer,"Worms, crickets, tiny jigs","Lake shallows, docks · kid-friendly",25 bag · verify per lake,fresh_gill
+Blue Catfish,Ictalurus furcatus,Freshwater,Lakes,Year-round Lower Otay trophy,"Fresh cut bait, big baits on bottom","Lower Otay, San Vicente",Varies by lake · verify,fresh_bluecat
