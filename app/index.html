@@ -244,6 +244,9 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
 .pending-chip{display:inline-block;padding:4px 9px;border-radius:999px;background:rgba(245,166,35,.16);color:var(--orange);font-size:.64rem;font-weight:700}
 .ok-chip{display:inline-block;padding:4px 9px;border-radius:999px;background:rgba(47,163,98,.16);color:#57CE8C;font-size:.64rem;font-weight:700}
 /* phase 2 */
+#scr-post .scroll{padding-bottom:40px}
+#ais-tabs{pointer-events:none}#ais-tabs .pill{pointer-events:auto}
+.aisbanner{pointer-events:none}
 .pane{display:none}.pane.on{display:block}
 .wpnum{width:56px;height:56px;border-radius:18px;background:var(--violet);display:grid;place-items:center;font-weight:800;font-size:1.05rem;color:#fff;flex:0 0 auto}
 .coordrow{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:.82rem;font-variant-numeric:tabular-nums;margin-top:4px}
@@ -798,6 +801,8 @@ function starsHtml(n){let h='';for(let i=1;i<=5;i++){h+='<svg viewBox="0 0 24 24
 const stack=['map'];
 function show(name){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$('scr-'+name).classList.add('on');
  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===name));
+ $('tabbar').style.display=(name==='post')?'none':'grid';
+ $('notifpanel').classList.remove('open');
  if(name==='map'&&window._map)setTimeout(()=>_map.invalidateSize(),60);
  if(name==='ais')setTimeout(initAis,60);
  if(name==='reports')renderReports();
@@ -829,6 +834,7 @@ $('fab-search').addEventListener('click',()=>{$('searchwrap').classList.add('ope
 $('searchclose').addEventListener('click',()=>$('searchwrap').classList.remove('open'));
 $('searchinput').addEventListener('input',()=>renderSearch($('searchinput').value));
 $('btn-bell').addEventListener('click',()=>{const p=$('notifpanel');p.classList.toggle('open');if(p.classList.contains('open'))$('btn-bell').querySelector('.badge').style.display='none'});
+document.addEventListener('click',e=>{const np=$('notifpanel');if(np.classList.contains('open')&&!e.target.closest('#notifpanel')&&!e.target.closest('#btn-bell'))np.classList.remove('open')},true);
 $('sheet').querySelector('.grab').parentElement.addEventListener('click',e=>{if(e.target.closest('button'))return;$('sheet').classList.toggle('mini')});
 $('hotcard').addEventListener('click',()=>openSpot('coronado-islands'));
 
@@ -864,10 +870,10 @@ let aisMap=null,aisFleet=[],aisKind='all';
 const VNAMES=['PACIFIC DAWN','BLUE HORIZON','MAR VIENTO','SWELL RIDER','CORTES RUNNER','KELP CUTTER','BAJA WIND','NORTH EDGE'];
 const VKINDS=['fishing','fishing','fishing','cargo','pleasure','other'];
 function initAis(){if(aisMap){aisMap.invalidateSize();return}
- aisMap=L.map('aismap',{zoomControl:false}).setView([32.58,-117.45],9);
+ aisMap=L.map('aismap',{zoomControl:false}).setView([32.76,-117.58],9);
  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:15,attribution:'Esri · sample AIS'}).addTo(aisMap);
  for(let i=0;i<40;i++){
-  const v={lat:32.2+Math.random()*.9,lon:-118.1+Math.random()*.95,course:Math.round(Math.random()*360),kn:(4+Math.random()*14).toFixed(1),name:VNAMES[i%VNAMES.length]+(i>=VNAMES.length?' '+(Math.floor(i/VNAMES.length)+1):''),kind:VKINDS[i%VKINDS.length]};
+  const v={lat:32.42+Math.random()*.62,lon:-118.0+Math.random()*.8,course:Math.round(Math.random()*360),kn:(4+Math.random()*14).toFixed(1),name:VNAMES[i%VNAMES.length]+(i>=VNAMES.length?' '+(Math.floor(i/VNAMES.length)+1):''),kind:VKINDS[i%VKINDS.length]};
   v.marker=L.marker([v.lat,v.lon],{icon:vslIcon(v.course)}).addTo(aisMap);
   v.marker.on('click',()=>{$('vc-name').textContent=v.name;$('vc-kind').textContent=(v.kind[0].toUpperCase()+v.kind.slice(1))+' Vessel · sample track';$('vc-stats').textContent=v.kn+' kn · Course '+v.course+'° · '+distNm(SD_ORIGIN,v).toFixed(1)+' nm away';$('vc-star').classList.remove('on')});
   aisFleet.push(v);
