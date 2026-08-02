@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>SluggFishing — App Preview</title>
-<meta name="description" content="Private app preview. UI direction 2026-07-29, wired to the OffingCue Supabase privacy foundation contract.">
+<title>First Light — San Diego Fishing (working title)</title>
+<meta name="description" content="First Light (working title, clearance pending) — San Diego fishing app preview wired to the Supabase privacy foundation contract.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
@@ -83,7 +83,7 @@ input,select,textarea{font:inherit}
 .leaflet-control-attribution a{color:#93A9CF!important}
 .map-top{position:absolute;top:0;left:0;right:0;z-index:1200;padding:50px 16px 26px;display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,rgba(4,9,20,.85),rgba(4,9,20,0));pointer-events:none}
 .map-top>*{pointer-events:auto}
-.logo{flex:1;text-align:center;font-style:italic;font-weight:800;font-size:1.45rem;letter-spacing:.01em;text-shadow:0 2px 10px rgba(0,0,0,.55)}
+.logo{flex:1;text-align:center;font-style:normal;font-weight:800;font-size:1.35rem;letter-spacing:.05em;text-shadow:0 2px 10px rgba(0,0,0,.55)}
 .logo .hook{color:var(--blue-2)}
 .bellwrap{position:relative}
 .badge{position:absolute;top:-4px;right:-5px;min-width:17px;height:17px;border-radius:9px;background:var(--red);color:#fff;font-size:.62rem;font-weight:800;display:grid;place-items:center;padding:0 4px;border:2px solid #071021}
@@ -109,20 +109,23 @@ input,select,textarea{font:inherit}
 .leaflet-tooltip.mlabel{background:transparent;border:0;box-shadow:none;color:#EAF1FB;font-weight:700;font-size:11px;text-shadow:0 1px 4px rgba(0,0,0,.9)}
 .leaflet-tooltip.mlabel:before{display:none}
 /* bottom sheet */
-.sheet{position:absolute;left:0;right:0;bottom:0;z-index:1300;background:#F4F7FB;color:#0D1B30;border-radius:22px 22px 0 0;padding:8px 16px calc(88px + env(safe-area-inset-bottom));box-shadow:0 -14px 40px rgba(0,0,0,.45);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
-.sheet.mini{transform:translateY(calc(100% - 118px))}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:1300;background:rgba(9,16,30,.94);backdrop-filter:blur(14px);color:var(--text);border-top:1px solid var(--line-2);border-radius:22px 22px 0 0;padding:8px 16px calc(88px + env(safe-area-inset-bottom));box-shadow:0 -14px 40px rgba(0,0,0,.45);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.sheet.mini{transform:translateY(calc(100% - 104px))}
 .sheet.mini .hotcard,.sheet.mini .tilerow,.sheet.mini .catchcard,.sheet.mini .sechead,.sheet.mini .foot{visibility:hidden}
-.grab{width:44px;height:5px;border-radius:3px;background:#C6D2E4;margin:4px auto 10px}
-.sheet h3{margin:0;font-size:1.02rem;font-weight:800;color:#0D1B30}
-.sheet .viewall{color:var(--blue);font-weight:700;font-size:.8rem}
-.hotcard{background:#FDEEEA;border:1px solid #F6D2CB;border-radius:14px;padding:12px;display:flex;gap:11px;align-items:center;margin-top:10px}
-.flamebox{width:40px;height:40px;border-radius:11px;background:#FADDD5;display:grid;place-items:center;flex:0 0 auto}
+.grab{width:44px;height:5px;border-radius:3px;background:#31415F;margin:4px auto 10px}
+.sheet h3{margin:0;font-size:1.02rem;font-weight:800;color:var(--text)}
+.sheet .viewall{color:var(--blue-2);font-weight:700;font-size:.8rem}
+.hotcard{background:rgba(229,72,77,.12);border:1px solid rgba(229,72,77,.32);border-radius:14px;padding:12px;display:flex;gap:11px;align-items:center;margin-top:10px}
+.flamebox{width:40px;height:40px;border-radius:11px;background:rgba(229,72,77,.2);display:grid;place-items:center;flex:0 0 auto}
 .flamebox svg{width:20px;height:20px;fill:var(--red)}
 .hotcard b{display:block;color:var(--red);font-size:.66rem;letter-spacing:.08em;font-weight:800}
-.hotcard .hspecies{color:#132038;font-weight:700;font-size:.86rem;line-height:1.3}
-.hotcard .hspot{color:#5D6F8D;font-size:.72rem}
+.hotcard .hspecies{color:var(--text);font-weight:700;font-size:.86rem;line-height:1.3}
+.hotcard .hspot{color:var(--sub);font-size:.72rem}
 .tilerow{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}
 .tile{background:#fff;border:1px solid #E1E8F2;border-radius:13px;padding:10px 11px}
+.sheet .tile{background:var(--card);border-color:var(--line)}
+.sheet .tile .tl{color:var(--faint)}.sheet .tile .tl svg{stroke:var(--faint)}
+.sheet .tile .tv{color:var(--text)}.sheet .tile .ts{color:var(--sub)}
 .tile .tl{display:flex;align-items:center;gap:5px;color:#66789A;font-size:.62rem;font-weight:600}
 .tile .tl svg{width:12px;height:12px;stroke:#66789A;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .tile .tv{font-size:1.28rem;font-weight:800;color:#0D1B30;margin-top:3px;font-variant-numeric:tabular-nums}
@@ -131,7 +134,7 @@ input,select,textarea{font:inherit}
 .catchcard .thumb{background:linear-gradient(145deg,#0E2B4E,#134B7A)}
 .catchcard b{font-size:.9rem;color:#0D1B30}
 .catchcard .cm{color:#5D6F8D;font-size:.72rem;margin-top:2px}
-.sheet .foot{margin-top:10px;font-size:.6rem;color:#8595B2;line-height:1.5}
+.sheet .foot{margin-top:10px;font-size:.6rem;color:var(--faint);line-height:1.5}
 .sechead{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
 /* ===== generic light list rows in dark screens ===== */
 .listcard{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
@@ -369,7 +372,7 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
     <div class="veiltag" id="veiltag"></div>
     <div class="map-top" style="pointer-events:none">
       <span style="width:38px"></span>
-      <div class="logo">Slugg<span style="font-weight:700">Fishing</span> <span class="hook">&#9096;</span></div>
+      <div class="logo">First<span style="font-weight:600;color:#CFE0F5">Light</span></div>
       <span style="width:38px"></span>
     </div>
     <div class="chipstack" style="top:96px">
@@ -388,7 +391,7 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
       <div class="row" style="justify-content:space-between"><h3>Today's Fishing Report</h3><button class="viewall" data-nav="reports">View All</button></div>
       <div class="hotcard" id="hotcard">
         <div class="flamebox"><svg><use href="#i-flame"/></svg></div>
-        <div style="flex:1;min-width:0"><b>HOT BITE</b><div class="hspecies">Bluefin Tuna, Yellowtail, Dorado</div><div class="hspot">Offshore Coronado Islands</div></div>
+        <div style="flex:1;min-width:0"><b>WIDE OPEN</b><div class="hspecies">Bluefin Tuna, Yellowtail, Dorado</div><div class="hspot">Offshore Coronado Islands</div></div>
         <div style="text-align:center"><div class="score">8.5</div><div style="font-size:.62rem;font-weight:700;color:#33845B;margin-top:4px">Very Good</div></div>
       </div>
       <div class="tilerow">
@@ -396,8 +399,6 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
         <div class="tile"><div class="tl"><svg><use href="#i-reef"/></svg>Water Temp</div><div class="tv" id="t-water">66°</div><div class="ts" id="t-water-s">SST · model</div></div>
         <div class="tile"><div class="tl"><svg><use href="#i-mpa"/></svg>Tide (San Diego)</div><div class="tv" id="t-tide">3.2 ft</div><div class="ts" id="t-tide-s">Rising · sample</div></div>
       </div>
-      <div class="sechead"><h3 style="font-size:.94rem">Recent Verified Catch</h3><button class="viewall" data-nav="reports">View All</button></div>
-      <div class="catchcard" id="recentcatch"></div>
       <div class="foot">Model + preview data — not for navigation. Verify regulations with CDFW. <span id="sheet-src">Conditions: Open-Meteo model</span></div>
     </div>
   </section>
@@ -458,7 +459,7 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
       <div class="tile"><div class="tl">Next Tide</div><div class="tv" id="rc-tide">—</div><div class="ts" id="rc-tide-s">NOAA</div></div>
     </div>
     <div class="condlink"><span id="rc-stamp">Live feeds · updating…</span><button data-nav="weather">Full Conditions →</button></div>
-    <div class="segrow" id="rep-tabs"><button class="pill on" data-f="all">All</button><button class="pill" data-f="ocean">Ocean</button><button class="pill" data-f="lakes">Lakes</button><button class="pill" data-f="hot">Hot Bite</button><button class="pill" data-f="nearby">Nearby</button></div>
+    <div class="segrow" id="rep-tabs"><button class="pill on" data-f="all">All</button><button class="pill" data-f="ocean">Ocean</button><button class="pill" data-f="lakes">Lakes</button><button class="pill" data-f="hot">Wide Open</button><button class="pill" data-f="nearby">Nearby</button></div>
     <div class="scroll" id="rep-list"></div>
   </section>
 
@@ -693,7 +694,7 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
 
   <!-- notifications -->
   <div class="notifpanel" id="notifpanel">
-    <div class="lrow"><span class="li" style="background:rgba(229,72,77,.15)"><svg style="stroke:var(--red)"><use href="#i-flame"/></svg></span><span style="flex:1"><b>Hot bite: Bluefin Tuna</b><small>Offshore Coronado Islands · 2 hrs ago · sample alert</small></span></div>
+    <div class="lrow"><span class="li" style="background:rgba(229,72,77,.15)"><svg style="stroke:var(--red)"><use href="#i-flame"/></svg></span><span style="flex:1"><b>Wide open: Bluefin Tuna</b><small>Offshore Coronado Islands · 2 hrs ago · sample alert</small></span></div>
     <div class="lrow"><span class="li" style="background:rgba(47,163,98,.15)"><svg style="stroke:#57CE8C"><use href="#i-check"/></svg></span><span style="flex:1"><b>Report approved</b><small>Your Calico Bass report is live at zone-only privacy · sample</small></span></div>
     <div class="lrow"><span class="li"><svg><use href="#i-fish"/></svg></span><span style="flex:1"><b>Trout stocking: Lake Poway</b><small>CDFW stocking feed · this week · sample</small></span></div>
   </div>
@@ -960,7 +961,7 @@ function compass(d){const p=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW'
 
 /* ---- reports ---- */
 function repCardHtml(r){
- return '<button class="repcard" data-spot="'+r.zone+'"><span class="thumb" style="background:linear-gradient(145deg,#0E2B4E,#134B7A)"><svg><use href="#'+speciesFx(r.species)+'"/></svg></span><span class="rmeta">'+(r.hot?'<span class="tag-hot"><svg><use href="#i-flame"/></svg>HOT BITE</span><br>':'')+'<b>'+speciesName(r.species)+'</b><div class="sub">'+(r.weightLb?r.weightLb+' lbs · ':'')+ago(r.createdAt)+'</div><div class="by">'+locLabel(r)+' · '+r.author+(r.verified?'<span class="vcheck"><svg><use href="#i-check"/></svg></span>':' <span class="pending-chip">In review</span>')+'</div></span>'+(r.score?'<span class="score sm">'+r.score+'</span>':'')+'</button>';
+ return '<button class="repcard" data-spot="'+r.zone+'"><span class="thumb" style="background:linear-gradient(145deg,#0E2B4E,#134B7A)"><svg><use href="#'+speciesFx(r.species)+'"/></svg></span><span class="rmeta">'+(r.hot?'<span class="tag-hot"><svg><use href="#i-flame"/></svg>WIDE OPEN</span><br>':'')+'<b>'+speciesName(r.species)+'</b><div class="sub">'+(r.weightLb?r.weightLb+' lbs · ':'')+ago(r.createdAt)+'</div><div class="by">'+locLabel(r)+' · '+r.author+(r.verified?'<span class="vcheck"><svg><use href="#i-check"/></svg></span>':' <span class="pending-chip">In review</span>')+'</div></span>'+(r.score?'<span class="score sm">'+r.score+'</span>':'')+'</button>';
 }
 async function renderReports(filter){
  filter=filter||document.querySelector('#rep-tabs .pill.on').dataset.f;
@@ -1129,6 +1130,7 @@ function currentPageIsWeather(){return document.querySelector('#scr-weather.on')
 
 /* ---- recent catch card + live tiles ---- */
 async function renderRecent(){
+ if(!$('recentcatch'))return;
  const rs=await Backend.listApproved();const r=rs[0];
  $('recentcatch').innerHTML='<span class="thumb"><svg><use href="#'+speciesFx(r.species)+'"/></svg></span><div style="flex:1;min-width:0"><b>'+speciesName(r.species)+'</b><div class="cm">'+(r.weightLb?r.weightLb+' lbs · ':'')+ago(r.createdAt)+'</div><div class="cm">'+locLabel(r)+'</div></div><div style="text-align:right"><div style="font-size:.78rem;font-weight:700;color:#0D1B30">'+r.author+'<span class="vcheck"><svg><use href="#i-check"/></svg></span></div><div class="stars" style="margin-top:4px">'+starsHtml(4.5)+'</div></div>';
  $('recentcatch').onclick=()=>openSpot(r.zone);
