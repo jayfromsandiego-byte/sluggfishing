@@ -247,6 +247,26 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
 .pending-chip{display:inline-block;padding:4px 9px;border-radius:999px;background:rgba(245,166,35,.16);color:var(--orange);font-size:.64rem;font-weight:700}
 .ok-chip{display:inline-block;padding:4px 9px;border-radius:999px;background:rgba(47,163,98,.16);color:#57CE8C;font-size:.64rem;font-weight:700}
 /* phase 2 */
+.mapbtn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(9,17,33,.85);backdrop-filter:blur(8px);border:1px solid var(--line-2);color:var(--text);box-shadow:0 5px 16px rgba(0,0,0,.35)}
+.mapbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.mapbtn.on{border-color:var(--blue);color:var(--blue-2);background:rgba(21,45,90,.9)}
+.mapbtn.green{background:var(--green);border-color:var(--green)}
+.pin.wpa{width:20px;height:20px;border-radius:50%;background:rgba(10,18,34,.62);border:1.5px solid rgba(233,228,214,.45);color:#C3D0E4;box-shadow:none;display:grid;place-items:center;position:relative}
+.pin.wpa svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pin.cat{width:24px;height:24px;opacity:.92}
+.pin.cat svg{width:13px;height:13px}
+.mappill{position:absolute;top:96px;left:50%;transform:translateX(-50%);z-index:1250;display:none;align-items:center;gap:8px;background:rgba(9,17,33,.92);border:1px solid var(--line-2);border-radius:999px;padding:8px 8px 8px 14px;font-size:.74rem;font-weight:700}
+.mappill.show{display:flex}
+.mappill button{width:22px;height:22px;border-radius:50%;background:var(--card-2);display:grid;place-items:center}
+.mappill svg{width:12px;height:12px;stroke:var(--sub);fill:none;stroke-width:2;stroke-linecap:round}
+.sstlbl{font-size:9px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.speciesbar{display:flex;gap:9px;overflow-x:auto;padding:2px 16px 12px;scrollbar-width:none}
+.speciesbar::-webkit-scrollbar{display:none}
+.spchip{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:5px;width:76px;padding:10px 4px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:var(--sub);font-size:.6rem;font-weight:700}
+.spchip svg{width:46px;height:28px}
+.spchip .cnt{display:inline-block;padding:1px 7px;border-radius:999px;background:var(--card-2);color:var(--text);font-size:.6rem;font-variant-numeric:tabular-nums}
+.spchip.on{border-color:var(--blue);background:rgba(21,45,90,.55);color:var(--text)}
+.pickcard{margin:4px 16px 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center;color:var(--sub);font-size:.8rem;line-height:1.6}
 .posdot{position:relative;width:20px;height:20px}
 .posdot .core{position:absolute;inset:3px;border-radius:50%;background:#2F7BF6;border:2.5px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.5)}
 .posdot .pulse{position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(77,147,255,.7);animation:gpspulse 2s ease-out infinite}
@@ -352,6 +372,7 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
 <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.8 19.5h18.4zM12 10v4.5"/><circle cx="12" cy="17" r=".9" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11M7.5 11 12 15.5 16.5 11M5 19.5h14"/></symbol>
 <symbol id="i-crown" viewBox="0 0 24 24"><path d="m4 8 4 3.5L12 5l4 6.5L20 8l-1.5 10h-13z"/></symbol>
+<symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3 17 17 3l4 4L7 21zM7.5 12.5l2 2M10.5 9.5l2 2M13.5 6.5l2 2"/></symbol>
 <symbol id="i-dir" viewBox="0 0 24 24"><path d="M12 3.5 20.5 12 12 20.5 3.5 12zM9.5 13.5v-2.2h4.4M12.2 9.5l2 1.8-2 1.9"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3.5v11M8 7l4-3.5L16 7M5.5 12v7.5h13V12"/></symbol>
 <symbol id="i-reel" viewBox="0 0 24 24"><circle cx="10" cy="12" r="5.5"/><circle cx="10" cy="12" r="1.6"/><path d="M15.5 12h5M10 3.5v3M10 17.5v3"/></symbol>
@@ -379,38 +400,26 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
     <div class="veiltag" id="veiltag"></div>
     <div class="map-top" style="pointer-events:none">
       <span style="width:38px"></span>
-      <div class="logo">First<span style="font-weight:600;color:#CFE0F5">Light</span></div>
+      <div class="logo" style="display:flex;align-items:center;justify-content:center;gap:9px">First<span style="font-weight:600;color:#CFE0F5">Light</span><button id="logo-boat" class="iconbtn" style="pointer-events:auto;width:32px;height:32px;background:rgba(9,17,33,.6);border-radius:10px" aria-label="Recenter on my position"><svg style="width:18px;height:18px"><use href="#i-boat"/></svg></button></div>
       <span style="width:38px"></span>
     </div>
-    <div class="chipstack" style="top:96px">
-      <button class="chip" data-chip="post" style="border-color:var(--green)"><span class="ci" style="background:var(--green)"><svg><use href="#i-plus"/></svg></span>Post</button>
-      <button class="chip" data-chip="locate"><span class="ci"><svg><use href="#i-locate"/></svg></span>My Location</button>
-      <button class="chip" data-chip="conditions"><span class="ci"><svg><use href="#i-wx"/></svg></span>Conditions</button>
-      <button class="chip" data-chip="track"><span class="ci"><svg><use href="#i-dir"/></svg></span>Track</button>
+    <div class="chipstack" style="top:96px;gap:10px">
+      <button class="mapbtn" data-chip="ais" aria-label="AIS vessels"><svg><use href="#i-boat"/></svg></button>
+      <button class="mapbtn" data-chip="conditions" aria-label="Conditions"><svg><use href="#i-wx"/></svg></button>
+      <button class="mapbtn" data-chip="track" aria-label="Record track"><svg><use href="#i-dir"/></svg></button>
+      <button class="mapbtn green" data-chip="post" aria-label="Post a catch"><svg><use href="#i-plus"/></svg></button>
     </div>
+    <div class="mappill" id="speciespill"><span id="speciespill-t"></span><button id="speciespill-x"><svg><use href="#i-close"/></svg></button></div>
+    <div class="mappill" id="measurepill" style="top:auto;bottom:calc(160px + env(safe-area-inset-bottom))"><span id="measure-t">Tap the map to measure</span><button id="measure-x"><svg><use href="#i-close"/></svg></button></div>
     <div class="trackhud" id="trackhud"><b>TRACKING</b><span id="th-line">0.0 nm · — kn · 0 fixes</span></div>
     <div class="navstack" id="navstack">
+      <button id="ns-locate" aria-label="My location"><svg><use href="#i-locate"/></svg></button>
+      <button id="ns-measure" aria-label="Measure distance"><svg><use href="#i-ruler"/></svg></button>
       <button id="fab-search" aria-label="Search"><svg><use href="#i-search"/></svg></button>
-      <button id="ns-species" aria-label="Species filter"><svg><use href="#i-filter"/></svg></button>
       <button id="btn-bell" class="bellwrap" aria-label="Notifications"><svg><use href="#i-bell"/></svg><span class="badge">3</span></button>
       <button id="fab-more" aria-label="Menu"><svg><use href="#i-menu"/></svg></button>
     </div>
-    <div class="sheet mini" id="sheet">
-      <div class="grab"></div>
-      <div class="row" style="justify-content:space-between"><h3>Today's Fishing Report</h3><button class="viewall" data-nav="reports">View All</button></div>
-      <div class="hotcard" id="hotcard">
-        <div class="flamebox"><svg><use href="#i-flame"/></svg></div>
-        <div style="flex:1;min-width:0"><b>WIDE OPEN</b><div class="hspecies">Bluefin Tuna, Yellowtail, Dorado</div><div class="hspot">Offshore Coronado Islands</div></div>
-        <div style="text-align:center"><div class="score">8.5</div><div style="font-size:.62rem;font-weight:700;color:#33845B;margin-top:4px">Very Good</div></div>
-      </div>
-      <div class="tilerow">
-        <div class="tile"><div class="tl"><svg><use href="#i-wx"/></svg>Weather</div><div class="tv" id="t-air">72°</div><div class="ts" id="t-wind">NW 12 mph</div></div>
-        <div class="tile"><div class="tl"><svg><use href="#i-reef"/></svg>Water Temp</div><div class="tv" id="t-water">66°</div><div class="ts" id="t-water-s">SST · model</div></div>
-        <div class="tile"><div class="tl"><svg><use href="#i-mpa"/></svg>Tide (San Diego)</div><div class="tv" id="t-tide">3.2 ft</div><div class="ts" id="t-tide-s">Rising · sample</div></div>
-      </div>
-      <div class="foot">Model + preview data — not for navigation. Verify regulations with CDFW. <span id="sheet-src">Conditions: Open-Meteo model</span></div>
-    </div>
-  </section>
+    </section>
 
   <!-- ============ SPOT DETAIL ============ -->
   <section class="scr" id="scr-spot">
@@ -462,13 +471,9 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
   <!-- ============ REPORTS ============ -->
   <section class="scr" id="scr-reports">
     <div class="scr-head"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><span class="ttl">Fishing Reports</span><button class="iconbtn"><svg><use href="#i-search"/></svg></button></div>
-    <div class="condstrip">
-      <div class="tile"><div class="tl">Swell</div><div class="tv" id="rc-swell">—</div><div class="ts" id="rc-swell-s">ft · model</div></div>
-      <div class="tile"><div class="tl">Wind</div><div class="tv" id="rc-wind">—</div><div class="ts" id="rc-wind-s">mph · model</div></div>
-      <div class="tile"><div class="tl">Next Tide</div><div class="tv" id="rc-tide">—</div><div class="ts" id="rc-tide-s">NOAA</div></div>
-    </div>
     <div class="condlink"><span id="rc-stamp">Live feeds · updating…</span><button data-nav="weather">Full Conditions →</button></div>
-    <div class="segrow" id="rep-tabs"><button class="pill on" data-f="all">All</button><button class="pill" data-f="ocean">Ocean</button><button class="pill" data-f="lakes">Lakes</button><button class="pill" data-f="hot">Wide Open</button><button class="pill" data-f="nearby">Nearby</button></div>
+    <div style="padding:0 16px 8px;font-size:.72rem;font-weight:700;color:var(--sub)">What's biting today <span style="color:var(--faint);font-weight:500">· pick a target</span></div>
+    <div class="speciesbar" id="speciesbar"></div>
     <div class="scroll" id="rep-list"></div>
   </section>
 
@@ -508,7 +513,7 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
     <div class="mapwrap"><div id="aismap"></div></div>
     <div class="map-top"><button class="iconbtn" data-back><svg><use href="#i-back"/></svg></button><span class="ttl" style="flex:1;text-align:center;font-weight:700">AIS Boats</span><button class="iconbtn"><svg><use href="#i-filter"/></svg></button></div>
     <div class="segrow" id="ais-tabs" style="position:absolute;top:100px;left:0;right:0;z-index:1200"><button class="pill on" data-ak="all">All</button><button class="pill" data-ak="fishing">Fishing</button><button class="pill" data-ak="cargo">Cargo</button><button class="pill" data-ak="pleasure">Pleasure</button><button class="pill" data-ak="other">Other</button></div>
-    <div class="aisbanner" id="ais-banner">Showing 356 vessels · sample until AIS goes live (V1.1)</div>
+    <div class="aisbanner" id="ais-banner">Regional feed · positions ~1 hr delayed by design · sample</div>
     <div class="vesselcard"><div class="vflag"><svg style="width:24px;height:24px;stroke:#68F09A;fill:none;stroke-width:1.8"><use href="#i-boat"/></svg></div><div style="flex:1"><b style="font-size:.92rem" id="vc-name">PACIFIC DAWN</b><div style="color:var(--sub);font-size:.72rem;margin-top:2px" id="vc-kind">Fishing Vessel · sample track</div><div style="color:var(--faint);font-size:.7rem;margin-top:2px;font-variant-numeric:tabular-nums" id="vc-stats">12.4 kn · Course 215° · 1.2 nm away</div></div><button class="starbtn" id="vc-star"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></button></div>
   </section>
 
@@ -757,6 +762,7 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
    ================================================================ */
 const BACKEND_CONFIG={mode:'mock',supabaseUrl:'',supabaseAnonKey:''};
 const $=id=>document.getElementById(id);
+const setTxt=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
 const NM=1.852,SD_ORIGIN={lat:32.672,lon:-117.240};
 function distNm(a,b){const R=6371,dLa=(b.lat-a.lat)*Math.PI/180,dLo=(b.lon-a.lon)*Math.PI/180,la1=a.lat*Math.PI/180,la2=b.lat*Math.PI/180,h=Math.sin(dLa/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(h))/NM}
 function project(lat,lon,distM,azRad){const R=6371000,dr=distM/R,la1=lat*Math.PI/180,lo1=lon*Math.PI/180,la2=Math.asin(Math.sin(la1)*Math.cos(dr)+Math.cos(la1)*Math.sin(dr)*Math.cos(azRad)),lo2=lo1+Math.atan2(Math.sin(azRad)*Math.sin(dr)*Math.cos(la1),Math.cos(dr)-Math.sin(la1)*Math.sin(la2));return{lat:la2*180/Math.PI,lon:lo2*180/Math.PI}}
@@ -832,6 +838,10 @@ const Backend=(()=>{
   async setPrivacy(id,privacy){ // mirrors rpc set_report_privacy — stable jitter reuse
    if(BACKEND_CONFIG.mode==='supabase')return sb('/rest/v1/rpc/set_report_privacy',{p_report:id,p_privacy:privacy});
    const r=reports.find(x=>x.id===id);if(!r)return;r.privacy=privacy;r.display=deriveDisplay(id,privacy)},
+  async activeToday(){
+   const rs=(BACKEND_CONFIG.mode==='supabase')?await this.listApproved():reports.filter(r=>r.status==='approved'&&Date.now()-r.createdAt<48*3600e3);
+   const m={};rs.forEach(r=>{const a=m[r.species]||(m[r.species]={slug:r.species,count:0,zones:new Set(),latest:0});a.count++;a.zones.add(r.zone);a.latest=Math.max(a.latest,r.createdAt)});
+   return Object.values(m).sort((a,b)=>b.count-a.count||b.latest-a.latest)},
   async operatorApprove(id){ // mirrors rpc moderate_report(id,'approve') — named operator only
    const r=reports.find(x=>x.id===id);if(r&&r.status==='submitted'){r.status='approved';r.verified=true}}
  };
@@ -866,7 +876,6 @@ document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{stack.length=1;nav(t.dataset.tab)}));
 function showPane(prefix,name){document.querySelectorAll('[id^="'+prefix+'pane-"]').forEach(p=>p.classList.toggle('on',p.id===prefix+'pane-'+name))}
 document.querySelectorAll('.segrow').forEach(row=>row.addEventListener('click',e=>{const p=e.target.closest('.pill');if(!p)return;row.querySelectorAll('.pill').forEach(x=>x.classList.toggle('on',x===p));
- if(row.id==='rep-tabs')renderReports(p.dataset.f);
  if(row.id==='wx-tabs')showPane('wx',p.dataset.wx);
  if(row.id==='regs-tabs')showPane('rg',p.dataset.rg);
  if(row.id==='fav-tabs'){showPane('fv',p.dataset.fv);renderFavs()}
@@ -882,14 +891,12 @@ $('searchclose').addEventListener('click',()=>$('searchwrap').classList.remove('
 $('searchinput').addEventListener('input',()=>renderSearch($('searchinput').value));
 $('btn-bell').addEventListener('click',()=>{const p=$('notifpanel');p.classList.toggle('open');if(p.classList.contains('open'))$('btn-bell').querySelector('.badge').style.display='none'});
 document.addEventListener('click',e=>{const np=$('notifpanel');if(np.classList.contains('open')&&!e.target.closest('#notifpanel')&&!e.target.closest('#btn-bell'))np.classList.remove('open')},true);
-$('sheet').querySelector('.grab').parentElement.addEventListener('click',e=>{if(e.target.closest('button'))return;$('sheet').classList.toggle('mini')});
-$('hotcard').addEventListener('click',()=>openSpot('coronado-islands'));
 
 /* ---- main map ---- */
 let _map=null,speciesFilterOn=false,aisLayerMain=null;
 const favs=new Set(['coronado-islands','san-clemente-island','lake-poway','oceanside-harbor']);
 function catIcon(p){return L.divIcon({className:'',html:'<div class="pin cat c-'+p.cat+'" style="position:relative"><svg><use href="#'+p.icon+'"/></svg><span class="catlbl">'+(p.label||'')+'</span></div>',iconSize:[28,28],iconAnchor:[14,14]})}
-function wpIcon(w){return L.divIcon({className:'',html:'<div class="pin wp" style="position:relative">'+w.num+'<span class="wp-name">'+w.name+'</span></div>',iconSize:[30,30],iconAnchor:[15,15]})}
+function wpIcon(w){return L.divIcon({className:'',html:'<div class="pin wpa"><svg><use href="#i-anchor"/></svg><span class="wp-name">'+w.num+' · '+w.name+'</span></div>',iconSize:[20,20],iconAnchor:[10,10]})}
 const mapGroups={};
 function initMap(){
  _map=L.map('map',{zoomControl:false,attributionControl:true}).setView([32.62,-117.55],8);
@@ -902,24 +909,28 @@ function initMap(){
  });
  L.polyline(BOUNDARIES.usmx_points,{color:'#FFFFFF',weight:6,opacity:.9}).addTo(_map);
  L.polyline(BOUNDARIES.usmx_points,{color:'#E5484D',weight:2.6,opacity:1}).addTo(_map).bindTooltip('US / MEXICO MARITIME BOUNDARY · NOAA',{permanent:true,direction:'bottom',className:'mlabel'});
+ L.polyline([[32.53428,-117.12467],[32.54210,-116.97210],[32.56540,-116.82910],[32.58370,-116.62600],[32.61800,-116.10500],[32.71870,-115.50000]],{color:'#FFFFFF',weight:5,opacity:.85}).addTo(_map);
+ L.polyline([[32.53428,-117.12467],[32.54210,-116.97210],[32.56540,-116.82910],[32.58370,-116.62600],[32.61800,-116.10500],[32.71870,-115.50000]],{color:'#E5484D',weight:2.2,dashArray:'10 6',opacity:.95}).addTo(_map).bindTooltip('US / MEXICO BORDER · LAND (illustrative — IBWC official in production)',{permanent:false,direction:'top',className:'mlabel'});
  mapGroups.spots=L.layerGroup().addTo(_map);mapGroups.piers=L.layerGroup().addTo(_map);mapGroups.harbors=L.layerGroup().addTo(_map);mapGroups.lakes=L.layerGroup().addTo(_map);mapGroups.wp=L.layerGroup().addTo(_map);
  CATPINS.forEach(p=>{const m=L.marker([p.lat,p.lon],{icon:catIcon(p)});m.on('click',()=>{const z=ZONES.find(z=>Math.abs(z.lat-p.lat)<.05&&Math.abs(z.lon-p.lon)<.05);openSpot(z?z.slug:'coronado-islands')});
   const g=p.cat==='pier'?'piers':p.cat==='harbor'?'harbors':p.cat==='lake'?'lakes':'spots';mapGroups[g].addLayer(m)});
  window._wpMarkers=WAYPOINTS.map((w,i)=>{const m=L.marker([w.lat,w.lon],{icon:wpIcon(w)});m.on('click',()=>openWaypoint(i));m._w=w;mapGroups.wp.addLayer(m);return m});
  _map.on('zoomend',()=>{const z=_map.getZoom();const el=document.getElementById('map');el.classList.toggle('zn',z>=10);el.classList.toggle('zc',z>=9)});
 }
-document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+document.querySelectorAll('[data-chip]').forEach(c=>c.addEventListener('click',()=>{
  const k=c.dataset.chip;
  if(k==='post'){nav('post');return}
- if(k==='locate'){if(!geoWatch){c.classList.add('on');startLocate()}else{stopLocate();c.classList.remove('on');if(tracking)stopTrack()}return}
+ if(k==='ais'){c.classList.toggle('on');toggleAisMain(c.classList.contains('on'));return}
  if(k==='track'){if(!tracking)startTrack();else stopTrack();return}
  if(k==='conditions'){nav('weather');return}
 }));
+$('ns-locate').addEventListener('click',()=>{if(!geoWatch){$('ns-locate').classList.add('on');startLocate()}else{stopLocate();$('ns-locate').classList.remove('on');if(tracking)stopTrack()}});
+$('logo-boat').addEventListener('click',()=>{if(posMarker){stack.length=1;nav('map');_map.flyTo(posMarker.getLatLng(),Math.max(_map.getZoom(),12),{duration:.7})}else{$('ns-locate').classList.add('on');startLocate()}});
 /* ---- real GPS: live position + breadcrumb track ---- */
 let geoWatch=null,posMarker=null,accCircle=null,firstFix=true;
 let tracking=false,trackPts=[],trackLine=null,trackStart=0,trackDist=0,lastPt=null,lastSpeed=null;
 const posIcon=L.divIcon({className:'',html:'<div class="posdot"><div class="pulse"></div><div class="core"></div></div>',iconSize:[20,20],iconAnchor:[10,10]});
-function chipEl(k){return document.querySelector('.chip[data-chip="'+k+'"]')}
+function chipEl(k){return k==='locate'?$('ns-locate'):document.querySelector('[data-chip="'+k+'"]')}
 function startLocate(){
  if(!('geolocation' in navigator)){toast('GPS unavailable','This browser does not expose geolocation.');chipEl('locate').classList.remove('on');return}
  firstFix=true;
@@ -966,10 +977,17 @@ function stopTrack(){
  const mins=Math.max(1,Math.round((Date.now()-trackStart)/60000));
  toast('Track saved on map',trackDist.toFixed(2)+' nm over '+mins+' min · '+trackPts.length+' fixes. Starting a new track clears this line. (Native build stores tracks permanently, offline.)');
 }
-$('ns-species').addEventListener('click',()=>{speciesFilterOn=!speciesFilterOn;$('ns-species').classList.toggle('on',speciesFilterOn);_wpMarkers.forEach(m=>m.setOpacity(speciesFilterOn?(parseFloat(m._w.rating)>=7.5?1:.25):1));toast('Species Filter',speciesFilterOn?'Showing tuna + yellowtail marks (preview filter).':'Filter cleared.')});
 function vslIcon(deg){return L.divIcon({className:'',html:'<svg class="vsl" width="26" height="26" viewBox="0 0 24 24" style="transform:rotate('+deg+'deg)"><path d="M12 2.5 18 20l-6-4-6 4z" fill="currentColor"/></svg>',iconSize:[26,26],iconAnchor:[13,13]})}
 const SAMPLE_VESSELS=[[32.60,-117.42,215],[32.52,-117.30,180],[32.70,-117.50,95],[32.44,-117.60,240],[32.80,-117.42,300],[32.36,-117.36,200]];
-function toggleAisMain(on){if(on){aisLayerMain=L.layerGroup(SAMPLE_VESSELS.map(v=>L.marker([v[0],v[1]],{icon:vslIcon(v[2])}))).addTo(_map);toast('AIS Boats','Sample vessel layer — live AIS ships in V1.1 after terms confirmation.')}else if(aisLayerMain){_map.removeLayer(aisLayerMain);aisLayerMain=null}}
+let aisTrail=null;
+function selectVessel(name,lat,lon,course,kn){
+ if(aisTrail)_map.removeLayer(aisTrail);
+ const rad=(course+180)*Math.PI/180,pts=[];
+ for(let m=60;m>=0;m-=12){const d=(kn*1852/60)*m/60/6371000;pts.push([lat+Math.cos(rad)*d*57.2958,lon+Math.sin(rad)*d*57.2958/Math.cos(lat*Math.PI/180)])}
+ aisTrail=L.polyline(pts,{color:'#68F09A',weight:2.5,dashArray:'4 7',opacity:.9}).addTo(_map);
+ toast('Tracking '+name,'Feed runs ~1 hour behind actual position by design — positions are accurate, not live. Dashed line = last hour of delayed track (sample).');
+}
+function toggleAisMain(on){if(on){aisLayerMain=L.layerGroup(SAMPLE_VESSELS.map((v,i)=>{const nm=VNAMES[i%VNAMES.length];const m=L.marker([v[0],v[1]],{icon:vslIcon(v[2])});m.on('click',()=>selectVessel(nm,v[0],v[1],v[2],8+i*1.4));return m})).addTo(_map);toast('AIS vessels · ~1 hr delayed','Regional feed only. Tap a vessel to track it. Positions are deliberately served ~60 min behind — accurate, not live.')}else{if(aisLayerMain){_map.removeLayer(aisLayerMain);aisLayerMain=null}if(aisTrail){_map.removeLayer(aisTrail);aisTrail=null}}}
 /* AIS screen map */
 let aisMap=null,aisFleet=[],aisKind='all';
 const VNAMES=['PACIFIC DAWN','BLUE HORIZON','MAR VIENTO','SWELL RIDER','CORTES RUNNER','KELP CUTTER','BAJA WIND','NORTH EDGE'];
@@ -980,7 +998,7 @@ function initAis(){if(aisMap){aisMap.invalidateSize();return}
  for(let i=0;i<40;i++){
   const v={lat:32.42+Math.random()*.62,lon:-118.0+Math.random()*.8,course:Math.round(Math.random()*360),kn:(4+Math.random()*14).toFixed(1),name:VNAMES[i%VNAMES.length]+(i>=VNAMES.length?' '+(Math.floor(i/VNAMES.length)+1):''),kind:VKINDS[i%VKINDS.length]};
   v.marker=L.marker([v.lat,v.lon],{icon:vslIcon(v.course)}).addTo(aisMap);
-  v.marker.on('click',()=>{$('vc-name').textContent=v.name;$('vc-kind').textContent=(v.kind[0].toUpperCase()+v.kind.slice(1))+' Vessel · sample track';$('vc-stats').textContent=v.kn+' kn · Course '+v.course+'° · '+distNm(SD_ORIGIN,v).toFixed(1)+' nm away';$('vc-star').classList.remove('on')});
+  v.marker.on('click',()=>{$('vc-name').textContent=v.name;$('vc-kind').textContent='TRACKING · '+(v.kind[0].toUpperCase()+v.kind.slice(1))+' vessel · feed ~1 hr delayed';$('vc-stats').textContent=v.kn+' kn · Course '+v.course+'° · '+distNm(SD_ORIGIN,v).toFixed(1)+' nm away';$('vc-star').classList.remove('on')});
   aisFleet.push(v);
  }
  $('vc-star').addEventListener('click',()=>$('vc-star').classList.toggle('on'));
@@ -1024,20 +1042,45 @@ function compass(d){const p=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW'
 function repCardHtml(r){
  return '<button class="repcard" data-spot="'+r.zone+'"><span class="thumb" style="background:linear-gradient(145deg,#0E2B4E,#134B7A)"><svg><use href="#'+speciesFx(r.species)+'"/></svg></span><span class="rmeta">'+(r.hot?'<span class="tag-hot"><svg><use href="#i-flame"/></svg>WIDE OPEN</span><br>':'')+'<b>'+speciesName(r.species)+'</b><div class="sub">'+(r.weightLb?r.weightLb+' lbs · ':'')+ago(r.createdAt)+'</div><div class="by">'+locLabel(r)+' · '+r.author+(r.verified?'<span class="vcheck"><svg><use href="#i-check"/></svg></span>':' <span class="pending-chip">In review</span>')+'</div></span>'+(r.score?'<span class="score sm">'+r.score+'</span>':'')+'</button>';
 }
-async function renderReports(filter){
- filter=filter||document.querySelector('#rep-tabs .pill.on').dataset.f;
- let rs=await Backend.listApproved();
- rs=[...rs, ...(await Backend.myReports()).filter(r=>r.status!=='approved')];
- rs.sort((a,b)=>b.createdAt-a.createdAt);
- const zk=s=>{const z=ZONES.find(x=>x.slug===s);return z?z.kind:''};
- if(filter==='hot')rs=rs.filter(r=>r.hot);
- if(filter==='ocean')rs=rs.filter(r=>zk(r.zone)!=='lake');
- if(filter==='lakes')rs=rs.filter(r=>zk(r.zone)==='lake');
- if(filter==='nearby')rs=rs.filter(r=>r.display&&distNm(SD_ORIGIN,{lat:r.display.lat,lon:r.display.lon})<25);
- const stock=filter==='lakes'?'<div class="stockcard"><b>CDFW stocking</b> — official fish-planting schedule for San Diego County lakes. Lake reports are a first-class section; stocking alerts are a Pro feature. <a href="https://wildlife.ca.gov/Fishing/Inland/Fish-Plants" target="_blank" rel="noopener noreferrer" style="color:#57CE8C;font-weight:700">CDFW Fish Plants →</a></div>':'';
- $('rep-list').innerHTML=stock+(rs.map(repCardHtml).join('')||'<div class="small-note" style="padding:20px 4px;text-align:center">Nothing here yet.</div>');
+let repSpecies=null;
+async function renderReports(){
+ const act=await Backend.activeToday();
+ $('speciesbar').innerHTML=act.map(a=>'<button class="spchip'+(repSpecies===a.slug?' on':'')+'" data-sp="'+a.slug+'"><svg><use href="#'+speciesFx(a.slug)+'"/></svg>'+speciesName(a.slug)+'<span class="cnt">'+a.count+' today</span></button>').join('');
+ $('speciesbar').querySelectorAll('.spchip').forEach(b=>b.addEventListener('click',()=>{repSpecies=(repSpecies===b.dataset.sp?null:b.dataset.sp);if(!repSpecies)clearSpeciesMap();renderReports()}));
+ if(!repSpecies){
+  clearSpeciesMap();
+  $('rep-list').innerHTML='<div class="pickcard" style="margin:4px 0 0"><b style="color:var(--text);font-size:.92rem">'+act.length+' species biting today</b><br>Pick your target above. The reports and the map clear down to just that fish — everything else drops away.</div>';
+  return;
+ }
+ let rs=(await Backend.listApproved()).filter(r=>r.species===repSpecies).sort((a,b)=>b.createdAt-a.createdAt);
+ const spec=(SPECIES_FULL.length?SPECIES_FULL:SPECIES).find(s=>s.slug===repSpecies)||{};
+ const fresh=((spec.water||'')+'').toLowerCase().includes('fresh')||['rainbow-trout','largemouth-bass','bluegill','channel-catfish','blue-catfish'].includes(repSpecies);
+ const stock=fresh?'<div class="stockcard"><b>CDFW stocking</b> — official fish-planting schedule for San Diego County lakes. <a href="https://wildlife.ca.gov/Fishing/Inland/Fish-Plants" target="_blank" rel="noopener noreferrer" style="color:#57CE8C;font-weight:700">CDFW Fish Plants →</a></div>':'';
+ $('rep-list').innerHTML='<button class="btn green" id="rep-showmap" style="margin:2px 0 12px"><svg><use href="#i-map"/></svg>Show '+speciesName(repSpecies)+' on the map</button>'+stock+(rs.map(repCardHtml).join('')||'<div class="small-note" style="padding:14px 4px;text-align:center">No approved reports yet today for this species.</div>');
+ $('rep-showmap').addEventListener('click',()=>{applySpeciesMap(repSpecies);stack.length=1;nav('map')});
  $('rep-list').querySelectorAll('.repcard').forEach(c=>c.addEventListener('click',()=>openSpot(c.dataset.spot)));
 }
+/* species-first map state: one clean layer, everything else drops away */
+let speciesLayer=null;
+function speciesLocIcon(slug,label){return L.divIcon({className:'',html:'<div style="display:flex;flex-direction:column;align-items:center"><div style="background:rgba(9,17,33,.92);border:1.5px solid var(--blue);border-radius:12px;padding:3px 7px;box-shadow:0 3px 10px rgba(0,0,0,.5)"><svg style="width:34px;height:22px"><use href="#'+speciesFx(slug)+'"/></svg></div><span style="margin-top:2px;font-size:9px;font-weight:700;color:#EAF1FB;text-shadow:0 1px 4px rgba(0,0,0,.95)">'+label+'</span></div>',iconSize:[52,42],iconAnchor:[26,21]})}
+async function applySpeciesMap(slug){
+ clearSpeciesMap();
+ Object.values(mapGroups).forEach(g=>_map.removeLayer(g));
+ if(aisLayerMain){_map.removeLayer(aisLayerMain);aisLayerMain=null;const b=document.querySelector('[data-chip=ais]');if(b)b.classList.remove('on')}
+ const rs=(await Backend.listApproved()).filter(r=>r.species===slug);
+ const marks=[];const seen=new Set();
+ rs.forEach(r=>{const z=ZONES.find(x=>x.slug===r.zone);if(z&&!seen.has('z'+z.slug)){seen.add('z'+z.slug);marks.push({lat:z.lat,lon:z.lon,label:z.name,go:()=>openSpot(z.slug)})}});
+ WAYPOINTS.forEach((w,i)=>{if(w.bestFor&&w.bestFor.includes(slug)&&!seen.has('w'+w.num)){seen.add('w'+w.num);marks.push({lat:w.lat,lon:w.lon,label:w.num+' · '+w.name,go:()=>openWaypoint(i)})}});
+ speciesLayer=L.layerGroup(marks.map(m=>{const mk=L.marker([m.lat,m.lon],{icon:speciesLocIcon(slug,m.label)});mk.on('click',m.go);return mk})).addTo(_map);
+ $('speciespill-t').textContent=speciesName(slug).toUpperCase()+' TODAY · '+marks.length+' SPOTS';
+ $('speciespill').classList.add('show');
+}
+function clearSpeciesMap(){
+ if(speciesLayer){_map.removeLayer(speciesLayer);speciesLayer=null}
+ $('speciespill').classList.remove('show');
+ document.querySelectorAll('.laychip.on').forEach(c=>{const g=mapGroups[c.dataset.layer];if(g&&!_map.hasLayer(g))_map.addLayer(g)});
+}
+$('speciespill-x').addEventListener('click',()=>{repSpecies=null;clearSpeciesMap()});
 
 /* ---- waypoints list ---- */
 let wplFilter='all';
@@ -1116,7 +1159,7 @@ async function loadTides(){
   if(next){
    const lbl=(next.type==='H'?'High':'Low')+' '+next.t.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
    const dir=next.type==='H'?'Rising':'Falling';
-   $('t-tide').textContent=next.v.toFixed(1)+' ft';$('t-tide-s').textContent=dir+' · '+lbl+' · NOAA';
+   setTxt('t-tide',next.v.toFixed(1)+' ft');setTxt('t-tide-s',dir+' · '+lbl+' · NOAA');
    if($('rc-tide')){$('rc-tide').textContent=(next.type==='H'?'▲':'▼')+' '+next.t.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});$('rc-tide-s').textContent=next.v.toFixed(1)+' ft · NOAA 9410170'}
   }
   const rows=TIDES.slice(0,5).map(x=>'<div class="lrow"><span style="flex:1"><b>'+(x.type==='H'?'High':'Low')+'</b><small>'+x.t.toLocaleString([],{weekday:'short',hour:'numeric',minute:'2-digit'})+'</small></span><span class="rt">'+x.v.toFixed(1)+' ft</span></div>').join('');
@@ -1171,6 +1214,40 @@ function drawSwell(hi){
 (function(){const cv=$('swellchart');if(!cv)return;const h=e=>{const r=cv.getBoundingClientRect();const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;const n=(SWSER&&SWSER.swell_wave_height||[]).length;if(!n)return;drawSwell(Math.max(0,Math.min(n-1,Math.round((x-14)/(r.width-28)*(n-1)))))};
 cv.addEventListener('pointermove',h);cv.addEventListener('pointerdown',h)})();
 
+/* ---- live SST field (draft) ---- */
+let sstLayer=null,sstOn=false;
+function sstColor(f){const t=Math.max(0,Math.min(1,(f-58)/17));const h=210-190*t;return 'hsl('+h+',85%,55%)'}
+async function loadSst(){
+ if(!sstOn||!_map)return;
+ const pts=[];for(let la=32.05;la<=33.35;la+=0.32){for(let lo=-118.7;lo<=-117.05;lo+=0.4){if(isOcean(la,lo))pts.push([la,lo])}}
+ try{
+  const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude='+pts.map(p=>p[0].toFixed(2)).join(',')+'&longitude='+pts.map(p=>p[1].toFixed(2)).join(',')+'&current=sea_surface_temperature&temperature_unit=fahrenheit&cell_selection=sea');
+  let j=await r.json();if(!Array.isArray(j))j=[j];
+  if(sstLayer)_map.removeLayer(sstLayer);
+  sstLayer=L.layerGroup(j.filter(o=>o&&o.current&&Number.isFinite(+o.current.sea_surface_temperature)).map(o=>{const f=+o.current.sea_surface_temperature;
+   return L.marker([o.latitude,o.longitude],{interactive:false,icon:L.divIcon({className:'',html:'<div style="width:46px;height:46px;border-radius:50%;background:'+sstColor(f)+';opacity:.32;display:grid;place-items:center"><span class="sstlbl">'+f.toFixed(0)+'°</span></div>',iconSize:[46,46],iconAnchor:[23,23]})})})).addTo(_map);
+ }catch(e){}
+}
+function isOcean(la,lo){return lo < (la>=33.5?-118.0:la>=32.7?(-117.2-(la-32.7)):la>=32.0?(-117.2+(32.7-la)*.18):-116.9)-0.02}
+
+/* ---- measuring tool (style provisional pending reference) ---- */
+let measuring=false,measurePts=[],measureLine=null,measureDots=[];
+function measureReset(){measurePts=[];if(measureLine){_map.removeLayer(measureLine);measureLine=null}measureDots.forEach(d=>_map.removeLayer(d));measureDots=[];$('measure-t').textContent='Tap the map to measure'}
+function toggleMeasure(on){
+ measuring=on;$('ns-measure').classList.toggle('on',on);$('measurepill').classList.toggle('show',on);
+ if(on){toast('Measuring tape','Tap points on the map — running distance shows in nautical miles. Tap the ruler again to finish.');_map.on('click',measureClick)}
+ else{_map.off('click',measureClick);measureReset()}
+}
+function measureClick(e){
+ measurePts.push([e.latlng.lat,e.latlng.lng]);
+ measureDots.push(L.circleMarker(e.latlng,{radius:4,color:'#F7C948',weight:2,fillColor:'#14181B',fillOpacity:1}).addTo(_map));
+ if(!measureLine)measureLine=L.polyline(measurePts,{color:'#F7C948',weight:2.5,dashArray:'6 6'}).addTo(_map);else measureLine.setLatLngs(measurePts);
+ let d=0;for(let i=1;i<measurePts.length;i++)d+=distNm({lat:measurePts[i-1][0],lon:measurePts[i-1][1]},{lat:measurePts[i][0],lon:measurePts[i][1]});
+ $('measure-t').textContent=d.toFixed(2)+' nm · '+measurePts.length+' pts';
+}
+$('ns-measure').addEventListener('click',()=>toggleMeasure(!measuring));
+$('measure-x').addEventListener('click',()=>toggleMeasure(false));
+
 /* ---- toggleable live wind overlay on map ---- */
 let windLayer=null,windOn=false;
 function windIcon(deg,mph){return L.divIcon({className:'',html:'<div style="position:relative;text-align:center"><svg width="26" height="26" viewBox="0 0 24 24" style="transform:rotate('+(deg+180)+'deg);color:'+(mph>=18?'#E5484D':mph>=10?'#F5A623':'#57CE8C')+'"><path d="M12 3 17 19l-5-3.4L7 19z" fill="currentColor"/></svg><span style="font-size:9px;font-weight:800;color:#EAF1FB;text-shadow:0 1px 4px #000">'+Math.round(mph)+'</span></div>',iconSize:[26,34],iconAnchor:[13,17]})}
@@ -1198,8 +1275,8 @@ async function renderRecent(){
 }
 async function loadHomeTiles(){
  try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=32.70&longitude=-117.24&current=temperature_2m,relative_humidity_2m,uv_index,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,visibility,weather_code&hourly=temperature_2m,weather_code,wind_speed_10m&forecast_hours=8&temperature_unit=fahrenheit&wind_speed_unit=mph');const j=await r.json(),c=j.current||{};
-  if(Number.isFinite(+c.temperature_2m)){$('t-air').textContent=Math.round(+c.temperature_2m)+'°';$('wx-air').textContent=Math.round(+c.temperature_2m)+'°F'}
-  if(Number.isFinite(+c.wind_speed_10m)){const w=compass(+c.wind_direction_10m)+' '+Math.round(+c.wind_speed_10m)+' mph';$('t-wind').textContent=w;$('wx-wind').textContent=Math.round(+c.wind_speed_10m);$('wx-wind-s').textContent='mph '+compass(+c.wind_direction_10m);
+  if(Number.isFinite(+c.temperature_2m)){setTxt('t-air',Math.round(+c.temperature_2m)+'°');$('wx-air').textContent=Math.round(+c.temperature_2m)+'°F'}
+  if(Number.isFinite(+c.wind_speed_10m)){const w=compass(+c.wind_direction_10m)+' '+Math.round(+c.wind_speed_10m)+' mph';setTxt('t-wind',w);$('wx-wind').textContent=Math.round(+c.wind_speed_10m);$('wx-wind-s').textContent='mph '+compass(+c.wind_direction_10m);
    if($('rc-wind')){$('rc-wind').textContent=Math.round(+c.wind_speed_10m);$('rc-wind-s').textContent='mph '+compass(+c.wind_direction_10m)+' · model'}
    $('wxw-big').textContent=Math.round(+c.wind_speed_10m);$('wxw-dir').textContent='mph from '+compass(+c.wind_direction_10m);$('wxw-deg').textContent=Math.round(+c.wind_direction_10m)+'°';
    if(Number.isFinite(+c.wind_gusts_10m))$('wxw-gust').textContent=Math.round(+c.wind_gusts_10m)+' mph'}
@@ -1212,10 +1289,10 @@ async function loadHomeTiles(){
    cells+='<div class="hcell'+(i===0?' now':'')+'"><div class="hh">'+lbl+'</div><svg><use href="#wx-sun"/></svg><div class="ht">'+Math.round(hh.temperature_2m[i])+'°</div></div>';
    if(hh.wind_speed_10m)wcells+='<div class="hcell'+(i===0?' now':'')+'"><div class="hh">'+lbl+'</div><div class="ht" style="margin-top:12px">'+Math.round(hh.wind_speed_10m[i])+'</div><div class="hh" style="margin-top:4px">mph</div></div>'});
   $('wx-hourly').innerHTML=cells;$('wxw-hourly').innerHTML=wcells;
-  $('sheet-src').textContent='Conditions: Open-Meteo model · live · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
- }catch(e){$('sheet-src').textContent='Conditions: sample (feed blocked)'}
+  setTxt('sheet-src','');
+ }catch(e){}
  try{const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=32.55&longitude=-117.35&current=wave_height,swell_wave_height,swell_wave_direction,swell_wave_period,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&length_unit=imperial&temperature_unit=fahrenheit&wind_speed_unit=kn&cell_selection=sea');const j=await r.json(),c=j.current||{};
-  if(Number.isFinite(+c.sea_surface_temperature)){$('t-water').textContent=Math.round(+c.sea_surface_temperature)+'°';$('t-water-s').textContent='SST · model · live';$('wx-water').textContent=Math.round(+c.sea_surface_temperature)+'°';$('wxt-big').textContent=Math.round(+c.sea_surface_temperature)+'°'}
+  if(Number.isFinite(+c.sea_surface_temperature)){setTxt('t-water',Math.round(+c.sea_surface_temperature)+'°');setTxt('t-water-s','SST · model · live');$('wx-water').textContent=Math.round(+c.sea_surface_temperature)+'°';$('wxt-big').textContent=Math.round(+c.sea_surface_temperature)+'°'}
   if(Number.isFinite(+c.swell_wave_height)){$('wx-swell').textContent=(+c.swell_wave_height).toFixed(1);$('wx-swell-s').textContent='ft '+compass(+c.swell_wave_direction);$('wxs-big').textContent=(+c.swell_wave_height).toFixed(1);$('wxs-dir').textContent=compass(+c.swell_wave_direction);
    if($('rc-swell')){$('rc-swell').textContent=(+c.swell_wave_height).toFixed(1);$('rc-swell-s').textContent='ft '+compass(+c.swell_wave_direction)+' · model'}
    if($('rc-stamp'))$('rc-stamp').textContent='Live · updated '+new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' · auto-refresh 10 min'}
@@ -1303,12 +1380,8 @@ document.querySelectorAll('.laychip').forEach(c=>c.addEventListener('click',()=>
  const k=c.dataset.layer;c.classList.toggle('on');const on=c.classList.contains('on');
  if(k==='ais'){toggleAisMain(on);return}
  if(k==='wind'){windOn=on;if(on){refreshWind();toast('Wind overlay','Live Open-Meteo wind field — arrows show direction, number is mph. Auto-refreshes every 10 min.')}else if(windLayer){_map.removeLayer(windLayer);windLayer=null}return}
- if(k==='sst'||k==='chl'){
-  const v=$('mapveil');v.className='sstveil'+(k==='chl'?' chl':'');v.classList.toggle('show',on);
-  document.querySelectorAll('.laychip[data-layer=sst],.laychip[data-layer=chl]').forEach(x=>{if(x!==c)x.classList.remove('on')});
-  $('veiltag').textContent=(k==='sst'?'SST':'Chlorophyll')+' · sample field — NOAA CoastWatch in production (Pro)';$('veiltag').classList.toggle('show',on);
-  if(!on)$('veiltag').classList.remove('show');
-  return}
+ if(k==='sst'){sstOn=on;if(on){loadSst();$('veiltag').textContent='SST · live model · presentation draft pending reference screenshots';$('veiltag').classList.add('show')}else{if(sstLayer){_map.removeLayer(sstLayer);sstLayer=null}$('veiltag').classList.remove('show')}return}
+ if(k==='chl'){const v=$('mapveil');v.className='sstveil chl';v.classList.toggle('show',on);$('veiltag').textContent='Chlorophyll · sample field — NOAA CoastWatch in production (Pro)';$('veiltag').classList.toggle('show',on);return}
  if(mapGroups[k]){on?_map.addLayer(mapGroups[k]):_map.removeLayer(mapGroups[k])}
 }));
 
@@ -1353,7 +1426,7 @@ function fillGallery(z){
 }
 
 /* ---- boot ---- */
-initMap();renderRecent();loadHomeTiles();loadTides();loadNws();loadSwellSeries();renderReports();
+initMap();loadHomeTiles();loadTides();loadNws();loadSwellSeries();renderReports();
 if(SPECIES_FULL.length){$('pc-species').innerHTML=SPECIES_FULL.map(s=>'<option value="'+s.slug+'"'+(s.slug==='bluefin-tuna'?' selected':'')+'>'+s.common_name+'</option>').join('')}
 </script>
 </body>
