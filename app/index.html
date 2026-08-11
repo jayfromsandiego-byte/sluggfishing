@@ -247,6 +247,13 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
 .pending-chip{display:inline-block;padding:4px 9px;border-radius:999px;background:rgba(245,166,35,.16);color:var(--orange);font-size:.64rem;font-weight:700}
 .ok-chip{display:inline-block;padding:4px 9px;border-radius:999px;background:rgba(47,163,98,.16);color:#57CE8C;font-size:.64rem;font-weight:700}
 /* phase 2 */
+.posdot{position:relative;width:20px;height:20px}
+.posdot .core{position:absolute;inset:3px;border-radius:50%;background:#2F7BF6;border:2.5px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.5)}
+.posdot .pulse{position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(77,147,255,.7);animation:gpspulse 2s ease-out infinite}
+@keyframes gpspulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.5);opacity:0}}
+.trackhud{position:absolute;left:12px;bottom:calc(122px + env(safe-area-inset-bottom));z-index:1160;display:none;background:rgba(9,16,30,.92);backdrop-filter:blur(8px);border:1px solid var(--line-2);border-radius:12px;padding:9px 12px;font-size:.72rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text)}
+.trackhud.show{display:block}
+.trackhud b{color:#57CE8C;font-size:.62rem;letter-spacing:.08em;display:block;margin-bottom:3px}
 .navstack{position:absolute;right:12px;bottom:calc(96px + env(safe-area-inset-bottom));z-index:1150;display:flex;flex-direction:column;background:rgba(10,18,34,.92);backdrop-filter:blur(10px);border:1px solid var(--line-2);border-radius:14px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.45)}
 .navstack button{width:46px;height:46px;display:grid;place-items:center;color:var(--text)}
 .navstack button+button{border-top:1px solid var(--line)}
@@ -379,7 +386,9 @@ textarea.notes{width:100%;background:var(--card);border:1px solid var(--line);bo
       <button class="chip" data-chip="post" style="border-color:var(--green)"><span class="ci" style="background:var(--green)"><svg><use href="#i-plus"/></svg></span>Post</button>
       <button class="chip" data-chip="locate"><span class="ci"><svg><use href="#i-locate"/></svg></span>My Location</button>
       <button class="chip" data-chip="conditions"><span class="ci"><svg><use href="#i-wx"/></svg></span>Conditions</button>
+      <button class="chip" data-chip="track"><span class="ci"><svg><use href="#i-dir"/></svg></span>Track</button>
     </div>
+    <div class="trackhud" id="trackhud"><b>TRACKING</b><span id="th-line">0.0 nm · — kn · 0 fixes</span></div>
     <div class="navstack" id="navstack">
       <button id="fab-search" aria-label="Search"><svg><use href="#i-search"/></svg></button>
       <button id="ns-species" aria-label="Species filter"><svg><use href="#i-filter"/></svg></button>
@@ -902,9 +911,61 @@ function initMap(){
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
  const k=c.dataset.chip;
  if(k==='post'){nav('post');return}
- if(k==='locate'){c.classList.toggle('on');if(c.classList.contains('on')){_map.flyTo([32.72,-117.23],10,{duration:.6});toast('My Location','Preview position: San Diego Bay entrance.')}return}
+ if(k==='locate'){if(!geoWatch){c.classList.add('on');startLocate()}else{stopLocate();c.classList.remove('on');if(tracking)stopTrack()}return}
+ if(k==='track'){if(!tracking)startTrack();else stopTrack();return}
  if(k==='conditions'){nav('weather');return}
 }));
+/* ---- real GPS: live position + breadcrumb track ---- */
+let geoWatch=null,posMarker=null,accCircle=null,firstFix=true;
+let tracking=false,trackPts=[],trackLine=null,trackStart=0,trackDist=0,lastPt=null,lastSpeed=null;
+const posIcon=L.divIcon({className:'',html:'<div class="posdot"><div class="pulse"></div><div class="core"></div></div>',iconSize:[20,20],iconAnchor:[10,10]});
+function chipEl(k){return document.querySelector('.chip[data-chip="'+k+'"]')}
+function startLocate(){
+ if(!('geolocation' in navigator)){toast('GPS unavailable','This browser does not expose geolocation.');chipEl('locate').classList.remove('on');return}
+ firstFix=true;
+ geoWatch=navigator.geolocation.watchPosition(onFix,geoErr,{enableHighAccuracy:true,maximumAge:2000,timeout:20000});
+ toast('My Location','Requesting GPS… allow location access when prompted. Positioning is satellite-based — it works with zero bars once the page is loaded.');
+}
+function stopLocate(){
+ if(geoWatch!==null){navigator.geolocation.clearWatch(geoWatch);geoWatch=null}
+ if(posMarker){_map.removeLayer(posMarker);posMarker=null}
+ if(accCircle){_map.removeLayer(accCircle);accCircle=null}
+}
+function geoErr(e){
+ stopLocate();chipEl('locate').classList.remove('on');
+ const inFrame=window.self!==window.top;
+ toast('GPS blocked',(e&&e.code===1?'Location permission denied. ':'No GPS fix. ')+(inFrame?'If this page is embedded, open the direct link in your phone browser so it can ask for location permission.':'Check location permissions for this site in browser settings.'));
+}
+function onFix(p){
+ const lat=p.coords.latitude,lon=p.coords.longitude,acc=p.coords.accuracy||0;
+ if(!posMarker){posMarker=L.marker([lat,lon],{icon:posIcon,interactive:false,zIndexOffset:900}).addTo(_map)}else posMarker.setLatLng([lat,lon]);
+ if(!accCircle){accCircle=L.circle([lat,lon],{radius:Math.min(acc,400),color:'#4D93FF',weight:1,opacity:.5,fillColor:'#2F7BF6',fillOpacity:.12,interactive:false}).addTo(_map)}else{accCircle.setLatLng([lat,lon]);accCircle.setRadius(Math.min(acc,400))}
+ if(firstFix){firstFix=false;_map.flyTo([lat,lon],Math.max(_map.getZoom(),12),{duration:.8});toast('GPS lock','±'+Math.round(acc)+' m accuracy. Real satellite fix — no data connection required for positioning.')}
+ lastSpeed=Number.isFinite(p.coords.speed)&&p.coords.speed!==null?p.coords.speed*1.94384:null;
+ if(tracking){
+  const cur={lat,lon};
+  if(!lastPt||distNm(lastPt,cur)*1852>=5){
+   if(lastPt)trackDist+=distNm(lastPt,cur);
+   trackPts.push([lat,lon]);lastPt=cur;
+   if(!trackLine)trackLine=L.polyline(trackPts,{color:'#57CE8C',weight:3.5,opacity:.95}).addTo(_map);
+   else trackLine.setLatLngs(trackPts);
+  }
+  const kn=lastSpeed!==null?lastSpeed.toFixed(1):(trackPts.length>1?(trackDist/((Date.now()-trackStart)/3600000)).toFixed(1):'—');
+  $('th-line').textContent=trackDist.toFixed(2)+' nm · '+kn+' kn · '+trackPts.length+' fixes';
+ }
+}
+function startTrack(){
+ tracking=true;trackPts=[];trackDist=0;lastPt=null;trackStart=Date.now();
+ if(trackLine){_map.removeLayer(trackLine);trackLine=null}
+ chipEl('track').classList.add('on');$('trackhud').classList.add('show');
+ if(!geoWatch){chipEl('locate').classList.add('on');startLocate()}
+ else toast('Tracking','Recording your track. The line keeps drawing as you move — works offline once loaded.');
+}
+function stopTrack(){
+ tracking=false;chipEl('track').classList.remove('on');$('trackhud').classList.remove('show');
+ const mins=Math.max(1,Math.round((Date.now()-trackStart)/60000));
+ toast('Track saved on map',trackDist.toFixed(2)+' nm over '+mins+' min · '+trackPts.length+' fixes. Starting a new track clears this line. (Native build stores tracks permanently, offline.)');
+}
 $('ns-species').addEventListener('click',()=>{speciesFilterOn=!speciesFilterOn;$('ns-species').classList.toggle('on',speciesFilterOn);_wpMarkers.forEach(m=>m.setOpacity(speciesFilterOn?(parseFloat(m._w.rating)>=7.5?1:.25):1));toast('Species Filter',speciesFilterOn?'Showing tuna + yellowtail marks (preview filter).':'Filter cleared.')});
 function vslIcon(deg){return L.divIcon({className:'',html:'<svg class="vsl" width="26" height="26" viewBox="0 0 24 24" style="transform:rotate('+deg+'deg)"><path d="M12 2.5 18 20l-6-4-6 4z" fill="currentColor"/></svg>',iconSize:[26,26],iconAnchor:[13,13]})}
 const SAMPLE_VESSELS=[[32.60,-117.42,215],[32.52,-117.30,180],[32.70,-117.50,95],[32.44,-117.60,240],[32.80,-117.42,300],[32.36,-117.36,200]];
