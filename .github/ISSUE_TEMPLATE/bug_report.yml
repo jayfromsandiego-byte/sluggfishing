@@ -1,0 +1,38 @@
+name: Bug report
+description: Something in the preview is broken or showing the wrong information
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The app is an early preview. A lot of spots, catches, boats, and profile numbers are sample data. A bug is when the preview itself fails or mislabels something, not when sample fish are not real reports.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, and what you saw.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: Chrome 131 on macOS, or Safari on iPhone
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the map
+        2. ...
+    validations:
+      required: false
