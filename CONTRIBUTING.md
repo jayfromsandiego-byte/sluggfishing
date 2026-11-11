@@ -30,7 +30,7 @@ Keep the existing layout. A fork for another shop should look like the same app 
 
 - Describe what you actually changed. Do not write that the app finds fish, recommends times, or coordinates trips unless the code does that.
 - Sample catches, boat names, profile counts, scores, and the "146 MB" offline-pack line are placeholders. Do not replace them with invented user numbers.
-- Waypoint coordinates in the preview are public-reference marks. Leave the "not for navigation" wording in place.
+- Waypoint pins are coarse demo areas. Leave the "not a real fishing mark" wording in place. Do not commit precise fishing coordinates.
 - Regulation text in the species list is a summary. Do not present it as the official rule. Links should stay pointed at the agency pages in `site.config.js`.
 - Do not commit API keys, service-role keys, passwords, or personal phone numbers or email addresses. The Supabase anon key field is for a public client key only, and it should stay empty until a project exists.
 
@@ -38,7 +38,7 @@ Keep the existing layout. A fork for another shop should look like the same app 
 
 The runnable UI is one HTML file. A good change is a bugfix, a config hook, or a small screen fix with a note on how you checked it in a browser.
 
-`handoff/` is internal planning context. `scaffold/` is an older SwiftUI sketch and is not the running app. `preview/offingcue-preview.html` is an earlier web preview. Prefer `app/index.html` unless you are specifically fixing one of those.
+`handoff/` is gitignored and is not part of the published tree. `scaffold/` is an older SwiftUI sketch and is not the running app. `preview/offingcue-preview.html` is an earlier web preview. Prefer `app/index.html` unless you are specifically fixing one of those.
 
 ## Reporting issues
 

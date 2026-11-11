@@ -285,7 +285,7 @@ create policy fci_delete_operator on public.fish_count_items
   for delete to authenticated using (app.is_operator());
 
 -- ---------------------------------------------------------------------------
--- Intel drafts (Joseph / Telegram) — operator-only surface.
+-- Intel drafts (demo contributor / inbound channel) — operator-only surface.
 -- Raw inbound text and exact coordinates live in app_private with short
 -- retention. Publication is a named-operator action (migration 0005) and is
 -- additionally gated on a signed contributor agreement.
@@ -293,7 +293,7 @@ create policy fci_delete_operator on public.fish_count_items
 create table public.intel_drafts (
   id                     uuid primary key default gen_random_uuid(),
   channel                text not null default 'telegram',
-  contributor_label      text not null default 'Joseph',
+  contributor_label      text not null default 'Angler A',
   agreement_status       text not null default 'missing'
                          check (agreement_status in ('missing', 'draft', 'signed')),
   received_at            timestamptz not null default now(),

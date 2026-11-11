@@ -7,7 +7,7 @@
 --   * 90 minutes  → route to backup reviewer
 --   * 120 minutes → expire from the freshness queue; the draft is retained
 --   * Every action lands in an append-only audit table.
---   * Intel (Joseph/Telegram) publication additionally requires a SIGNED
+--   * Intel publication additionally requires a SIGNED
 --     contributor agreement — the schema refuses to publish without it.
 -- ============================================================================
 

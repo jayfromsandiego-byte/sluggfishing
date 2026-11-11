@@ -68,15 +68,15 @@ window.SITE = {
      */
     offlinePackNote: 'San Diego pack · 146 MB · never lapses mid-trip',
     /**
-     * Sample profile only. These counts are not users or catch records.
+     * Obvious demo profile. Counts start at 0. They are not a user base.
      */
     demoProfile: {
-      name: 'Tommy Tran',
+      name: 'Demo Angler',
       homePort: 'San Diego, CA',
-      catches: 128,
-      spots: 54,
-      followers: 32,
-      following: 28
+      catches: 0,
+      spots: 0,
+      followers: 0,
+      following: 0
     }
   },
 

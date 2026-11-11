@@ -3,3 +3,7 @@
 .env.*
 *.log
 node_modules/
+
+# Internal planning notes. Removed from the tree on purpose.
+# Older commits still contain this folder until history is rewritten.
+handoff/

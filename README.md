@@ -12,9 +12,9 @@ It is not a released app. It does not have accounts, a user base, or a hosted da
 
 What follows is what `app/index.html` does when you serve it. Anything the project is meant to do later is under [Roadmap (planned)](#roadmap-planned).
 
-**Map.** A Leaflet map opens on the San Diego coast using Esri satellite imagery. Pins mark a fixed set of harbors, piers, coastal spots, and lakes, plus 11 offshore waypoint numbers. Lines drawn from NOAA coordinates show the 12 nautical mile territorial sea and the U.S./Mexico maritime boundary. A separate land-border line is labeled as illustrative. The menu can hide spots, piers, lakes, bays, and offshore marks.
+**Map.** A Leaflet map opens on the San Diego coast using Esri satellite imagery. Pins mark a fixed set of harbors, piers, coastal spots, and lakes, plus 11 offshore demo areas. Those areas sit on a 0.1 degree grid, about 6 nautical miles apart, and the page labels them as demo areas. They are not real fishing marks. Lines drawn from NOAA coordinates show the 12 nautical mile territorial sea and the U.S./Mexico maritime boundary. A separate land-border line is labeled as illustrative. The menu can hide spots, piers, lakes, bays, and offshore marks.
 
-**Sample catch marks.** The map and the Reports tab show catch reports seeded in the browser (names such as "John D." and "Tommy T."). They are not a live community feed. Posting a catch keeps that report in the page until you reload. Privacy choices are Exact, General (about 1 km), or Zone only. In mock mode the page stores an offset in memory and only draws the display point. Nothing is sent to a server unless you later fill in `backend` in `app/site.config.js`.
+**Sample catch marks.** The map and the Reports tab show catch reports seeded in the browser under names Angler A through Angler P. The positions are on that same coarse grid, near the named public places (a harbor, a lake, an island). They are not a live community feed. Posting a catch keeps that report in the page until you reload. Privacy choices are Exact, General (about 1 km), or Zone only. In mock mode the page stores an offset in memory and only draws the display point. Nothing is sent to a server unless you later fill in `backend` in `app/site.config.js`.
 
 **Species.** The Species tab lists 30 San Diego-area species with a search box, a season note, and a short limit summary. Bag limits, seasons, fish-ID notes, and a list of San Diego County marine protected areas open from Regulations. Those pages tell you to verify with California Department of Fish and Wildlife. They are not the official regulation book.
 
@@ -28,7 +28,7 @@ Spot and waypoint pages load Open-Meteo wind, swell, and water temperature for t
 
 **Other controls that work in the page.** Search across the built-in spots, waypoints, and species. Favorites for this browser session. A distance tool in nautical miles. Browser geolocation and a track line that exists until you start a new track or reload. Shore and lake spots can open Google Maps; offshore marks refuse directions and say they are not for navigation. Copy on a waypoint copies the coordinates and shows the same warning. An AIS screen plots 40 generated boats with made-up names. It is not a vessel feed.
 
-**Profile.** A sample angler, Tommy Tran of San Diego, with placeholder catch, spot, follower, and following counts. Edit Profile changes the name and home port until reload. Premium, downloaded maps, and the gear icon open a short message. They do not bill anyone or download a chart pack. The three notifications are static sample text.
+**Profile.** A demo angler named Demo Angler, with catch, spot, follower, and following counts starting at 0. The screen says it is a demo profile. Edit Profile changes the name and home port until reload. Premium, downloaded maps, and the gear icon open a short message. They do not bill anyone or download a chart pack. The three notifications are static sample text.
 
 **Backend files, not a running backend.** `supabase/migrations/` is a Postgres/PostGIS schema for reports, location privacy, moderation, and GPS tracks. No Supabase project is connected. `BACKEND_CONFIG` defaults to `mode: 'mock'`.
 
@@ -65,7 +65,9 @@ The preview is one page plus a config file, so a shop or a guide service can for
 4. Keep the warnings. Offshore coordinates are not for navigation, and regulation blurbs are not a substitute for the agency site you link to.
 5. Do not commit secrets. Leave `supabaseAnonKey` empty, or set a public anon key only in an environment you control. Do not add a service-role key.
 
-`scaffold/` is an older SwiftUI sketch with a different color set. It is not what the browser runs. `preview/offingcue-preview.html` is an earlier desktop-style preview under the codename OffingCue. `handoff/` is internal planning notes from July 2026.
+`scaffold/` is an older SwiftUI sketch with a different color set. It is not what the browser runs. `preview/offingcue-preview.html` is an earlier desktop-style preview under the codename OffingCue. Its offshore pins are the same kind of coarse demo areas.
+
+`handoff/` is not in this tree. It held internal planning notes, including partner notes and preview links. Those files are still in older commits, including on the default branch until this change is merged. Removing them from every commit would take a history rewrite, which this repository has not done. Do not add the folder back. It is listed in `.gitignore`.
 
 ## Project status
 
@@ -86,7 +88,7 @@ These are goals, not features. The current page does not do them.
 
 ## Notices
 
-Waypoint numbers and coordinates are public-reference samples pending verification. They are not for navigation.
+Offshore waypoint pins are demo areas on a coarse grid. Copying a coordinate copies that demo point. They are not real fishing marks, and they are not for navigation.
 
 Fishing rules on the species screens are summaries with a date of whatever was typed into the file. California, federal, and Mexican rules change. Use the agency links in the Regulations tab.
 

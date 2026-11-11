@@ -20,7 +20,7 @@ Applied to the live build (`app/index.html`). The SwiftUI scaffold is untouched;
 | Oceanside Harbor, Shelter Island launch | Verified + corrected |
 | La Jolla Cove, Mission Bay, Coronado Is., San Clemente Is. | Verified + corrected |
 | **Del Mar "pier" (old sample pin)** | **REMOVED — no such pier exists. Audit catch.** |
-| Numbered offshore marks (43 Fathom, 115…302, Tanner, etc.) | **NOT geocodable** — not POIs in any places DB. Remain public-reference, pending captain verification per waypoint policy. |
+| Numbered offshore marks | Removed from the published preview. The map uses coarse demo areas instead of real mark coordinates. |
 
 Zoom behavior kept: numbers-only zoomed out; names fade in at zoom ≥10 (waypoints) / ≥9 (destinations).
 
@@ -50,7 +50,7 @@ Zoom behavior kept: numbers-only zoomed out; names fade in at zoom ≥10 (waypoi
 - **Bottom line**: ship Mapbox offline + live tracking (~7–11 person-days) in the native phase — matches the locked stack.
 
 ## Could not verify
-1. Numbered offshore marks — no geocoding source exists; captain verification remains the gate (Rockfish 32 and Pyramid Head still unresolved with Tommy).
+1. Numbered offshore marks — removed from the published tree and replaced with coarse demo areas.
 2. Ocean Beach Pier — entrance address only; seaward extent approximated.
 3. Landing report feeds — rights not yet granted; counts stay sample until permissions are documented.
 4. NWS marine zone id (PZZ775) returned 404 on the zones API — worked around via the official CWF/SGX product + point-based alerts (both live and official).
