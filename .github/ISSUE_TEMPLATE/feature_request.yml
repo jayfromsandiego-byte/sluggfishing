@@ -1,0 +1,39 @@
+name: Feature request
+description: Suggest something the preview does not do yet
+title: "[Feature] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read the Roadmap (planned) section in the README before filing. If the idea is already listed there, say which item it matches. Please do not describe a planned idea as if the app already does it.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should this solve
+      description: Who is fishing, and what is hard for them today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you want the app to do
+    validations:
+      required: true
+  - type: dropdown
+    id: already-built
+    attributes:
+      label: Does the current preview already do this?
+      options:
+        - "No — this is new"
+        - "Partly — I will explain what is missing"
+        - "I am not sure"
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Region, species, or a screen this should live on. Skip this if you have nothing to add.
+    validations:
+      required: false
